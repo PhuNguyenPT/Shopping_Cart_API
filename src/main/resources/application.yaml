@@ -1,0 +1,40 @@
+jwt-private-key: classpath:private-key.pem
+jwt-public-key: classpath:public-key.pem
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/shopping_cart
+    username: postgres
+    password: password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  profiles:
+    active: dev
+#  servlet:
+#    multipart:
+#      max-file-size: 50MB
+#server:
+#  servlet:
+#    context-path: /api/v1
+  error:
+    include-message: always
+springdoc:
+  default-produces-media-type: application/json
+server:
+  port: 443
+  ssl:
+    enabled:
+      protocols: TLSv1.3,TLSv1.2
+    protocol: TLSv1.3
+    key-store: keystore.p12
+    key-store-password: password
+    keyStoreType: PKCS12
+    keyAlias: tomcat
