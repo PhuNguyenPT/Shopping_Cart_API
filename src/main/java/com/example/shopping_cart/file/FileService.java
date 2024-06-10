@@ -1,6 +1,6 @@
 package com.example.shopping_cart.file;
 
-import com.example.shopping_cart.exception.CustomExceptionHandler;
+import com.example.shopping_cart.handler.CustomExceptionHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

@@ -1,0 +1,133 @@
+package com.example.shopping_cart.authentication;
+
+import com.example.shopping_cart.email.EmailService;
+import com.example.shopping_cart.email.EmailTemplate;
+import com.example.shopping_cart.role.MyRoleRepository;
+import com.example.shopping_cart.security.JwtService;
+import com.example.shopping_cart.user.MyUser;
+import com.example.shopping_cart.user.MyUserRepository;
+import com.example.shopping_cart.user.Token;
+import com.example.shopping_cart.user.TokenRepository;
+import jakarta.mail.MessagingException;
+import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
+import org.springframework.stereotype.Service;
+
+import java.security.SecureRandom;
+import java.time.DateTimeException;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Service
+@RequiredArgsConstructor
+public class AuthenticationService {
+    private final MyRoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final MyUserRepository userRepository;
+    private final TokenRepository tokenRepository;
+    private final EmailService emailService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
+
+    @Value("${application.mailing.frontend.activation-url}")
+    private String activationUrl;
+    public void register(@NotNull RegistrationRequest request) {
+        var userRole = roleRepository.findByAuthority("USER")
+                .orElseThrow(() -> new IllegalStateException("ROLE USER was not initialized"));
+        var user = MyUser.builder()
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .isAccountNonLocked(true)
+                .isAccountNonExpired(true)
+                .isCredentialsNonExpired(true)
+                .isEnabled(false)
+                .roles(List.of(userRole))
+                .build();
+        userRepository.save(user);
+        sendValidationEmail(user);
+
+    }
+
+    private void sendValidationEmail(MyUser user) {
+        var newToken = generateAndSaveActivationToken(user);
+        // send email
+        try {
+            emailService.sendEmail(
+                    user.getEmail(),
+                    user.getFullName(),
+                    EmailTemplate.ACTIVATE_ACCOUNT,
+                    activationUrl,
+                    newToken,
+                    "Account activation"
+            );
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String generateAndSaveActivationToken(MyUser user) {
+        String generatedToken = generateActivationCode(6);
+        var token = Token.builder()
+                .value(generatedToken)
+                .createdAt(LocalDateTime.now())
+                .expiresAt(LocalDateTime.now().plusMinutes(15))
+                .user(user)
+                .build();
+        tokenRepository.save(token);
+        return generatedToken;
+    }
+
+    private String generateActivationCode(int length) {
+        String characters = "0123456789";
+        StringBuilder codeBuilder = new StringBuilder();
+        SecureRandom secureRandom = new SecureRandom();
+        for (int i = 0; i < length; i++) {
+            int randomIndex = secureRandom.nextInt(characters.length()); // 0..9
+            codeBuilder.append(characters.charAt(randomIndex));
+        }
+        return codeBuilder.toString();
+    }
+
+    public AuthenticationResponse authenticate(@NotNull AuthenticationRequest request) {
+        var auth = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(),
+                        request.getPassword()
+                )
+        );
+        Map<String, Object> claims = new HashMap<String, Object>();
+        var user = ((MyUser)auth.getPrincipal());
+        claims.put("fullName", user.getFullName());
+        var jwt = jwtService.generateToken(claims, user);
+        return AuthenticationResponse.builder()
+                .token(jwt)
+                .build();
+    }
+
+//    @Transactional
+    public void activateAccount(String token) {
+        Token savedToken = tokenRepository.findByValue(token)
+                .orElseThrow(() -> new InvalidBearerTokenException("Invalid token"));
+        if (LocalDateTime.now().isAfter(savedToken.getExpiresAt())) {
+            sendValidationEmail(savedToken.getUser());
+            throw new DateTimeException("Activation token has expired. " +
+                    "A new token has been sent to the same registered email address");
+        }
+        var user = userRepository.findById(savedToken.getUser().getId())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        user.setEnabled(true);
+        userRepository.save(user);
+        savedToken.setValidatedAt(LocalDateTime.now());
+        tokenRepository.save(savedToken);
+    }
+}

@@ -1,4 +1,4 @@
-package com.example.shopping_cart.exception;
+package com.example.shopping_cart.handler;
 
 import org.apache.juli.logging.LogFactory;
 import org.springframework.http.HttpStatus;

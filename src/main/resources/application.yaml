@@ -1,33 +1,53 @@
-jwt-private-key: classpath:private-key.pem
-jwt-public-key: classpath:public-key.pem
+#jwt-private-key: classpath:private-key.pem
+#jwt-public-key: classpath:public-key.pem
 
 spring:
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      max-file-size: 50MB
   datasource:
     url: jdbc:postgresql://localhost:5432/shopping_cart
     username: postgres
-    password: password
+    password: thienphu123
     driver-class-name: org.postgresql.Driver
   jpa:
-    defer-datasource-initialization: true
     hibernate:
-      ddl-auto: update
-    database: postgresql
-    show-sql: true
+      ddl-auto: create-drop
+    show-sql: false
     properties:
       hibernate:
         format_sql: true
-  profiles:
-    active: dev
-#  servlet:
-#    multipart:
-#      max-file-size: 50MB
-#server:
-#  servlet:
-#    context-path: /api/v1
-  error:
-    include-message: always
+  mail:
+    host: localhost
+    port: 1025
+    username: mail
+    password: password
+    properties:
+      mail:
+        smtp:
+          trust: "*"
+        auth: true
+        starttls:
+          enable: true
+        connectiontimeout: 5000
+        timeout: 3000
+        writetimeout: 5000
+
+application:
+  security:
+    jwt:
+      private-key: classpath:private-key.pem
+      public-key: classpath:public-key.pem
+      expiration: 86400000
+  mailing:
+    frontend:
+      activation-url: https://localhost:443/api/v1/auth/activate-account
+
 springdoc:
   default-produces-media-type: application/json
+
 server:
   port: 443
   ssl:
@@ -38,3 +58,8 @@ server:
     key-store-password: password
     keyStoreType: PKCS12
     keyAlias: tomcat
+  servlet:
+    context-path: /api/v1
+  error:
+    include-message: always
+

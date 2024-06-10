@@ -1,4 +1,4 @@
-package com.example.shopping_cart.embedded;
+package com.example.shopping_cart.order;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "_order")
+@Table(name = "orders")
 public class Order {
     @EmbeddedId
     private OrderID orderID;
