@@ -2,18 +2,12 @@ package com.example.shopping_cart;
 
 import com.example.shopping_cart.role.MyRole;
 import com.example.shopping_cart.role.MyRoleRepository;
-import com.example.shopping_cart.user.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 
 @SpringBootApplication
 @EnableJpaAuditing
@@ -34,6 +28,15 @@ public class ShoppingCartApplication {
 						MyRole.builder()
 								.authority(
 										MyRole.Value.USER.name()
+								)
+								.build()
+				);
+			}
+			if (roleRepository.findByAuthority(MyRole.Value.ADMIN.name()).isEmpty()) {
+				roleRepository.save(
+						MyRole.builder()
+								.authority(
+										MyRole.Value.ADMIN.name()
 								)
 								.build()
 				);
