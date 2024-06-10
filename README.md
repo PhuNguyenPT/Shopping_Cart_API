@@ -28,7 +28,8 @@ To set up the backend of the Book Social Network project, follow these steps:
    https://localhost:443/api/v1/auth/register
 ```
 
-example in body:
+   - Example in body:
+     
 ```bash
 {
     "firstName": "firstname",
@@ -46,17 +47,17 @@ example in body:
 7. Copy the 6-digit activation code and send to the activate-account api by GET
 
 ```bash
+// Replace the value with the actual 6-digit activation code
    https://localhost:443/api/v1/auth/activate-account?token=value
 ```
-// Replace the value with the actual 6-digit activation code
 
-8. Login to the account by POST
+8. Login to the account by POST and receive a token as response
 
 ```bash
-https://localhost:443/api/v1/auth/login
+   https://localhost:443/api/v1/auth/login
 ```
 
-example in body
+   - Example in body
 
 ```bash
 {
