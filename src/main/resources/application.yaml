@@ -1,6 +1,3 @@
-#jwt-private-key: classpath:private-key.pem
-#jwt-public-key: classpath:public-key.pem
-
 spring:
   profiles:
     active: dev
@@ -10,7 +7,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/shopping_cart
     username: postgres
-    password: thienphu123
+    password: password
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
