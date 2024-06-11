@@ -1,40 +1,43 @@
 package com.example.shopping_cart.file;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import com.example.shopping_cart.common.BaseEntity;
+import com.example.shopping_cart.common.Resource;
+import com.example.shopping_cart.product.Product;
+import jakarta.persistence.*;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-@EqualsAndHashCode(callSuper = true)
+import java.math.BigInteger;
+
+//@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @SuperBuilder
 @Entity
+@Getter
+@Setter
 //@PrimaryKeyJoinColumn(name = "file_id") -> only with join table strategy
 //@DiscriminatorValue("F") -> only with single table strategy
-public class File extends Resource {
+@Table(name = "files")
+public class File extends BaseEntity {
+    @Id
+    @GeneratedValue
+    private Long id;
     @Column(name = "file_type")
     private String fileType;
     @Column(name = "file_content")
     private byte[] fileContent;
 
-    public String getFileType() {
-        return fileType;
-    }
+    @Column(unique = true)
+    private String name;
+    private String url;
+    private BigInteger size;
 
-    public void setFileType(String fileType) {
-        this.fileType = fileType;
-    }
-
-    public byte[] getFileContent() {
-        return fileContent;
-    }
-
-    public void setFileContent(byte[] fileContent) {
-        this.fileContent = fileContent;
-    }
+    @ManyToOne
+    @JoinTable(name = "files_products",
+            joinColumns = @JoinColumn(name = "file_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private Product product;
 }

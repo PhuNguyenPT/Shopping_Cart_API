@@ -1,37 +1,44 @@
 package com.example.shopping_cart.user;
 
+import com.example.shopping_cart.common.BaseEntity;
+import com.example.shopping_cart.order.Order;
+import com.example.shopping_cart.cart.ShoppingCart;
+import com.example.shopping_cart.product.ProductQuantity;
 import com.example.shopping_cart.role.MyRole;
+import com.example.shopping_cart.transaction.Transaction;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.math.BigInteger;
 import java.security.Principal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "users")
 @EntityListeners(AuditingEntityListener.class)
-public class MyUser implements UserDetails, Principal {
+public class MyUser extends BaseEntity implements UserDetails, Principal {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
+    private BigInteger phoneNumber;
+    @Embedded
+    private Address address;
     @Column(unique = true)
     private String email;
     private String password;
@@ -40,28 +47,20 @@ public class MyUser implements UserDetails, Principal {
     private boolean isCredentialsNonExpired;
     private boolean isEnabled;
 
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<Order> orders;
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<ShoppingCart> shoppingCarts;
+
     @ManyToMany(fetch = FetchType.EAGER)
     private List<MyRole> roles;
 
-    @CreatedDate
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdDate;
-    @LastModifiedDate
-    @Column(insertable = false)
-    private LocalDateTime lastModifiedDate;
-    @Column(nullable = false, updatable = false)
-    private ZoneId createdTimeZone;
-    @Column(insertable = false)
-    private ZoneId modifiedTimeZone;
-
-    @PrePersist
-    public void prePersist() {
-        createdTimeZone = ZoneId.systemDefault();
-    }
-    @PreUpdate
-    public void preUpdate() {
-        modifiedTimeZone = ZoneId.systemDefault();
-    }
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<Transaction> transactions;
 
     @Override
     public String getName() {
