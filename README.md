@@ -1,3 +1,10 @@
+## Required pre-installed apps
+1. Intellij (Community/ Ultimate Edition)
+2. PostgreSQL + pgAdmin
+3. Postman
+4. Any web browser (Google, Microsoft Edge, Firefox)
+5. Github
+
 ## Setup Instructions
 
 To set up the backend of the Book Social Network project, follow these steps:
