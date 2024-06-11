@@ -6,6 +6,16 @@ To set up the backend of the Book Social Network project, follow these steps:
 ```bash
    git clone https://github.com/PhuNguyenPT/Shopping_Cart.git
 ```
+   - Change docker-compose.yml
+```
+   environment:
+      POSTGRES_PASSWORD: to your database password
+```
+   - Change src/main/resources/application.yaml
+```bash
+   datasource:
+      password: to your database password
+```
 
 2. Run the docker-compose file in a terminal
 
