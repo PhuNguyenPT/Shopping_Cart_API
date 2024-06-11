@@ -1,17 +1,16 @@
 package com.example.shopping_cart.models;
 
-import com.example.shopping_cart.file.Resource;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-@Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
+@Getter
+@Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "lectures")
 public class Lecture {
     @Id
     @GeneratedValue
@@ -22,9 +21,9 @@ public class Lecture {
             name = "section_id"
     )
     private Section section;
-    @OneToOne
-    @JoinColumn(
-            name = "resource_id"
-    )
-    private Resource resource;
+//    @OneToOne
+//    @JoinColumn(
+//            name = "resource_id"
+//    )
+//    private Resource resource;
 }

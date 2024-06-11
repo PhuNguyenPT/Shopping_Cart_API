@@ -1,17 +1,18 @@
 package com.example.shopping_cart.author;
 
-import com.example.shopping_cart.models.BaseEntity;
+import com.example.shopping_cart.common.BaseEntity;
 import com.example.shopping_cart.models.Course;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
-@Entity
-@NoArgsConstructor
+@Getter
+@Setter
 @AllArgsConstructor
-@Data
-@Builder
+@NoArgsConstructor
+@Entity
 @NamedQuery(
         name = "Author.findByNamedQuery",
         query = "select a from Author a where a.age >= :age"
