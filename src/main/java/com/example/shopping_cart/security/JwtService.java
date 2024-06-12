@@ -1,21 +1,24 @@
 package com.example.shopping_cart.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
 
+import java.net.URL;
 import java.time.Instant;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
+@Getter
+@Setter
 public class JwtService {
 //    private final JwtDecoder jwtDecoder;
 //    private final JwtEncoder jwtEncoder;
@@ -27,6 +30,8 @@ public class JwtService {
 //    private final Long jwtExpiration;
 
     private final JwtProperties jwtProperties;
+    private final JwtEncoder jwtEncoder;
+    private final JwtDecoder jwtDecoder;
 
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
@@ -44,43 +49,48 @@ public class JwtService {
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList();
-        return Jwts.builder()
-                .claims(extraClaims)
+        JwtClaimsSet jwtClaimsSet =JwtClaimsSet.builder()
+                .issuer("shopping-cart.com")
                 .subject(userDetails.getUsername())
-                .issuedAt(Date.from(Instant.now()))
-                .expiration(Date.from(Instant.now().plusMillis(jwtExpiration)))
+                .issuedAt(Instant.now())
+                .expiresAt(Instant.now().plusMillis(jwtExpiration))
                 .claim("authorities", authorities)
-                .signWith(jwtProperties.getPrivateKey())
-                .compact();
+                .build();
+        return jwtEncoder.encode(JwtEncoderParameters.from(jwtClaimsSet)).getTokenValue();
+
+//        return Jwts.builder()
+//                .issuer("shopping-cart.com")
+//                .claims(extraClaims)
+//                .subject(userDetails.getUsername())
+//                .issuedAt(Date.from(Instant.now()))
+//                .expiration(Date.from(Instant.now().plusMillis(jwtExpiration)))
+//                .claim("authorities", authorities)
+//                .signWith(jwtProperties.getPrivateKey())
+//                .compact();
     }
 
     public boolean isTokenValid(String tokenValue, @NotNull UserDetails userDetails) {
-        final String username =  extractUsername(tokenValue);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(tokenValue);
+        Jwt jwt = jwtDecoder.decode(tokenValue);
+        final String username = extractUsername(jwt);
+        final String issuer = extractIssuer(jwt);
+        return issuer.equals("shopping-cart.com") &&
+                (username.equals(userDetails.getUsername())) &&
+                !isTokenExpired(jwt);
     }
 
-    public String extractUsername(String tokenValue) {
-        return extractClaim(tokenValue, Claims::getSubject);
+    public String extractIssuer(Jwt jwt) {
+        return jwt.getClaim("iss");
     }
 
-    private boolean isTokenExpired(String tokenValue) {
-        return extractExpiration(tokenValue).before(Date.from(Instant.now()));
+    public String extractUsername(Jwt jwt) {
+        return jwt.getSubject();
     }
 
-    private Date extractExpiration(String tokenValue) {
-        return extractClaim(tokenValue, Claims::getExpiration);
+    private boolean isTokenExpired(Jwt jwt) {
+        return extractExpiration(jwt).isBefore(Instant.now());
     }
 
-    public <T> T extractClaim(String tokenValue, @NotNull Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(tokenValue);
-        return claimsResolver.apply(claims);
-    }
-
-    public Claims extractAllClaims(String tokenValue) {
-        return Jwts.parser()
-                .decryptWith(jwtProperties.getPrivateKey())
-                .build()
-                .parseSignedClaims(tokenValue)
-                .getPayload();
+    private Instant extractExpiration(Jwt jwt) {
+        return jwt.getExpiresAt();
     }
 }

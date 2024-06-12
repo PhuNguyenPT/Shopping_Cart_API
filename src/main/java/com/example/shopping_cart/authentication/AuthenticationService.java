@@ -25,6 +25,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -56,7 +57,6 @@ public class AuthenticationService {
                 .build();
         userRepository.save(user);
         sendValidationEmail(user);
-
     }
 
     private void sendValidationEmail(MyUser user) {
@@ -107,9 +107,9 @@ public class AuthenticationService {
                 )
         );
         Map<String, Object> claims = new HashMap<String, Object>();
-        var user = ((MyUser)auth.getPrincipal());
-        claims.put("fullName", user.getFullName());
-        var jwt = jwtService.generateToken(claims, user);
+        Optional<MyUser> user = userRepository.findByEmail(auth.getName());
+        claims.put("fullName", user.get().getFullName());
+        var jwt = jwtService.generateToken(claims, user.get());
         return AuthenticationResponse.builder()
                 .token(jwt)
                 .build();
