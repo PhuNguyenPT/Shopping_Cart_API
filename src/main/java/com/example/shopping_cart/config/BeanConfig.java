@@ -1,5 +1,10 @@
 package com.example.shopping_cart.config;
 
+import com.example.shopping_cart.security.JwtProperties;
+import com.nimbusds.jose.jwk.JWK;
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,6 +13,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -18,6 +27,7 @@ import java.util.Collections;
 @Configuration
 @RequiredArgsConstructor
 public class BeanConfig {
+    private final JwtProperties jwtProperties;
 //    @Value("${application.security.jwt.public-key}")
 //    private RSAPublicKey publicKey;
 //    @Value("${application.security.jwt.private-key}")
@@ -74,15 +84,15 @@ public class BeanConfig {
         return new CorsFilter(source);
 
     }
-//    @Bean
-//    public JwtDecoder jwtDecoder() {
-//        return NimbusJwtDecoder.withPublicKey(publicKey).build();
-//    }
-//
-//    @Bean
-//    public JwtEncoder jwtEncoder() {
-//        JWK jwk = new RSAKey.Builder(this.publicKey).privateKey(privateKey).build();
-//        var jwkSet = new ImmutableJWKSet<>(new JWKSet(jwk));
-//        return new NimbusJwtEncoder(jwkSet);
-//    }
+    @Bean
+    public JwtDecoder jwtDecoder() {
+        return NimbusJwtDecoder.withPublicKey(jwtProperties.getPublicKey()).build();
+    }
+
+    @Bean
+    public JwtEncoder jwtEncoder() {
+        JWK jwk = new RSAKey.Builder(jwtProperties.getPublicKey()).privateKey(jwtProperties.getPrivateKey()).build();
+        var jwkSet = new ImmutableJWKSet<>(new JWKSet(jwk));
+        return new NimbusJwtEncoder(jwkSet);
+    }
 }
