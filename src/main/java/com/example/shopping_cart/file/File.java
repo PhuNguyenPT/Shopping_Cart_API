@@ -6,6 +6,7 @@ import com.example.shopping_cart.product.Product;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigInteger;
 
@@ -17,6 +18,7 @@ import java.math.BigInteger;
 @Entity
 @Getter
 @Setter
+@EntityListeners(AuditingEntityListener.class)
 //@PrimaryKeyJoinColumn(name = "file_id") -> only with join table strategy
 //@DiscriminatorValue("F") -> only with single table strategy
 @Table(name = "files")

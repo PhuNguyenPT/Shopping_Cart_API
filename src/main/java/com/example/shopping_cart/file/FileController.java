@@ -23,7 +23,7 @@ public class FileController {
     @GetMapping("/search/{file-name}")
     public ResponseEntity<?> findFileList(
             @PathVariable("file-name") String fileName) {
-        return fileService.findFile(fileName);
+        return fileService.findFiles(fileName);
     }
 
     @DeleteMapping("/delete/{file-name}")
