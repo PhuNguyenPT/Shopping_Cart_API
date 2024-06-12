@@ -7,11 +7,11 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/shopping_cart
     username: postgres
-    password: _change_your_password_here_
+    password: password
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: false
     properties:
       hibernate:
@@ -40,7 +40,7 @@ application:
       expiration: 86400000
   mailing:
     frontend:
-      activation-url: https://localhost:443/api/v1/auth/activate-account
+      activation-url: https://localhost:4200/activate-account
 
 springdoc:
   default-produces-media-type: application/json
