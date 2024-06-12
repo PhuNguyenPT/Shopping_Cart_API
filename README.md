@@ -83,3 +83,24 @@ To set up the backend of the Book Social Network project, follow these steps:
 }
 ```
 
+9. Create New Environt by Environments->Create Environment <br/>
+    ![create-environment](https://github.com/PhuNguyenPT/Shopping_Cart/assets/154642828/fd713c17-8020-4267-ad3d-a09b46af643d)
+   - Create new variable token and Save <br/>
+   ![save](https://github.com/PhuNguyenPT/Shopping_Cart/assets/154642828/a4900bb7-6457-4396-b472-25fc6d7de811)
+   - Choose environment to New Environment <br/>
+   ![environment](https://github.com/PhuNguyenPT/Shopping_Cart/assets/154642828/6e219860-2a8c-4795-add8-35704d775949)
+   - Navigate to Response Body in step 8 to select token "value" and right-click to choose Set: New Envinronment -> token:
+```bash
+{
+   "token": "select_this_value"
+}
+```
+
+10. Access to user home page by GET
+    
+```bash
+   https://localhost:443/api/v1/user/home
+```
+   - Go to Authorization->Auth Type->Bearer Token and enter in the box '{{token}}' and Send <br/>
+![user-home](https://github.com/PhuNguyenPT/Shopping_Cart/assets/154642828/5af38fb1-6374-4677-a280-43fe49288db6)
+
