@@ -1,5 +1,6 @@
 package com.example.shopping_cart.file;
 
+import com.example.shopping_cart.handler.ExceptionResponse;
 import com.example.shopping_cart.handler.FileExceptionHandler;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -36,10 +37,11 @@ public class FileService {
     }
 
     public ResponseEntity<?> saveFiles(@NotNull List<MultipartFile> multipartFiles) {
+
         List<File> files = multipartFiles.stream()
+                .filter(multipartFile -> !multipartFile.isEmpty()) // Check that the file is not empty
                 .map(fileMapper::toFile)
                 .collect(Collectors.toUnmodifiableList());
-
         List<File> savedFiles = files.stream()
                 .map(fileRepository::save)
                 .collect(Collectors.toUnmodifiableList());

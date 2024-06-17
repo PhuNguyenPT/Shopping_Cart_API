@@ -1,6 +1,7 @@
 package com.example.shopping_cart.file;
 
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -10,7 +11,7 @@ import java.math.BigInteger;
 @Service
 public class FileMapper {
 
-    public File toFile(MultipartFile multipartFile) {
+    public File toFile(@NotNull MultipartFile multipartFile) {
 
         try {
             return File.builder()
@@ -33,12 +34,13 @@ public class FileMapper {
         }
     }
 
-    public FileResponseDTO toFileResponseDTO(File file) {
+    public FileResponseDTO toFileResponseDTO(@NotNull File file) {
         var compressedFileByte = Base64.decodeBase64(file.getFileContent(), 0, file.getFileContent().length);
         var fileByte = FileUtil.decompressByte(compressedFileByte);
 //        var fileByte = FileUtil.decompressFile(file.getFileContent());
 //        System.out.println(fileByte);
         return new FileResponseDTO(
+                file.getId(),
                 file.getName(),
                 file.getFileType(),
                 file.getSize(),

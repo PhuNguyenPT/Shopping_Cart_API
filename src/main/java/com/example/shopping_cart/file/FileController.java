@@ -30,7 +30,7 @@ public class FileController {
 
     @PostMapping("/upload")
     public ResponseEntity<?> uploadFiles(
-            @RequestParam("files") @Valid
+            @RequestParam("files")
             @NotEmpty(message = "Please provide files to upload")
             List<MultipartFile> multipartFiles) {
         return fileService.saveFiles(multipartFiles);
@@ -45,7 +45,7 @@ public class FileController {
 
     @DeleteMapping("/delete/{file-name}")
     public ResponseEntity<?> deleteFile(
-            @PathVariable("file-name") @Valid
+            @PathVariable("file-name")
             @NotNull(message = "File name must be not null")
             @NotBlank(message = "File name must be not blank")
             String fileName) {
