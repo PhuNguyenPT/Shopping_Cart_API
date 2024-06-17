@@ -15,6 +15,7 @@ To set up the backend of the Book Social Network project, follow these steps:
    git clone https://github.com/PhuNguyenPT/Shopping_Cart.git
    cd Shopping_Cart
 ```
+   - Create a new database in pgAdmin 4 with the name `shopping_cart`
    - Change docker-compose.yml
 ```
    environment:
