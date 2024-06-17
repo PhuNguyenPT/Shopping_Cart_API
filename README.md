@@ -13,6 +13,7 @@ To set up the backend of the Book Social Network project, follow these steps:
 
 ```bash
    git clone https://github.com/PhuNguyenPT/Shopping_Cart.git
+   cd Shopping_Cart
 ```
    - Change docker-compose.yml
 ```
