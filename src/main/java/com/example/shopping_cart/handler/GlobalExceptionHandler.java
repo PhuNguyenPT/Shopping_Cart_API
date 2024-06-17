@@ -2,6 +2,7 @@ package com.example.shopping_cart.handler;
 
 import com.example.shopping_cart.file.FileProperties;
 import jakarta.mail.MessagingException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.ConversionNotSupportedException;
@@ -250,7 +251,11 @@ public class GlobalExceptionHandler {
         String errorMessage = "An error occurred: " + e.getMessage();
 
         // Return a ResponseEntity with the custom error message and HTTP status
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                ExceptionResponse.builder()
+                        .error(errorMessage)
+                        .build()
+        );
     }
 
     @ExceptionHandler(MultipartException.class)
@@ -261,8 +266,22 @@ public class GlobalExceptionHandler {
         // Return a ResponseEntity with the custom error message and HTTP status
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ExceptionResponse.builder()
-                        .error(errorMessage)
+                        .businessErrorDescription(errorMessage)
+                        .error(e.getMessage())
                         .build()
                 );
     }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<?> handleEntityNotFoundException(@NotNull EntityNotFoundException e) {
+        String errorMessage = "The requested entity was not found: " + e.getMessage();
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ExceptionResponse.builder()
+                        .businessErrorDescription(errorMessage)
+                        .error(e.getMessage())
+                        .build()
+                );
+    }
+
 }
