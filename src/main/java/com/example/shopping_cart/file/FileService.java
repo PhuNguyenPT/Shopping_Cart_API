@@ -38,11 +38,11 @@ public class FileService {
     public ResponseEntity<?> saveFiles(@NotNull List<MultipartFile> multipartFiles) {
         List<File> files = multipartFiles.stream()
                 .map(fileMapper::toFile)
-                .collect(Collectors.toList());
+                .collect(Collectors.toUnmodifiableList());
 
         List<File> savedFiles = files.stream()
                 .map(fileRepository::save)
-                .collect(Collectors.toList());
+                .collect(Collectors.toUnmodifiableList());
 
         return ResponseEntity.ok("Saved " + savedFiles.size() + " files successfully.");
     }
