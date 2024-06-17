@@ -2,28 +2,34 @@ package com.example.shopping_cart.file;
 
 import com.example.shopping_cart.handler.ExceptionResponse;
 import com.example.shopping_cart.handler.FileExceptionHandler;
+import com.example.shopping_cart.product.Product;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class FileService {
     private final FileRepository fileRepository;
     private final FileMapper fileMapper;
-    private final FileExceptionHandler customExceptionHandler;
-    public FileService(FileRepository fileRepository, FileMapper fileMapper, FileExceptionHandler customExceptionHandler) {
-        this.fileRepository = fileRepository;
-        this.fileMapper = fileMapper;
-        this.customExceptionHandler = customExceptionHandler;
-    }
+//    private final FileExceptionHandler customExceptionHandler;
+//    public FileService(FileRepository fileRepository, FileMapper fileMapper, FileExceptionHandler customExceptionHandler) {
+//        this.fileRepository = fileRepository;
+//        this.fileMapper = fileMapper;
+//        this.customExceptionHandler = customExceptionHandler;
+//    }
 
     public ResponseEntity<?> saveFile(MultipartFile multipartFile) {
         try {
@@ -46,9 +52,29 @@ public class FileService {
                 .map(fileRepository::save)
                 .collect(Collectors.toUnmodifiableList());
 
-        return ResponseEntity.ok("Saved " + savedFiles.size() + " files successfully.");
+//        return ResponseEntity.ok("Saved " + savedFiles.size() + " files successfully.");
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                "Saved " + savedFiles.size() + " files successfully."
+        );
     }
 
+    public ResponseEntity<?> saveFilesByProduct(
+            Product product,
+            @NotNull List<MultipartFile> multipartFiles) {
+
+        List<File> files = multipartFiles.stream()
+                .filter(multipartFile -> !multipartFile.isEmpty())
+                .map(multipartFile -> fileMapper.toFileSave(multipartFile, product))
+                .collect(Collectors.toUnmodifiableList());
+        List<File> savedFiles = files.stream()
+                .map(fileRepository::save)
+                .collect(Collectors.toUnmodifiableList());
+        List<FileResponseDTO> fileResponseDTOList = savedFiles.stream()
+                .map(fileMapper::toFileResponseDTOSave)
+                .collect(Collectors.toUnmodifiableList());
+//        return ResponseEntity.ok("Saved " + savedFiles.size() + " files successfully.");
+        return ResponseEntity.status(HttpStatus.CREATED).body(fileResponseDTOList);
+    }
 
     public ResponseEntity<?> findFiles(String fileName) {
         try {
@@ -83,5 +109,30 @@ public class FileService {
             e.printStackTrace();
             return null;
         }
+    }
+
+
+    public FileResponseDTO updateFile(
+            MultipartFile multipartFile,
+            Product product,
+            Long fileId) {
+        File file = fileRepository.findById(fileId);
+        if (file == null || !file.getProduct().equals(product)) {
+            throw new EntityNotFoundException("File not found for the given product");
+        }
+        file.setName(multipartFile.getOriginalFilename());
+        file.setFileType(multipartFile.getContentType());
+        file.setSize(BigInteger.valueOf(multipartFile.getSize()));
+        try {
+            file.setFileContent(
+                    fileMapper.toCompressedFileByteBase64(
+                            multipartFile.getBytes()
+                    )
+            );
+        } catch (IOException e) {
+            throw new RuntimeException("Cannot compress file byte in Base64");
+        }
+        File savedFile = fileRepository.save(file);
+        return fileMapper.toFileResponseDTOUpdate(savedFile);
     }
 }
