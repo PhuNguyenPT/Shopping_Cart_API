@@ -1,25 +1,52 @@
 package com.example.shopping_cart.handler;
 
+import com.example.shopping_cart.file.FileProperties;
 import jakarta.mail.MessagingException;
+import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.ConversionNotSupportedException;
+import org.springframework.beans.TypeMismatchException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingPathVariableException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.multipart.MultipartException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class GlobalExceptionHandler {
+    private final FileProperties fileProperties;
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<?> handleMethodArgumentTypeMismatchException(@NotNull MethodArgumentTypeMismatchException e) {
+        // Create a custom error message
+        String errorMessage = "Method argument type mismatch: " + e.getMessage();
+
+        // Return a ResponseEntity with the custom error message and HTTP status
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
 
     @ExceptionHandler(LockedException.class)
-    public ResponseEntity<ExceptionResponse> handleException(
-            LockedException e
+    public ResponseEntity<?> handleException(
+            @NotNull LockedException e
     ) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(ExceptionResponse.builder()
@@ -31,8 +58,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(DisabledException.class)
-    public ResponseEntity<ExceptionResponse> handleException(
-            DisabledException e
+    public ResponseEntity<?> handleException(
+            @NotNull DisabledException e
     ) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(ExceptionResponse.builder()
@@ -44,8 +71,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ExceptionResponse> handleException(
-            BadCredentialsException e
+    public ResponseEntity<?> handleException(
+            @NotNull BadCredentialsException e
     ) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(ExceptionResponse.builder()
@@ -57,8 +84,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MessagingException.class)
-    public ResponseEntity<ExceptionResponse> handleException(
-            MessagingException e
+    public ResponseEntity<?> handleException(
+            @NotNull MessagingException e
     ) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ExceptionResponse.builder()
@@ -67,30 +94,53 @@ public class GlobalExceptionHandler {
                 );
     }
 
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<?> handleHttpMessageNotReadableException(@NotNull HttpMessageNotReadableException e) {
+        // Create a custom error message
+        String errorMessage = "Request body is invalid: " + e.getMessage();
+
+        // Return a ResponseEntity with the custom error message and HTTP status
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
+
+//    @ExceptionHandler(MethodArgumentNotValidException.class)
+//    public ResponseEntity<?> handleException(
+//            @NotNull MethodArgumentNotValidException e
+//    ) {
+//        Set<String> errors = new HashSet<>();
+//        e.getBindingResult().getAllErrors()
+//                .forEach(error -> {
+//                    var errorMessage = error.getDefaultMessage();
+//                    errors.add(errorMessage);
+//                });
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                .body(ExceptionResponse.builder()
+//                        .validationErrors(errors)
+//                        .build()
+//                );
+//    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ExceptionResponse> handleException(
-            MethodArgumentNotValidException e
-    ) {
-        Set<String> errors = new HashSet<>();
-        e.getBindingResult().getAllErrors()
-                .forEach(error -> {
-                    var errorMessage = error.getDefaultMessage();
-                    errors.add(errorMessage);
-                });
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ExceptionResponse.builder()
-                        .validationErrors(errors)
-                        .build()
-                );
+    public ResponseEntity<?> handleMethodArgumentNotValidException(@NotNull MethodArgumentNotValidException e) {
+        // Create a map to store error messages for each field
+        Map<String, String> errorMessages = new HashMap<>();
+
+        // Add error messages for each field
+        e.getBindingResult().getFieldErrors().forEach(error ->
+                errorMessages.put(error.getField(), error.getDefaultMessage()));
+
+        // Return a ResponseEntity with the error messages and HTTP status
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessages);
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
-    public ResponseEntity<ExceptionResponse> handleException(
-            NoResourceFoundException e
+    public ResponseEntity<?> handleException(
+            @NotNull NoResourceFoundException e
     ) {
         e.printStackTrace();
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(ExceptionResponse.builder()
+                .body(
+                        ExceptionResponse.builder()
                         .businessErrorDescription("Page not found")
                         .error(e.getMessage())
                         .build()
@@ -98,14 +148,120 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ExceptionResponse> handleException(
-            Exception e
+    public ResponseEntity<?> handleException(
+            @NotNull Exception e
     ) {
         e.printStackTrace();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ExceptionResponse.builder()
+                .body(
+                        ExceptionResponse.builder()
                         .businessErrorDescription("Internal errors, please contact admin")
                         .error(e.getMessage())
+                        .build()
+                );
+    }
+
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<?> handleMissingServletRequestParameterException(@NotNull MissingServletRequestParameterException e) {
+        // Create a custom error message
+        String errorMessage = "Missing request parameter: " + e.getParameterName();
+
+        // Return a ResponseEntity with the custom error message and HTTP status
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
+
+    @ExceptionHandler(MissingPathVariableException.class)
+    public ResponseEntity<?> handleMissingPathVariableException(@NotNull MissingPathVariableException e) {
+        // Create a custom error message
+        String errorMessage = "Missing path variable: " + e.getVariableName();
+
+        // Return a ResponseEntity with the custom error message and HTTP status
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
+
+    @ExceptionHandler(MissingServletRequestPartException.class)
+    public ResponseEntity<?> handleMissingServletRequestPartException(@NotNull MissingServletRequestPartException e) {
+        // Create a custom error message
+        String errorMessage = "Missing request part: " + e.getRequestPartName();
+
+        // Return a ResponseEntity with the custom error message and HTTP status
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
+
+    @ExceptionHandler(ServletRequestBindingException.class)
+    public ResponseEntity<?> handleServletRequestBindingException(@NotNull ServletRequestBindingException e) {
+        // Create a custom error message
+        String errorMessage = "Request binding error: " + e.getMessage();
+
+        // Return a ResponseEntity with the custom error message and HTTP status
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
+
+    @ExceptionHandler(ConversionNotSupportedException.class)
+    public ResponseEntity<?> handleConversionNotSupportedException(@NotNull ConversionNotSupportedException e) {
+        // Create a custom error message
+        String errorMessage = "Data conversion error: " + e.getMessage();
+
+        // Return a ResponseEntity with the custom error message and HTTP status
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
+
+    @ExceptionHandler(TypeMismatchException.class)
+    public ResponseEntity<?> handleTypeMismatchException(@NotNull TypeMismatchException e) {
+        // Create a custom error message
+        String errorMessage = "Type mismatch error: " + e.getMessage();
+
+        // Return a ResponseEntity with the custom error message and HTTP status
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<?> handleMaxUploadSizeExceededException(
+            @NotNull MaxUploadSizeExceededException e) {
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
+                .body(
+//                        e.getMessage()
+                        ExceptionResponse.builder()
+                                .businessErrorDescription("File must not exceed " + fileProperties.getMaxFileSize())
+                                .error(e.getMessage())
+                                .build()
+                );
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<?> handleDataIntegrityViolationException(
+            @NotNull DataIntegrityViolationException e) {
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(
+                        ExceptionResponse.builder()
+                                .businessErrorDescription("Data integrity violation")
+                                .error(e.getMessage())
+                                .build()
+        //                        e.getMessage()
+                );
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<?> handleRuntimeException(@NotNull RuntimeException e) {
+        // Create a custom error message
+        String errorMessage = "An error occurred: " + e.getMessage();
+
+        // Return a ResponseEntity with the custom error message and HTTP status
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    @ExceptionHandler(MultipartException.class)
+    public ResponseEntity<?> handleMultipartException(@NotNull MultipartException e) {
+        // Create a custom error message
+        String errorMessage = "Error processing the uploaded file: " + e.getMessage();
+
+        // Return a ResponseEntity with the custom error message and HTTP status
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ExceptionResponse.builder()
+                        .error(errorMessage)
                         .build()
                 );
     }
