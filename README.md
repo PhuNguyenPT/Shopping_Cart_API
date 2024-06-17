@@ -4,6 +4,7 @@
 3. Postman
 4. Any web browser (Google, Microsoft Edge, Firefox)
 5. Github
+6. Docker
 
 ## Setup Instructions
 
