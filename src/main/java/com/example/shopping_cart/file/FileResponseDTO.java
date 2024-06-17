@@ -1,12 +1,18 @@
 package com.example.shopping_cart.file;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.math.BigInteger;
 
-public record FileResponseDTO(
-        Long id,
-        String name,
-        String fileType,
-        BigInteger size,
-        byte[] fileByte
-) {
+@Getter
+@Setter
+@Builder
+public class FileResponseDTO {
+    private final Long id;
+    private final String name;
+    private final String fileType;
+    private final BigInteger size;
+    private final byte[] fileByte;
 }
