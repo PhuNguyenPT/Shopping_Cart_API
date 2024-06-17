@@ -46,7 +46,7 @@ To set up the backend of the Book Social Network project, follow these steps:
    https://localhost:443/api/v1/auth/register
 ```
 
-   - Example in body:
+   - Example in body Raw:
      
 ```bash
 {
@@ -75,7 +75,7 @@ To set up the backend of the Book Social Network project, follow these steps:
    https://localhost:443/api/v1/auth/login
 ```
 
-   - Example in body
+   - Example in body Raw:
 
 ```bash
 {
