@@ -10,6 +10,7 @@ import java.math.BigInteger;
 @Setter
 @Builder
 public class FileResponseDTO {
+    private String message;
     private final Long id;
     private final String name;
     private final String fileType;

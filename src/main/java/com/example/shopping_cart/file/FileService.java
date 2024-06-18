@@ -33,7 +33,7 @@ public class FileService {
 
     public ResponseEntity<?> saveFile(MultipartFile multipartFile) {
         try {
-            var file = fileMapper.toFile(multipartFile);
+            var file = FileMapper.toFile(multipartFile);
             var savedFile = fileRepository.save(file);
             return ResponseEntity.ok("Save file " + savedFile.getName() + " successfully.");
         } catch (RuntimeException e) {
@@ -134,5 +134,16 @@ public class FileService {
         }
         File savedFile = fileRepository.save(file);
         return fileMapper.toFileResponseDTOUpdate(savedFile);
+    }
+
+    public List<File> saveAllFilesByProduct(
+            @NotNull List<MultipartFile> multipartFiles,
+            Product product
+    ) {
+        List<File> files = multipartFiles.stream()
+                .filter(multipartFile -> !multipartFile.isEmpty())
+                .map(multipartFile -> FileMapper.toFileSave(multipartFile, product))
+                .collect(Collectors.toList());
+        return fileRepository.saveAll(files);
     }
 }
