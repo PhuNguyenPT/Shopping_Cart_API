@@ -42,7 +42,9 @@ public class FileService {
         }
     }
 
-    public ResponseEntity<?> saveFiles(@NotNull List<MultipartFile> multipartFiles) {
+    public ResponseEntity<?> saveFiles(
+            @NotNull List<MultipartFile> multipartFiles
+    ) {
 
         List<File> files = multipartFiles.stream()
                 .filter(multipartFile -> !multipartFile.isEmpty()) // Check that the file is not empty
@@ -66,12 +68,20 @@ public class FileService {
                 .filter(multipartFile -> !multipartFile.isEmpty())
                 .map(multipartFile -> fileMapper.toFileSave(multipartFile, product))
                 .collect(Collectors.toUnmodifiableList());
+        if (files.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No non-empty files provided");
+        }
         List<File> savedFiles = files.stream()
                 .map(fileRepository::save)
                 .collect(Collectors.toUnmodifiableList());
         List<FileResponseDTO> fileResponseDTOList = savedFiles.stream()
                 .map(FileMapper::toFileResponseDTOSave)
                 .collect(Collectors.toUnmodifiableList());
+        fileResponseDTOList.stream()
+                .forEach(fileResponseDTO ->
+                        fileResponseDTO.setMessage("Save " +
+                                        fileResponseDTO.getName() +
+                                        " successfully"));
 //        return ResponseEntity.ok("Saved " + savedFiles.size() + " files successfully.");
         return ResponseEntity.status(HttpStatus.CREATED).body(fileResponseDTOList);
     }
