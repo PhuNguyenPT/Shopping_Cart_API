@@ -166,4 +166,26 @@ https://localhost:443/api/v1/user/home
        * `files` : *multipart file* <br/>
        
 6. PATCH: https://localhost/api/v1/products/update/{product-id}
-   
+   - Update Product attribute(s) with `product-id` <br/>   
+   - Request Body <br/>
+     + Content-Type = multipart/form-data <br/>
+     + Suported attributes for Product: 
+       * `name` 
+       * `price`
+       * `stockQuantity`
+       * `description`
+       * `categoryIds` <br/><br/>
+
+     + Attributes constraints for Product:
+       * `name` : *Optional*
+       * `price` : *Optional*
+       * `stockQuantity` : *Optional*
+       * `description` : *Optional*
+       * `categoryIds` : *Optional* <br/><br/>
+
+     + Attributes explaination for Product:
+       * `name` : *product name*
+       * `price` : *product price*
+       * `stockQuantity` : *product stock quantity*
+       * `description` : *product description*
+       * `categoryIds` : *saved category ids from database* <br/><br/>
