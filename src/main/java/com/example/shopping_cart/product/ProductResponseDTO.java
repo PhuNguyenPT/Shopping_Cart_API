@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 @Builder
 public class ProductResponseDTO {
-    private final String message;
+    private String message;
     private final Long id;
     private final String name;
     private final Double price;
@@ -22,4 +22,5 @@ public class ProductResponseDTO {
     private final ZonedDateTime createdDate;
     private final ZonedDateTime lastModifiedDate;
     private final List<FileResponseDTO> fileResponseDTOList;
+    private final List<CategoryResponseDTO> categoryResponseDTOList;
 }

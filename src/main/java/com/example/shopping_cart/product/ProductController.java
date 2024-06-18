@@ -20,11 +20,9 @@ public class ProductController {
     @PostMapping("/upload")
     public ResponseEntity<?> upload(
             @ModelAttribute @Valid
-            ProductRequestDTO productRequestDTO,
-            @RequestParam(value = "files", required = false)
-            List<MultipartFile> multipartFiles
+            ProductRequestDTO productRequestDTO
     ) {
-        return productService.save(productRequestDTO, multipartFiles);
+        return productService.save(productRequestDTO);
     }
 
     @GetMapping("/search/{product-name}")
@@ -60,5 +58,13 @@ public class ProductController {
             MultipartFile multipartFile
     ) {
         return productService.updateFilesByProductId(productId, fileId, multipartFile);
+    }
+
+    @PatchMapping("/update/{product-id}")
+    public ResponseEntity<?> updateProductAttributes(
+            @PathVariable(value = "product-id") Long id,
+            @ModelAttribute @Valid ProductUpdateDTO productUpdateDTO
+    ) {
+        return productService.updateProductAttributes(id, productUpdateDTO);
     }
 }
