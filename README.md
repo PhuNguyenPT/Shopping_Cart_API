@@ -86,12 +86,12 @@ https://localhost:443/api/v1/auth/login
 }
 ```
 
-9. Create New Environt by Environments->Create Environment <br/>
-    ![create-environment](https://github.com/PhuNguyenPT/Shopping_Cart/assets/154642828/fd713c17-8020-4267-ad3d-a09b46af643d)
-   - Create new variable token and Save <br/>
-   ![save](https://github.com/PhuNguyenPT/Shopping_Cart/assets/154642828/a4900bb7-6457-4396-b472-25fc6d7de811)
-   - Choose environment to New Environment <br/>
-   ![environment](https://github.com/PhuNguyenPT/Shopping_Cart/assets/154642828/6e219860-2a8c-4795-add8-35704d775949)
+9. Create New Environt by Environments->Create Environment <br/><br/>
+    ![create-environment](https://github.com/PhuNguyenPT/Shopping_Cart/assets/154642828/fd713c17-8020-4267-ad3d-a09b46af643d) <br/><br/>
+   - Create new variable token and Save <br/><br/>
+   ![save](https://github.com/PhuNguyenPT/Shopping_Cart/assets/154642828/a4900bb7-6457-4396-b472-25fc6d7de811) <br/><br/>
+   - Choose environment to New Environment <br/><br/>
+   ![environment](https://github.com/PhuNguyenPT/Shopping_Cart/assets/154642828/6e219860-2a8c-4795-add8-35704d775949) <br/><br/>
    - Navigate to Response Body in step 8 to select token "value" and right-click to choose Set: New Envinronment -> token:
 ```bash
 {
@@ -104,6 +104,32 @@ https://localhost:443/api/v1/auth/login
 ```bash
 https://localhost:443/api/v1/user/home
 ```
-   - Go to Authorization->Auth Type->Bearer Token and enter in the box '{{token}}' and Send <br/>
-![user-home](https://github.com/PhuNguyenPT/Shopping_Cart/assets/154642828/5af38fb1-6374-4677-a280-43fe49288db6)
+   - Go to Authorization->Auth Type->Bearer Token and enter in the box '{{token}}' and Send <br/><br/>
+![user-home](https://github.com/PhuNguyenPT/Shopping_Cart/assets/154642828/5af38fb1-6374-4677-a280-43fe49288db6) <br/><br/>
+
+## Rest API
+1. POST: https://localhost/api/v1/products/upload <br/>
+   - Request Body: <br/>
+     + Content-Type = multipart/form-data <br/><br/>
+     + Suported attributes for Product: 
+       * `name` 
+       * `price`
+       * `stockQuantity`
+       * `description`
+       * `categoryIds`
+       * `newCategoryNames` <br/><br/>
+     + Attributes constraints for Product:
+       * `name` : *NotNull*, *NotBlank*
+       * `price` : *NotNull*, *DecimalMin(0.01)*
+       * `stockQuantity` : *NotNull*, *Min(0)*
+       * `description` : *Optional*
+       * `categoryIds` : *Optional*
+       * `newCategoryNames` : *Optional* <br/><br/>
+     + Attributes explaination for Product:
+       * `name` : *product name*
+       * `price` : *product price*
+       * `stockQuantity` : *product stock quantity*
+       * `description` : *product description*
+       * `categoryIds` : *saved category ids from database*
+       * `newCategoryNames` : *new category names to save to database* <br/><br/>
 
