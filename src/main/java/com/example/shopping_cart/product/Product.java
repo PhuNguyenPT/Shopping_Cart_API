@@ -32,11 +32,11 @@ public class Product extends BaseEntity {
 
     @ManyToMany(mappedBy = "products")
     @JsonIgnore
-    private List<Order> orders;
+    private List<Order> orders = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<File> files;
+    private List<File> files = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -44,21 +44,15 @@ public class Product extends BaseEntity {
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
-    private List<Category> categories;
+    private List<Category> categories = new ArrayList<>();
 
     @ManyToMany(mappedBy = "products")
     @JsonIgnore
-    private List<ShoppingCart> shoppingCarts;
+    private List<ShoppingCart> shoppingCarts = new ArrayList<>();
 
 
     @OneToMany(mappedBy = "product")
     @JsonIgnore
-    private List<ProductQuantity> quantities;
+    private List<ProductQuantity> quantities = new ArrayList<>();
 
-    public void addFile(File file) {
-        if (this.files == null) {
-            this.files = new ArrayList<>();
-        }
-        this.files.add(file);
-    }
 }
