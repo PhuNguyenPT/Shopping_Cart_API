@@ -88,10 +88,13 @@ https://localhost:443/api/v1/auth/login
 
 9. Create New Environt by Environments->Create Environment <br/><br/>
     ![create-environment](https://github.com/PhuNguyenPT/Shopping_Cart/assets/154642828/fd713c17-8020-4267-ad3d-a09b46af643d) <br/><br/>
+    
    - Create new variable token and Save <br/><br/>
    ![save](https://github.com/PhuNguyenPT/Shopping_Cart/assets/154642828/a4900bb7-6457-4396-b472-25fc6d7de811) <br/><br/>
+   
    - Choose environment to New Environment <br/><br/>
    ![environment](https://github.com/PhuNguyenPT/Shopping_Cart/assets/154642828/6e219860-2a8c-4795-add8-35704d775949) <br/><br/>
+   
    - Navigate to Response Body in step 8 to select token "value" and right-click to choose Set: New Envinronment -> token:
 ```bash
 {
@@ -109,6 +112,7 @@ https://localhost:443/api/v1/user/home
 
 ## Rest API
 1. POST: https://localhost/api/v1/products/upload <br/>
+   - Upload Product
    - Request Body: <br/>
      + Content-Type = multipart/form-data <br/><br/>
      + Suported attributes for Product: 
@@ -133,3 +137,30 @@ https://localhost:443/api/v1/user/home
        * `categoryIds` : *saved category ids from database*
        * `newCategoryNames` : *new category names to save to database* <br/><br/>
 
+2. GET: https://localhost/api/v1/products/search/{product-id} <br/>
+   - Search Product by `product-id` <br/>
+
+3. DELETE: https://localhost/api/v1/products/delete/{product-id} <br/>
+   - Delete Product by `product-id` but do not delete the `categories` <br/>
+
+4. PUT: https://localhost/api/v1/products/update/{product-id}/files/{file-id} <br/>
+   - Update Files with `file-id` of Product with `product-id` by new File <br/>
+   - Request Body <br/>
+     + Content-Type = multipart/form-data <br/>
+     + Suported attributes for Product: 
+       * `files` <br/>
+     + Attributes constraints for Product:
+       * `files` : *NotNull* <br/>
+     + Attributes explaination for Product:
+       * `files` : *multipart file* <br/>
+5. POST: https://localhost/api/v1/products/{productId}/files <br/>
+   - Create new File(s) for Product with `product-id` <br/>
+   - Request Body <br/>
+     + Content-Type = multipart/form-data <br/>
+     + Suported attributes for Product: 
+       * `files` <br/>
+     + Attributes constraints for Product:
+       * `files` : *NotNull* <br/>
+     + Attributes explaination for Product:
+       * `files` : *multipart file* <br/>
+7. PATCH: https://localhost/api/v1/products/update/{product-id}
