@@ -153,6 +153,7 @@ https://localhost:443/api/v1/user/home
        * `files` : *NotNull* <br/>
      + Attributes explaination for Product:
        * `files` : *multipart file* <br/>
+       
 5. POST: https://localhost/api/v1/products/{productId}/files <br/>
    - Create new File(s) for Product with `product-id` <br/>
    - Request Body <br/>
@@ -163,4 +164,6 @@ https://localhost:443/api/v1/user/home
        * `files` : *NotNull* <br/>
      + Attributes explaination for Product:
        * `files` : *multipart file* <br/>
-7. PATCH: https://localhost/api/v1/products/update/{product-id}
+       
+6. PATCH: https://localhost/api/v1/products/update/{product-id}
+   
