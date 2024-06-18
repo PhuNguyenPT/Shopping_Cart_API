@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ import java.util.List;
 @Entity
 @Table(name = "products")
 @Tag(name = "Product")
+@EntityListeners(AuditingEntityListener.class)
 public class Product extends BaseEntity {
     @Id
     @GeneratedValue
@@ -33,7 +35,10 @@ public class Product extends BaseEntity {
     @JsonIgnore
     private List<Order> orders;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(
+            mappedBy = "product",
+            cascade = CascadeType.ALL
+    )
     @JsonIgnore
     private List<File> files;
 
