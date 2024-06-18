@@ -46,7 +46,7 @@ public class FileService {
 
         List<File> files = multipartFiles.stream()
                 .filter(multipartFile -> !multipartFile.isEmpty()) // Check that the file is not empty
-                .map(fileMapper::toFile)
+                .map(FileMapper::toFile)
                 .collect(Collectors.toUnmodifiableList());
         List<File> savedFiles = files.stream()
                 .map(fileRepository::save)
@@ -70,7 +70,7 @@ public class FileService {
                 .map(fileRepository::save)
                 .collect(Collectors.toUnmodifiableList());
         List<FileResponseDTO> fileResponseDTOList = savedFiles.stream()
-                .map(fileMapper::toFileResponseDTOSave)
+                .map(FileMapper::toFileResponseDTOSave)
                 .collect(Collectors.toUnmodifiableList());
 //        return ResponseEntity.ok("Saved " + savedFiles.size() + " files successfully.");
         return ResponseEntity.status(HttpStatus.CREATED).body(fileResponseDTOList);
@@ -80,7 +80,7 @@ public class FileService {
         try {
             List<FileResponseDTO> dtoList = fileRepository.findByNameContainingIgnoreCase(fileName)
                     .stream()
-                    .map(fileMapper::toFileResponseDTO)
+                    .map(FileMapper::toFileResponseDTO)
                     .collect(Collectors.toUnmodifiableList());
             if (dtoList.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No files found with name: " + fileName);

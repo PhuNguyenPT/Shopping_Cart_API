@@ -12,7 +12,7 @@ import java.math.BigInteger;
 @Service
 public class FileMapper {
 
-    public File toFile(
+    public static File toFile(
             @NotNull MultipartFile multipartFile
     ) {
         try {
@@ -27,7 +27,7 @@ public class FileMapper {
         }
     }
 
-    public byte[] toCompressedFileByteBase64(
+    public static byte[] toCompressedFileByteBase64(
             byte[] fileByte
     ) {
         try {
@@ -38,7 +38,7 @@ public class FileMapper {
         }
     }
 
-    public FileResponseDTO toFileResponseDTO(
+    public static FileResponseDTO toFileResponseDTO(
             @NotNull File file
     ) {
         var compressedFileByte = Base64.decodeBase64(file.getFileContent(), 0, file.getFileContent().length);
@@ -54,7 +54,7 @@ public class FileMapper {
                 .build();
     }
 
-    public File toFileSave(
+    public static File toFileSave(
             @NotNull MultipartFile multipartFile,
             Product product
     ){
@@ -71,7 +71,7 @@ public class FileMapper {
         }
     }
 
-    public FileResponseDTO toFileResponseDTOSave(
+    public static FileResponseDTO toFileResponseDTOSave(
             @NotNull File file
     ) {
 //        var compressedFileByte = Base64.decodeBase64(file.getFileContent(), 0, file.getFileContent().length);
