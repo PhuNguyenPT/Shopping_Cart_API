@@ -54,12 +54,12 @@ public class ProductMapper {
                 .fileResponseDTOList(
                         product.getFiles().stream()
                                 .map(FileMapper::toFileResponseDTOSearch)
-                                .collect(Collectors.toUnmodifiableList())
+                                .toList()
                 )
                 .categoryResponseDTOList(
                         product.getCategories().stream()
                                 .map(CategoryMapper::toCategoryResponseDTO)
-                                .collect(Collectors.toUnmodifiableList())
+                                .toList()
                 )
                 .build();
     }

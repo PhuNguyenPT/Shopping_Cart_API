@@ -20,7 +20,7 @@ public class CategoryService {
         List<Category> existingCategories = categoryRepository.findAllByIdIn(categoryIds);
         List<Long> notFoundCategoryIds = categoryIds.stream()
                 .filter(id -> existingCategories.stream().noneMatch(category -> category.getId().equals(id)))
-                .collect(Collectors.toList());
+                .toList();
         if (!notFoundCategoryIds.isEmpty()) {
             throw new EntityNotFoundException("Categories not found for IDs: " + notFoundCategoryIds);
         }
@@ -35,7 +35,7 @@ public class CategoryService {
         }
         List<CategoryResponseDTO> categoryResponseDTOList = categories.stream()
                 .map(CategoryMapper::toCategoryResponseDTO)
-                .collect(Collectors.toUnmodifiableList());
+                .toList();
         return ResponseEntity.status(HttpStatus.OK).body(categoryResponseDTOList);
     }
 
