@@ -10,6 +10,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -33,7 +34,7 @@ public class Product extends BaseEntity {
     @JsonIgnore
     private List<Order> orders;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<File> files;
 
@@ -53,4 +54,11 @@ public class Product extends BaseEntity {
     @OneToMany(mappedBy = "product")
     @JsonIgnore
     private List<ProductQuantity> quantities;
+
+    public void addFile(File file) {
+        if (this.files == null) {
+            this.files = new ArrayList<>();
+        }
+        this.files.add(file);
+    }
 }
