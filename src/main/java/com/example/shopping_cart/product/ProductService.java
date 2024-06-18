@@ -137,10 +137,11 @@ public class ProductService {
     @Transactional
     public ResponseEntity<?> createProductFilesByProductId(
             Long productId,
-            List<MultipartFile> multipartFiles) {
+            @NotNull List<MultipartFile> multipartFiles) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(EntityNotFoundException::new);
         return fileService.saveFilesByProduct(product, multipartFiles);
+
     }
 
     public ResponseEntity<?> updateProductAttributes(

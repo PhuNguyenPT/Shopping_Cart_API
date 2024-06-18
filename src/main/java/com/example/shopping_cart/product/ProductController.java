@@ -45,16 +45,18 @@ public class ProductController {
     @PostMapping("/{productId}/files")
     public ResponseEntity<?> createProductFiles(
             @PathVariable Long productId,
-            @RequestParam("files") List<MultipartFile> multipartFiles) {
+            @RequestParam("files")
+            @NotNull(message = "Please provide at least one file")
+            List<MultipartFile> multipartFiles) {
         return productService.createProductFilesByProductId(productId, multipartFiles);
     }
 
     @PutMapping("/update/{product-id}/files/{file-id}")
-    public ResponseEntity<?> updateProductFiles(
+    public ResponseEntity<?> updateProductFileByProductId(
             @PathVariable(value = "product-id") Long productId,
             @PathVariable(value = "file-id") Long fileId,
             @RequestParam("files")
-            @NotNull(message = "Please provide files to upload")
+            @NotNull(message = "Please provide a file to update")
             MultipartFile multipartFile
     ) {
         return productService.updateFilesByProductId(productId, fileId, multipartFile);
