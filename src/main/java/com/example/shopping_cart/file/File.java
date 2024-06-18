@@ -18,7 +18,6 @@ import java.math.BigInteger;
 @Entity
 @Getter
 @Setter
-@EntityListeners(AuditingEntityListener.class)
 //@PrimaryKeyJoinColumn(name = "file_id") -> only with join table strategy
 //@DiscriminatorValue("F") -> only with single table strategy
 @Table(name = "files")
