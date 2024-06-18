@@ -104,7 +104,7 @@ public class ProductService {
         return ResponseEntity.ok(
                 products.stream()
                         .map(ProductMapper::toProductResponseDTO)
-                        .collect(Collectors.toUnmodifiableList())
+                        .toList()
         );
     }
 

@@ -49,10 +49,10 @@ public class FileService {
         List<File> files = multipartFiles.stream()
                 .filter(multipartFile -> !multipartFile.isEmpty()) // Check that the file is not empty
                 .map(FileMapper::toFile)
-                .collect(Collectors.toUnmodifiableList());
+                .toList();
         List<File> savedFiles = files.stream()
                 .map(fileRepository::save)
-                .collect(Collectors.toUnmodifiableList());
+                .toList();
 
 //        return ResponseEntity.ok("Saved " + savedFiles.size() + " files successfully.");
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -66,18 +66,18 @@ public class FileService {
 
         List<File> files = multipartFiles.stream()
                 .filter(multipartFile -> !multipartFile.isEmpty())
-                .map(multipartFile -> fileMapper.toFileSave(multipartFile, product))
-                .collect(Collectors.toUnmodifiableList());
+                .map(multipartFile -> FileMapper.toFileSave(multipartFile, product))
+                .toList();
         if (files.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No non-empty files provided");
         }
         List<File> savedFiles = files.stream()
                 .map(fileRepository::save)
-                .collect(Collectors.toUnmodifiableList());
+                .toList();
         List<FileResponseDTO> fileResponseDTOList = savedFiles.stream()
                 .map(FileMapper::toFileResponseDTOSave)
-                .collect(Collectors.toUnmodifiableList());
-        fileResponseDTOList.stream()
+                .toList();
+        fileResponseDTOList
                 .forEach(fileResponseDTO ->
                         fileResponseDTO.setMessage("Save " +
                                         fileResponseDTO.getName() +
@@ -91,7 +91,7 @@ public class FileService {
             List<FileResponseDTO> dtoList = fileRepository.findByNameContainingIgnoreCase(fileName)
                     .stream()
                     .map(FileMapper::toFileResponseDTO)
-                    .collect(Collectors.toUnmodifiableList());
+                    .toList();
             if (dtoList.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No files found with name: " + fileName);
             }
@@ -135,7 +135,7 @@ public class FileService {
         file.setSize(BigInteger.valueOf(multipartFile.getSize()));
         try {
             file.setFileContent(
-                    fileMapper.toCompressedFileByteBase64(
+                    FileMapper.toCompressedFileByteBase64(
                             multipartFile.getBytes()
                     )
             );
