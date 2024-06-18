@@ -30,7 +30,6 @@ public class File extends BaseEntity {
     @Column(name = "file_content")
     private byte[] fileContent;
 
-    @Column(unique = true)
     private String name;
     private String url;
     private BigInteger size;

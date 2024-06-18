@@ -1,10 +1,13 @@
 package com.example.shopping_cart.file;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.ByteArrayOutputStream;
 import java.util.zip.*;
 
 public class FileUtil {
 
+    @NotNull
     public static byte[] compressByte(byte[] file) {
         Deflater deflater = new Deflater();
         deflater.setLevel(Deflater.BEST_COMPRESSION);
@@ -25,6 +28,7 @@ public class FileUtil {
         return stream.toByteArray();
     }
 
+    @NotNull
     public static byte[] decompressByte(byte[] file) {
         Inflater inflater = new Inflater();
         inflater.setInput(file);
