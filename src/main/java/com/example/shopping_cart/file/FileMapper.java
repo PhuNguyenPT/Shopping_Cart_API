@@ -1,13 +1,13 @@
 package com.example.shopping_cart.file;
 
 import com.example.shopping_cart.product.Product;
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.Base64;
 
 @Service
 public class FileMapper {
@@ -32,7 +32,7 @@ public class FileMapper {
     ) {
         try {
             var compressedFileByte = FileUtil.compressByte(fileByte);
-            return Base64.encodeBase64(compressedFileByte, true);
+            return Base64.getEncoder().encode(compressedFileByte);
         } catch (Exception e) {
             throw new RuntimeException("Error compressing file byte array", e);
         }
@@ -41,7 +41,7 @@ public class FileMapper {
     public static FileResponseDTO toFileResponseDTO(
             @NotNull File file
     ) {
-        var compressedFileByte = Base64.decodeBase64(file.getFileContent(), 0, file.getFileContent().length);
+        var compressedFileByte = Base64.getDecoder().decode(file.getFileContent());
         var fileByte = FileUtil.decompressByte(compressedFileByte);
 //        var fileByte = FileUtil.decompressFile(file.getFileContent());
 //        System.out.println(fileByte);
@@ -100,7 +100,7 @@ public class FileMapper {
     public static FileResponseDTO toFileResponseDTOSearch(
             @NotNull File file
     ) {
-        var compressedFileByte = Base64.decodeBase64(file.getFileContent(), 0, file.getFileContent().length);
+        var compressedFileByte = Base64.getDecoder().decode(file.getFileContent());
         var fileByte = FileUtil.decompressByte(compressedFileByte);
         return FileResponseDTO.builder()
                 .id(file.getId())
