@@ -40,6 +40,7 @@ public class AuthenticationService {
 
     @Value("${application.mailing.frontend.activation-url}")
     private String activationUrl;
+
     public void register(@NotNull RegistrationRequest request) {
         var userRole = roleRepository.findByAuthority("USER")
                 .orElseThrow(() -> new IllegalStateException("ROLE USER was not initialized"));
@@ -78,7 +79,7 @@ public class AuthenticationService {
 
     @NotNull
     private String generateAndSaveActivationToken(MyUser user) {
-        String generatedToken = generateActivationCode(6);
+        String generatedToken = generateActivationCode();
         var token = Token.builder()
                 .value(generatedToken)
                 .createdAt(LocalDateTime.now())
@@ -90,11 +91,11 @@ public class AuthenticationService {
     }
 
     @NotNull
-    private String generateActivationCode(int length) {
+    private String generateActivationCode() {
         String characters = "0123456789";
         StringBuilder codeBuilder = new StringBuilder();
         SecureRandom secureRandom = new SecureRandom();
-        for (int i = 0; i < length; i++) {
+        for (int i = 0; i < 6; i++) {
             int randomIndex = secureRandom.nextInt(characters.length()); // 0..9
             codeBuilder.append(characters.charAt(randomIndex));
         }
@@ -108,7 +109,7 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-        Map<String, Object> claims = new HashMap<String, Object>();
+        Map<String, Object> claims = new HashMap<>();
         Optional<MyUser> user = userRepository.findByEmail(auth.getName());
 
         if (user.isPresent()) {
