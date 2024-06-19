@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "lectures")
 public class Lecture {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
     @ManyToOne

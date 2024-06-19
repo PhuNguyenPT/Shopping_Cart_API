@@ -2,6 +2,7 @@ package com.example.shopping_cart.cart;
 
 import com.example.shopping_cart.common.BaseEntity;
 import com.example.shopping_cart.product.Product;
+import com.example.shopping_cart.product_quantity.ProductQuantity;
 import com.example.shopping_cart.user.MyUser;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,8 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -23,14 +26,13 @@ import java.util.List;
 @Table(name = "carts")
 public class ShoppingCart extends BaseEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinTable(name = "carts_users",
-            joinColumns = @JoinColumn(name = "cart_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
+    @Column(name = "total_amount")
+    private BigDecimal totalAmount;
+
+    @OneToOne(mappedBy = "shoppingCart", fetch = FetchType.LAZY)
     private MyUser user;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -39,5 +41,8 @@ public class ShoppingCart extends BaseEntity {
             joinColumns = @JoinColumn(name = "cart_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id")
     )
-    private List<Product> products;
+    private List<Product> products = new ArrayList<>();
+
+    @OneToMany(mappedBy = "shoppingCart", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductQuantity> quantities = new ArrayList<>();
 }

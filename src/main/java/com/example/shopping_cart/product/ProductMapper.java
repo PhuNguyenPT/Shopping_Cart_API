@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Collections;
 import java.util.Optional;
 
 @Service
@@ -55,6 +56,29 @@ public class ProductMapper {
                         product.getFiles().stream()
                                 .map(FileMapper::toFileResponseDTOSearch)
                                 .toList()
+                )
+                .categoryResponseDTOList(
+                        product.getCategories().stream()
+                                .map(CategoryMapper::toCategoryResponseDTO)
+                                .toList()
+                )
+                .build();
+    }
+    public static ProductResponseDTO toProductResponseDTOShoppingCart(
+            @NotNull Product product
+    ) {
+        return ProductResponseDTO.builder()
+                .name(product.getName())
+                .price(product.getPrice())
+                .stockQuantity(product.getStockQuantity())
+                .description(product.getDescription())
+                .fileResponseDTOList(
+                        Collections.singletonList(
+                                        product.getFiles().stream()
+                                                .map(FileMapper::toFileResponseDTOShoppingCart)
+                                                .findFirst()
+                                                .orElseThrow(() -> new RuntimeException("Cannot find file(s) in the shopping cart product"))
+                        )
                 )
                 .categoryResponseDTOList(
                         product.getCategories().stream()

@@ -110,4 +110,15 @@ public class FileMapper {
                 .fileByte(fileByte)
                 .build();
     }
+
+    public static FileResponseDTO toFileResponseDTOShoppingCart(
+            @NotNull File file
+    ) {
+        var compressedFileByte = Base64.getDecoder().decode(file.getFileContent());
+        var fileByte = FileUtil.decompressByte(compressedFileByte);
+        return FileResponseDTO.builder()
+                .id(file.getId())
+                .fileByte(fileByte)
+                .build();
+    }
 }

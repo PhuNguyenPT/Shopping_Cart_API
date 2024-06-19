@@ -48,8 +48,9 @@ public class CategoryService {
                 category = Category.builder()
                         .name(name)
                         .build();
-                categories.add(category);
+
             }
+            categories.add(category);
         }
         return categories;
     }
