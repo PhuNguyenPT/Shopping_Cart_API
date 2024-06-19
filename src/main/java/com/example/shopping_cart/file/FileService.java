@@ -37,8 +37,7 @@ public class FileService {
             var savedFile = fileRepository.save(file);
             return ResponseEntity.ok("Save file " + savedFile.getName() + " successfully.");
         } catch (RuntimeException e) {
-            e.printStackTrace();
-            return null;
+            throw new RuntimeException("Cannot save file " + multipartFile.getOriginalFilename());
         }
     }
 
@@ -97,9 +96,8 @@ public class FileService {
             }
 
             return ResponseEntity.ok(dtoList);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Cannot find File " + fileName);
         }
     }
 
@@ -116,8 +114,7 @@ public class FileService {
 
             return ResponseEntity.ok(String.format("Deleted %d file(s) %s successfully.", fileDeleteCount, fileName));
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            throw new RuntimeException("Cannot delete File " + fileName);
         }
     }
 
