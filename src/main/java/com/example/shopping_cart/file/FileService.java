@@ -26,15 +26,15 @@ public class FileService {
 //        this.customExceptionHandler = customExceptionHandler;
 //    }
 
-    public ResponseEntity<?> saveFile(MultipartFile multipartFile) {
-        try {
-            var file = FileMapper.toFile(multipartFile);
-            var savedFile = fileRepository.save(file);
-            return ResponseEntity.ok("Save file " + savedFile.getName() + " successfully.");
-        } catch (RuntimeException e) {
-            throw new RuntimeException("Cannot save file " + multipartFile.getOriginalFilename());
-        }
-    }
+//    public ResponseEntity<?> saveFile(MultipartFile multipartFile) {
+//        try {
+//            var file = FileMapper.toFile(multipartFile);
+//            var savedFile = fileRepository.save(file);
+//            return ResponseEntity.ok("Save file " + savedFile.getName() + " successfully.");
+//        } catch (RuntimeException e) {
+//            throw new RuntimeException("Cannot save file " + multipartFile.getOriginalFilename());
+//        }
+//    }
 
     public ResponseEntity<?> saveFiles(
             @NotNull List<MultipartFile> multipartFiles
