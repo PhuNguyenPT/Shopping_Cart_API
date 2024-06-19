@@ -30,7 +30,7 @@ datasource:
 2. Run the docker-compose file in a terminal
 
 ```bash
-docker-compose up -d
+docker-compose up
 ```
 3. Install dependencies (assuming Maven is installed) in a second terminal:
 
