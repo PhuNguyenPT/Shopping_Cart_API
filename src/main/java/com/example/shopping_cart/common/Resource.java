@@ -1,14 +1,13 @@
 package com.example.shopping_cart.common;
 
-import com.example.shopping_cart.models.Lecture;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.math.BigInteger;
 
-@Getter
 @Setter
+@Getter
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,27 +24,4 @@ public class Resource {
     private String url;
     private BigInteger size;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public BigInteger getSize() {
-        return size;
-    }
-
-    public void setSize(BigInteger size) {
-        this.size = size;
-    }
 }

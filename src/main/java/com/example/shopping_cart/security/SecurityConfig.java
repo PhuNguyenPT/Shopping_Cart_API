@@ -1,6 +1,7 @@
 package com.example.shopping_cart.security;
 
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -20,14 +21,17 @@ public class SecurityConfig {
 //    private final AuthenticationProvider authenticationProvider;
     private final JwtFilter jwtAuthFilter;
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+            @NotNull HttpSecurity httpSecurity
+    ) throws Exception {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(req ->
                         req.requestMatchers(
                                 "/auth/**",
                                 "/home",
-                                "/"
+                                "/",
+                                "/products/search/*"
                                         )
                                 .permitAll()
                                 .anyRequest()
