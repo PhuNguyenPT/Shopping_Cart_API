@@ -3,7 +3,6 @@ package com.example.shopping_cart.user;
 import com.example.shopping_cart.common.BaseEntity;
 import com.example.shopping_cart.order.Order;
 import com.example.shopping_cart.cart.ShoppingCart;
-import com.example.shopping_cart.product.ProductQuantity;
 import com.example.shopping_cart.role.MyRole;
 import com.example.shopping_cart.transaction.Transaction;
 import com.fasterxml.jackson.annotation.JsonIgnore;

@@ -1,9 +1,8 @@
-package com.example.shopping_cart.product;
+package com.example.shopping_cart.product_quantity;
 
-import com.example.shopping_cart.common.BaseEntity;
+import com.example.shopping_cart.product.Product;
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
