@@ -51,9 +51,12 @@ public class MyUser extends BaseEntity implements UserDetails, Principal {
     @JsonIgnore
     private List<Order> orders = new ArrayList<>();;
 
-    @OneToMany(mappedBy = "user")
-    @JsonIgnore
-    private List<ShoppingCart> shoppingCarts = new ArrayList<>();
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JoinTable(name = "user_cart",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "cart_id")
+    )
+    private ShoppingCart shoppingCart;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<MyRole> roles = new ArrayList<>();

@@ -56,5 +56,4 @@ public class Product extends BaseEntity {
     @OneToMany(mappedBy = "product")
     @JsonIgnore
     private List<ProductQuantity> quantities = new ArrayList<>();
-
 }

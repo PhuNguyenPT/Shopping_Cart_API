@@ -26,11 +26,7 @@ public class ShoppingCart extends BaseEntity {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinTable(name = "carts_users",
-            joinColumns = @JoinColumn(name = "cart_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
+    @OneToOne(mappedBy = "shoppingCart", fetch = FetchType.LAZY)
     private MyUser user;
 
     @ManyToMany(fetch = FetchType.EAGER)
