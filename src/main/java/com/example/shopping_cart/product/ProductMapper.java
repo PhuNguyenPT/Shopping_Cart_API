@@ -1,5 +1,6 @@
 package com.example.shopping_cart.product;
 
+import com.example.shopping_cart.category.CategoryMapper;
 import com.example.shopping_cart.file.FileMapper;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
@@ -7,7 +8,6 @@ import org.springframework.stereotype.Service;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductMapper {

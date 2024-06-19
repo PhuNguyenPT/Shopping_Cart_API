@@ -1,5 +1,8 @@
 package com.example.shopping_cart.product;
 
+import com.example.shopping_cart.category.Category;
+import com.example.shopping_cart.category.CategoryRepository;
+import com.example.shopping_cart.category.CategoryService;
 import com.example.shopping_cart.file.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

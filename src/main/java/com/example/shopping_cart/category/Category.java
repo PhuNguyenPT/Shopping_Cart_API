@@ -1,6 +1,7 @@
-package com.example.shopping_cart.product;
+package com.example.shopping_cart.category;
 
 import com.example.shopping_cart.common.BaseEntity;
+import com.example.shopping_cart.product.Product;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.example.shopping_cart.product;
+package com.example.shopping_cart.category;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;

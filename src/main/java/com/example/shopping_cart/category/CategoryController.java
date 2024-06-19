@@ -1,4 +1,4 @@
-package com.example.shopping_cart.product;
+package com.example.shopping_cart.category;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
