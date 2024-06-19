@@ -1,10 +1,7 @@
 package com.example.shopping_cart.models;
 
 import com.example.shopping_cart.common.Resource;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -20,7 +17,7 @@ import lombok.experimental.SuperBuilder;
 //@DiscriminatorValue("V") -> only with single table strategy
 public class Video extends Resource {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private int length;
 }

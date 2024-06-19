@@ -25,7 +25,7 @@ import java.util.List;
 @Tag(name = "Product")
 public class Product extends BaseEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private Double price;
@@ -53,7 +53,7 @@ public class Product extends BaseEntity {
     private List<ShoppingCart> shoppingCarts = new ArrayList<>();
 
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<ProductQuantity> quantities = new ArrayList<>();
 }

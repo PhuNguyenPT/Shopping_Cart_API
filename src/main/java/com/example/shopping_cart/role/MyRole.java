@@ -24,7 +24,7 @@ import java.util.List;
 @Table(name = "roles")
 public class MyRole implements GrantedAuthority {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(unique = true)
     private String authority;

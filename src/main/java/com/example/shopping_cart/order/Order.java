@@ -2,6 +2,7 @@ package com.example.shopping_cart.order;
 
 import com.example.shopping_cart.common.BaseEntity;
 import com.example.shopping_cart.product.Product;
+import com.example.shopping_cart.product_quantity.ProductQuantity;
 import com.example.shopping_cart.user.MyUser;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.*;
@@ -27,7 +28,7 @@ public class Order extends BaseEntity {
 //    @EmbeddedId
 //    private OrderId orderID;
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Double totalAmount;
@@ -42,6 +43,9 @@ public class Order extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private MyUser user;
+
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductQuantity> quantities = new ArrayList<>();
 
 //    @CreatedDate
 //    @Column(nullable = false, updatable = false)
