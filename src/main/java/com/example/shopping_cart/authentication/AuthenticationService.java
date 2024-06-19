@@ -38,8 +38,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
-    @Value("${application.mailing.frontend.activation-url}")
-    private String activationUrl;
+    private final AuthenticationProperties authenticationProperties;
 
     public void register(@NotNull RegistrationRequest request) {
         var userRole = roleRepository.findByAuthority("USER")
@@ -68,7 +67,7 @@ public class AuthenticationService {
                     user.getEmail(),
                     user.getFullName(),
                     EmailTemplate.ACTIVATE_ACCOUNT,
-                    activationUrl,
+                    authenticationProperties.getActivationUrl(),
                     newToken,
                     "Account activation"
             );
