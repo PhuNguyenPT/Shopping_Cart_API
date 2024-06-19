@@ -11,7 +11,6 @@ import com.example.shopping_cart.user.TokenRepository;
 import jakarta.mail.MessagingException;
 import org.jetbrains.annotations.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
