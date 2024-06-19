@@ -9,7 +9,7 @@ import com.example.shopping_cart.user.MyUserRepository;
 import com.example.shopping_cart.user.Token;
 import com.example.shopping_cart.user.TokenRepository;
 import jakarta.mail.MessagingException;
-import jakarta.validation.constraints.NotNull;
+import org.jetbrains.annotations.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -76,6 +76,7 @@ public class AuthenticationService {
         }
     }
 
+    @NotNull
     private String generateAndSaveActivationToken(MyUser user) {
         String generatedToken = generateActivationCode(6);
         var token = Token.builder()
@@ -88,6 +89,7 @@ public class AuthenticationService {
         return generatedToken;
     }
 
+    @NotNull
     private String generateActivationCode(int length) {
         String characters = "0123456789";
         StringBuilder codeBuilder = new StringBuilder();
@@ -108,11 +110,17 @@ public class AuthenticationService {
         );
         Map<String, Object> claims = new HashMap<String, Object>();
         Optional<MyUser> user = userRepository.findByEmail(auth.getName());
-        claims.put("fullName", user.get().getFullName());
-        var jwt = jwtService.generateToken(claims, user.get());
-        return AuthenticationResponse.builder()
-                .token(jwt)
-                .build();
+
+        if (user.isPresent()) {
+            claims.put("fullName", user.get().getFullName());
+            var jwt = jwtService.generateToken(claims, user.get());
+            return AuthenticationResponse.builder()
+                    .token(jwt)
+                    .build();
+        } else {
+            // Handle the case where the user is not found
+            throw new UsernameNotFoundException("User not found with email: " + request.getEmail());
+        }
     }
 
 //    @Transactional
