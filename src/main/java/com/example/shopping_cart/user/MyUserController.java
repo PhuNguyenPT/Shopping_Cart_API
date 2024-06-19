@@ -34,9 +34,6 @@ public class MyUserController {
             @PathVariable("user-id")UUID id
     ) {
         MyUser myUser = myUserService.findById(id);
-        if (myUser == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No user found");
-        }
         return ResponseEntity.status(HttpStatus.OK).body(myUser);
     }
 }
