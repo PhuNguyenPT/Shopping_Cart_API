@@ -50,6 +50,7 @@ public class ProductService {
 
         // Create and save the product
         Product product = ProductMapper.toProduct(productRequestDTOS);
+
         Product savedProduct = productRepository.save(product);
 
         // Handle new Categories
@@ -65,7 +66,7 @@ public class ProductService {
         // Handle combine categories
         List<Category> combinedCategories = new ArrayList<>(existingCategories);
         combinedCategories.addAll(savedNewCategories);
-        product.setCategories(combinedCategories);
+        savedProduct.setCategories(combinedCategories);
 
         // Handle file uploads
         List<File> savedFiles = new ArrayList<>();
@@ -173,5 +174,12 @@ public class ProductService {
         ProductResponseDTO productResponseDTO = ProductMapper.toProductResponseDTO(savedProduct);
         productResponseDTO.setMessage("Update successfully");
         return ResponseEntity.status(HttpStatus.OK).body(productResponseDTO);
+    }
+
+    public Product findById(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() ->
+                        new EntityNotFoundException("Product with id " +
+                                id + " not found"));
     }
 }
