@@ -1,11 +1,7 @@
 package com.example.shopping_cart.file;
 
-import com.example.shopping_cart.handler.ExceptionResponse;
-import com.example.shopping_cart.handler.FileExceptionHandler;
 import com.example.shopping_cart.product.Product;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
@@ -16,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
