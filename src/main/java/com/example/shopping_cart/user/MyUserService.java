@@ -15,17 +15,12 @@ public class MyUserService {
 
     private final MyUserRepository myUserRepository;
 
-    public ResponseEntity<?> findById(UUID id) {
-        MyUser myUser = myUserRepository.findById(id)
+    public MyUser findById(UUID id) {
+        return myUserRepository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
-        return ResponseEntity.status(HttpStatus.OK).body(myUser);
     }
 
-    public ResponseEntity<?> findAll() {
-        List<MyUser> myUsers = myUserRepository.findAll();
-        if (myUsers.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No users found");
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(myUsers);
+    public List<MyUser> findAll() {
+        return myUserRepository.findAll();
     }
 }
