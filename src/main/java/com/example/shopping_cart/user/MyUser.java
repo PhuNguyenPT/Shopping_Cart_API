@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.math.BigInteger;
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -48,18 +49,18 @@ public class MyUser extends BaseEntity implements UserDetails, Principal {
 
     @OneToMany(mappedBy = "user")
     @JsonIgnore
-    private List<Order> orders;
+    private List<Order> orders = new ArrayList<>();;
 
     @OneToMany(mappedBy = "user")
     @JsonIgnore
-    private List<ShoppingCart> shoppingCarts;
+    private List<ShoppingCart> shoppingCarts = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private List<MyRole> roles;
+    private List<MyRole> roles = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     @JsonIgnore
-    private List<Transaction> transactions;
+    private List<Transaction> transactions = new ArrayList<>();
 
     @Override
     public String getName() {

@@ -11,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -40,7 +41,7 @@ public class MyRole implements GrantedAuthority {
 
     @ManyToMany(mappedBy = "roles")
     @JsonIgnore
-    private List<MyUser> users;
+    private List<MyUser> users = new ArrayList<>();
 
     @Override
     public String getAuthority() {
