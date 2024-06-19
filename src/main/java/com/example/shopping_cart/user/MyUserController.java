@@ -23,9 +23,6 @@ public class MyUserController {
     @GetMapping("")
     private ResponseEntity<?> findAll() {
         List<MyUser> myUsers = myUserService.findAll();
-        if (myUsers.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No users found");
-        }
         return ResponseEntity.status(HttpStatus.OK).body(myUsers);
     }
 
