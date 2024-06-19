@@ -1,11 +1,7 @@
 package com.example.shopping_cart.file;
 
-import com.example.shopping_cart.handler.ExceptionResponse;
-import com.example.shopping_cart.handler.FileExceptionHandler;
 import com.example.shopping_cart.product.Product;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
@@ -16,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,16 +26,15 @@ public class FileService {
 //        this.customExceptionHandler = customExceptionHandler;
 //    }
 
-    public ResponseEntity<?> saveFile(MultipartFile multipartFile) {
-        try {
-            var file = FileMapper.toFile(multipartFile);
-            var savedFile = fileRepository.save(file);
-            return ResponseEntity.ok("Save file " + savedFile.getName() + " successfully.");
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+//    public ResponseEntity<?> saveFile(MultipartFile multipartFile) {
+//        try {
+//            var file = FileMapper.toFile(multipartFile);
+//            var savedFile = fileRepository.save(file);
+//            return ResponseEntity.ok("Save file " + savedFile.getName() + " successfully.");
+//        } catch (RuntimeException e) {
+//            throw new RuntimeException("Cannot save file " + multipartFile.getOriginalFilename());
+//        }
+//    }
 
     public ResponseEntity<?> saveFiles(
             @NotNull List<MultipartFile> multipartFiles
@@ -97,9 +91,8 @@ public class FileService {
             }
 
             return ResponseEntity.ok(dtoList);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Cannot find File " + fileName);
         }
     }
 
@@ -116,8 +109,7 @@ public class FileService {
 
             return ResponseEntity.ok(String.format("Deleted %d file(s) %s successfully.", fileDeleteCount, fileName));
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            throw new RuntimeException("Cannot delete File " + fileName);
         }
     }
 
