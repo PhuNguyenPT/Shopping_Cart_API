@@ -1,6 +1,7 @@
 package com.example.shopping_cart.product;
 
 import com.example.shopping_cart.cart.ShoppingCart;
+import com.example.shopping_cart.category.Category;
 import com.example.shopping_cart.common.BaseEntity;
 import com.example.shopping_cart.file.File;
 import com.example.shopping_cart.order.Order;
