@@ -15,12 +15,16 @@ public class MyUserService {
 
     private final MyUserRepository myUserRepository;
 
-    public MyUser findById(UUID id) {
-        return myUserRepository.findById(id)
-                .orElseThrow(EntityNotFoundException::new);
+    public List<MyUser> findAll() {
+        List<MyUser> myUsers = myUserRepository.findAll();
+        if (myUsers.isEmpty()) {
+            throw new EntityNotFoundException("No user(s) found");
+        }
+        return myUsers;
     }
 
-    public List<MyUser> findAll() {
-        return myUserRepository.findAll();
+    public MyUser findById(UUID id) {
+        return myUserRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("No user with " + id + " found"));
     }
 }
