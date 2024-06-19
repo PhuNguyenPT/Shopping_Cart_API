@@ -1,6 +1,5 @@
 package com.example.shopping_cart.common;
 
-import com.example.shopping_cart.models.Lecture;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
