@@ -11,6 +11,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
@@ -138,7 +139,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleException(
             @NotNull NoResourceFoundException e
     ) {
-        e.printStackTrace();
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(
                         ExceptionResponse.builder()
@@ -152,7 +152,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleException(
             @NotNull Exception e
     ) {
-        e.printStackTrace();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(
                         ExceptionResponse.builder()
@@ -220,7 +219,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ResponseEntity<?> handleMaxUploadSizeExceededException(
             @NotNull MaxUploadSizeExceededException e) {
-        e.printStackTrace();
         return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
                 .body(
 //                        e.getMessage()
@@ -234,7 +232,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<?> handleDataIntegrityViolationException(
             @NotNull DataIntegrityViolationException e) {
-        e.printStackTrace();
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(
                         ExceptionResponse.builder()
@@ -281,6 +278,19 @@ public class GlobalExceptionHandler {
                         .businessErrorDescription(errorMessage)
                         .error(e.getMessage())
                         .build()
+                );
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<?> handleAccessDeniedException(
+            @NotNull AccessDeniedException e
+    ) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(
+                        ExceptionResponse.builder()
+                                .businessErrorDescription("Access denied")
+                                .error(e.getMessage())
+                                .build()
                 );
     }
 

@@ -2,8 +2,8 @@ package com.example.shopping_cart.user;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,5 +26,12 @@ public class MyUserService {
     public MyUser findById(UUID id) {
         return myUserRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No user with " + id + " found"));
+    }
+
+    public MyUser findByUserAuthentication(
+            @NotNull Authentication authentication
+    ) {
+        MyUser myUser = (MyUser) authentication.getPrincipal();
+        return myUser;
     }
 }
