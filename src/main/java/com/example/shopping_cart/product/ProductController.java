@@ -1,10 +1,10 @@
 package com.example.shopping_cart.product;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,6 +18,7 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping("/upload")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> upload(
             @ModelAttribute @Valid
             ProductRequestDTO productRequestDTO
@@ -34,6 +35,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/delete/{product-id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> delete(
             @PathVariable(value = "product-id")
             @NotNull(message = "Product id must not be null")
@@ -43,6 +45,7 @@ public class ProductController {
     }
 
     @PostMapping("/{productId}/files")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> createProductFiles(
             @PathVariable Long productId,
             @RequestParam("files")
@@ -52,6 +55,7 @@ public class ProductController {
     }
 
     @PutMapping("/update/{product-id}/files/{file-id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> updateProductFileByProductId(
             @PathVariable(value = "product-id") Long productId,
             @PathVariable(value = "file-id") Long fileId,
@@ -63,6 +67,7 @@ public class ProductController {
     }
 
     @PatchMapping("/update/{product-id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> updateProductAttributes(
             @PathVariable(value = "product-id") Long id,
             @ModelAttribute @Valid ProductUpdateDTO productUpdateDTO
