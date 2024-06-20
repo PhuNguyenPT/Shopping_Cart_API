@@ -1,10 +1,11 @@
 package com.example.shopping_cart.category;
 
+import com.example.shopping_cart.product.ProductMapper;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 @Service
 public class CategoryMapper {
@@ -18,12 +19,27 @@ public class CategoryMapper {
                 .build();
     }
 
-//    public static List<CategoryResponseDTO> toCategoryResponseDTOList(
-//            @NotNull List<Category> categories
-//    ) {
-//        List<CategoryResponseDTO> categoryResponseDTOList = new ArrayList<>();
-//        return categoryResponseDTOList = categories.stream()
-//                .map(CategoryMapper::toCategoryResponseDTO)
-//                .toList();
-//    }
+    public static CategoryResponseDTO toCategoryResponseDTOFilter(
+            @NotNull Category category
+    ) {
+        return CategoryResponseDTO.builder()
+                .id(category.getId())
+                .name(category.getName())
+                .productResponseDTOList(
+                        category.getProducts().stream()
+                                .map(ProductMapper::toProductResponseDTOCategory)
+                                .toList()
+                )
+                .build();
+    }
+
+    public static CategoryResponseDTOFilter toCategoryResponseDTOFilter(
+            @NotNull Page productsDTOPage,
+            @NotNull Map<Long, String> namesMap
+            ) {
+        return CategoryResponseDTOFilter.builder()
+                .productsPage(productsDTOPage)
+                .namesMap(namesMap)
+                .build();
+    }
 }

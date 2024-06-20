@@ -29,4 +29,11 @@ public class Category extends BaseEntity {
     @ManyToMany(mappedBy = "categories")
     @JsonIgnore
     private List<Product> products = new ArrayList<>();
+
+    public void addProduct(Product product) {
+        if (products == null) {
+            products = new ArrayList<>();
+        }
+        products.add(product);
+    }
 }
