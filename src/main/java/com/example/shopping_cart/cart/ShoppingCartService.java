@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,12 +51,12 @@ public class ShoppingCartService {
                 .toList();
 
         ShoppingCart updatedShoppingCart = ShoppingCartMapper.toShoppingCart(
-                myUser, products, shoppingCartRequestDTOList, savedShoppingCart
+                products, shoppingCartRequestDTOList, savedShoppingCart
         );
 
-        updatedShoppingCart.getQuantities().forEach(productQuantity -> {
-            productQuantity.calculateTotalAmount(productQuantity.getProduct().getPrice());
-        });
+        updatedShoppingCart.getQuantities().forEach(productQuantity ->
+                productQuantity.calculateTotalAmount(productQuantity.getProduct().getPrice())
+        );
 
         BigDecimal cartTotalAmount = updatedShoppingCart.getQuantities().stream()
                 .map(ProductQuantity::getTotalAmount)
@@ -70,7 +69,6 @@ public class ShoppingCartService {
             }
         });
         ShoppingCart savedUpdatedShoppingCart = shoppingCartRepository.save(updatedShoppingCart);
-        ShoppingCartResponseDTO shoppingCartResponseDTO = ShoppingCartMapper.toShoppingCartResponseDTO(savedUpdatedShoppingCart);
-        return shoppingCartResponseDTO;
+        return ShoppingCartMapper.toShoppingCartResponseDTO(savedUpdatedShoppingCart);
     }
 }

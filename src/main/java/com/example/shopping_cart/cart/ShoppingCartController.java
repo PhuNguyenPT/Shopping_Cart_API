@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/carts")
@@ -22,7 +21,7 @@ public class ShoppingCartController {
             Authentication authentication,
             @RequestBody
             List<ShoppingCartRequestDTO> shoppingCartRequestDTOList
-    ) throws AccessDeniedException {
+    ) {
         ShoppingCartResponseDTO shoppingCartResponseDTO = shoppingCartService.save(authentication, shoppingCartRequestDTOList);
         return ResponseEntity.status(HttpStatus.OK).body(shoppingCartResponseDTO);
     }
