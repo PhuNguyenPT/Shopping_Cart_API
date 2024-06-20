@@ -207,7 +207,7 @@ To set up the backend of the Book Social Network project, follow these steps:
 
 ### Shopping Cart
 1. POST: https://localhost/api/v1/carts/upload
-   - Upload `List` of `Product id` and `Quantity` for Shopping Cart
+   - Upload `List` of (`Product id`, `Quantity`) for Shopping Cart
      + Request Body Raw
      + Content-Type = application/json <br/><br/>
      + Suported attributes for Shopping Cart: 
