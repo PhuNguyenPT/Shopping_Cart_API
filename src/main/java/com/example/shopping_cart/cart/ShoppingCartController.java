@@ -1,6 +1,8 @@
 package com.example.shopping_cart.cart;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,11 +22,10 @@ public class ShoppingCartController {
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<?> upload(
             Authentication authentication,
-            @RequestBody
+            @RequestBody @Valid
             List<ShoppingCartRequestDTO> shoppingCartRequestDTOList
     ) {
         ShoppingCartResponseDTO shoppingCartResponseDTO = shoppingCartService.save(authentication, shoppingCartRequestDTOList);
         return ResponseEntity.status(HttpStatus.OK).body(shoppingCartResponseDTO);
     }
-
 }
