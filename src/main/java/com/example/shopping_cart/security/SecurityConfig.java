@@ -31,7 +31,9 @@ public class SecurityConfig {
                                 "/auth/**",
                                 "/home",
                                 "/",
-                                "/products/search/*"
+                                "/products/search/*",
+                                "/categories/*",
+                                "/categories"
                                         )
                                 .permitAll()
                                 .anyRequest()
