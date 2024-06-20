@@ -117,7 +117,6 @@ public class AuthenticationService {
             var jwt = jwtService.generateToken(claims, user.get());
             return AuthenticationResponse.builder()
                     .token(jwt)
-                    .userId(user.get().getId())
                     .build();
         } else {
             // Handle the case where the user is not found
