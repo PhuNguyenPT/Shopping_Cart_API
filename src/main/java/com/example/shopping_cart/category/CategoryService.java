@@ -1,5 +1,8 @@
 package com.example.shopping_cart.category;
 
+import com.example.shopping_cart.product.Product;
+import com.example.shopping_cart.product.ProductMapper;
+import com.example.shopping_cart.product.ProductResponseDTO;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -58,4 +61,21 @@ public class CategoryService {
     public List<Category> saveAll(List<Category> categories) {
         return categoryRepository.saveAll(categories);
     }
+
+//    public ResponseEntity<?> filterAllProductsByCategoryIdIn(
+//            @NotNull List<CategoryRequestDTO> categoryRequestDTOList
+//    ) {
+//
+//        List<Category> categories = categoryRepository.findAllByIdIn(ids);
+//
+//        List<Product> productsFromFilterCategories = categories.stream()
+//                .flatMap(category -> category.getProducts().stream())
+//                .distinct()
+//                .toList();
+//        List<ProductResponseDTO> productsResponseDTOFromFilterCategories = productsFromFilterCategories.stream()
+//                .map(ProductMapper::toProductResponseDTO)
+//                .toList();
+//
+//        return ResponseEntity.status(HttpStatus.OK).body(productsResponseDTOFromFilterCategories);
+//    }
 }
