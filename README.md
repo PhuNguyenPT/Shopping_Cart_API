@@ -80,10 +80,10 @@ To set up the backend of the Book Social Network project, follow these steps:
    - Example in Request Body Raw:
 
 ```bash
-{
-   "email": "test@gmail.com",
-   "password": "password"
-}
+   {
+      "email": "test@gmail.com",
+      "password": "password"
+   }
 ```
 
 9. Create New Environt by Environments->Create Environment <br/><br/>
@@ -97,9 +97,9 @@ To set up the backend of the Book Social Network project, follow these steps:
    
    - Navigate to Response Body in step 8 to select token "value" and right-click to choose Set: New Envinronment -> token:
 ```bash
-{
-   "token": "select_this_value"
-}
+   {
+      "token": "select_this_value"
+   }
 ```
 
 10. Access to user home page by GET
@@ -118,13 +118,14 @@ To set up the backend of the Book Social Network project, follow these steps:
    - Example in Request Body Raw:
 
 ```
-{
-   "email": "admin@email.com",
-   "password": "password"
-}
+   {
+      "email": "admin@email.com",
+      "password": "password"
+   }
 ```
 ## Rest API
 
+### Product
 1. POST: https://localhost/api/v1/products/upload `(ADMIN ONLY)` <br/>
    - Upload Product
    - Request Body: <br/>
@@ -203,3 +204,39 @@ To set up the backend of the Book Social Network project, follow these steps:
        * `stockQuantity` : *product stock quantity*
        * `description` : *product description*
        * `categoryIds` : *saved category ids from database* <br/><br/>
+
+### Shopping Cart
+1. POST: https://localhost/api/v1/carts/upload
+   - Upload `List` of `Product id` and `Quantity` for Shopping Cart
+     + Request Body Raw
+     + Content-Type = application/json <br/><br/>
+     + Suported attributes for Shopping Cart: 
+       * `productId` 
+       * `quantity` <br/><br/>
+       
+     + Attributes constraints for Shopping Cart:
+       * `productId` : *NotNull*, *Min(1)*
+       * `quantity` : *NotNull*, *Min(1)* <br/><br/>
+       
+     + Attributes explaination for Product:
+       * `productId` : *product id*
+       * `quantity` : *product quantity* <br/><br/>
+       
+     + Example in Request Body Raw::
+```
+   [
+       {
+           "productId": 1,
+           "quantity": 7
+       },
+       {
+           "productId": 2,
+           "quantity": 9
+       },
+       {
+           "productId": 3,
+           "quantity": 1
+       }
+   ]
+```
+ 
