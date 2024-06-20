@@ -32,6 +32,7 @@ public class MyUserService {
             @NotNull Authentication authentication
     ) {
         MyUser myUser = (MyUser) authentication.getPrincipal();
-        return myUser;
+        return myUserRepository.findByEmail(myUser.getUsername())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
     }
 }

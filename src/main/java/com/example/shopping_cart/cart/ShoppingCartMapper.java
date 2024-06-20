@@ -3,7 +3,6 @@ package com.example.shopping_cart.cart;
 import com.example.shopping_cart.product.Product;
 import com.example.shopping_cart.product_quantity.ProductQuantity;
 import com.example.shopping_cart.product_quantity.ProductQuantityMapper;
-import com.example.shopping_cart.user.MyUser;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +19,6 @@ import java.util.stream.Collectors;
 public class ShoppingCartMapper {
 
     public static ShoppingCart toShoppingCart(
-            @NotNull MyUser myUser,
             @NotNull List<Product> products,
             @NotNull List<ShoppingCartRequestDTO> shoppingCartRequestDTOList,
             ShoppingCart savedShoppingCart) {
@@ -62,6 +60,7 @@ public class ShoppingCartMapper {
             @NotNull ShoppingCart shoppingCart
     ) {
         return ShoppingCartResponseDTO.builder()
+                .message("Upload cart successfully")
                 .cartId(shoppingCart.getId())
                 .userId(shoppingCart.getUser().getId())
                 .totalAmount(shoppingCart.getTotalAmount())
