@@ -3,20 +3,19 @@ package com.example.shopping_cart.cart;
 import com.example.shopping_cart.product.Product;
 import com.example.shopping_cart.product.ProductService;
 import com.example.shopping_cart.product_quantity.ProductQuantity;
-import com.example.shopping_cart.product_quantity.ProductQuantityMapper;
 import com.example.shopping_cart.product_quantity.ProductQuantityRepository;
-import com.example.shopping_cart.product_quantity.ProductQuantityResponseDTO;
 import com.example.shopping_cart.user.MyUser;
 import com.example.shopping_cart.user.MyUserService;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -29,10 +28,10 @@ public class ShoppingCartService {
 
     @Transactional
     public ShoppingCartResponseDTO save(
-            UUID userId,
+            @NotNull Authentication authentication,
             @NotNull List<ShoppingCartRequestDTO> shoppingCartRequestDTOList
     ) {
-        MyUser myUser = myUserService.findById(userId);
+        MyUser myUser = myUserService.findByUserAuthentication(authentication);
 
         ShoppingCart savedShoppingCart = myUser.getShoppingCart();
 

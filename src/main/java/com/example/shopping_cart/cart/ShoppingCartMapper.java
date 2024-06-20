@@ -62,6 +62,7 @@ public class ShoppingCartMapper {
             @NotNull ShoppingCart shoppingCart
     ) {
         return ShoppingCartResponseDTO.builder()
+                .message("Upload cart successfully")
                 .cartId(shoppingCart.getId())
                 .userId(shoppingCart.getUser().getId())
                 .totalAmount(shoppingCart.getTotalAmount())

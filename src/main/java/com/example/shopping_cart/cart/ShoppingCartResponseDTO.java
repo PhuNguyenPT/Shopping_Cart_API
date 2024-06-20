@@ -13,6 +13,7 @@ import java.util.UUID;
 @Setter
 @Builder
 public class ShoppingCartResponseDTO {
+    private String message;
     private final Long cartId;
     private final UUID userId;
     private final BigDecimal totalAmount;
