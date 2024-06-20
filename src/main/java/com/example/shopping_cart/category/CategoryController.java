@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class CategoryController {
     private final CategoryService categoryService;
-    @GetMapping("/search")
+    @GetMapping("")
     public ResponseEntity<?> findAll() {
         return categoryService.findAll();
     }
