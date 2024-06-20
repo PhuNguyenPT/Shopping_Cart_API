@@ -6,12 +6,16 @@ import com.example.shopping_cart.product.ProductResponseDTO;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -62,20 +66,63 @@ public class CategoryService {
         return categoryRepository.saveAll(categories);
     }
 
-//    public ResponseEntity<?> filterAllProductsByCategoryIdIn(
+//    public List<CategoryResponseDTO> filterAllProductsByCategoryIdIn(
 //            @NotNull List<CategoryRequestDTO> categoryRequestDTOList
 //    ) {
-//
-//        List<Category> categories = categoryRepository.findAllByIdIn(ids);
-//
-//        List<Product> productsFromFilterCategories = categories.stream()
-//                .flatMap(category -> category.getProducts().stream())
+//         List<Category> categories = categoryRequestDTOList.stream()
+//                .map(CategoryRequestDTO::getCategoryId)
 //                .distinct()
+//                .map(this::findById)
 //                .toList();
-//        List<ProductResponseDTO> productsResponseDTOFromFilterCategories = productsFromFilterCategories.stream()
-//                .map(ProductMapper::toProductResponseDTO)
+//        return categories.stream()
+//                .map(CategoryMapper::toCategoryResponseDTOFilter)
 //                .toList();
-//
-//        return ResponseEntity.status(HttpStatus.OK).body(productsResponseDTOFromFilterCategories);
 //    }
+
+    public Category findById(Long id) {
+        return categoryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Cannot find category with id " + id));
+    }
+
+
+    public CategoryResponseDTOFilter filterAllProductsByCategoryIdIn(
+            @NotNull CategoryRequestFilterDTO categoryRequestFilterDTO
+    ) {
+        // Handle page
+        Pageable pageable = PageRequest.of(
+                categoryRequestFilterDTO.getPageNumber(),
+                categoryRequestFilterDTO.pageSize);
+        Set<Category> categories = categoryRequestFilterDTO
+                .getCategoryRequestDTOList().stream()
+                .map(CategoryRequestDTO::getCategoryId)
+                .map(this::findById)
+                .collect(Collectors.toSet());
+
+        // Set of unique products
+        Set<Product> uniqueProducts = new HashSet<>();
+
+        // Add all the products of each categories
+        categories.forEach(category -> {
+            List<Product> products = category.getProducts();
+            uniqueProducts.addAll(products);
+        });
+
+        // Map unique products to response dto list
+        List<ProductResponseDTO> productResponseDTOList = uniqueProducts.stream()
+                .map(ProductMapper::toProductResponseDTOCategory)
+                .toList();
+
+        // Map of id, category names
+        Map<Long, String> namesMap = categories.stream()
+                .collect(Collectors.toMap(Category::getId, Category::getName));
+
+        // Page of products dto
+        Page<ProductResponseDTO> productsDTOPage = new PageImpl<>(
+                productResponseDTOList, pageable, productResponseDTOList.size()
+        );
+
+        return CategoryMapper.toCategoryResponseDTOFilter(
+                productsDTOPage, namesMap
+        );
+    }
 }

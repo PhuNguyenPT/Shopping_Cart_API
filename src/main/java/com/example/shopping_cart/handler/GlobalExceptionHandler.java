@@ -21,16 +21,16 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @RestControllerAdvice
 @RequiredArgsConstructor
@@ -229,6 +229,13 @@ public class GlobalExceptionHandler {
                 );
     }
 
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    public ResponseEntity<?> handleHandlerMethodValidationException(
+            @NotNull HandlerMethodValidationException e) {
+
+        return ResponseEntity.status(BAD_REQUEST).body(e.getDetailMessageArguments());
+    }
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<?> handleDataIntegrityViolationException(
             @NotNull DataIntegrityViolationException e) {
@@ -236,7 +243,7 @@ public class GlobalExceptionHandler {
                 .body(
                         ExceptionResponse.builder()
                                 .businessErrorDescription("Data integrity violation")
-                                .error(e.getMessage())
+                                .error(String.valueOf(e.getMostSpecificCause()))
                                 .build()
         //                        e.getMessage()
                 );
@@ -244,13 +251,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<?> handleRuntimeException(@NotNull RuntimeException e) {
-        // Create a custom error message
-        String errorMessage = "An error occurred: " + e.getMessage();
+        e.printStackTrace();
 
         // Return a ResponseEntity with the custom error message and HTTP status
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                 ExceptionResponse.builder()
-                        .error(errorMessage)
+                        .error(e.getMessage())
                         .build()
         );
     }
