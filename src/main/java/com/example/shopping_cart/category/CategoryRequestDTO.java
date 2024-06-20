@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 @Getter
 @Setter
 @Builder

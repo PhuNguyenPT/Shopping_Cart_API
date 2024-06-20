@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.domain.Page;
 
-import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -14,5 +13,5 @@ import java.util.Map;
 @Builder
 public class CategoryResponseDTOFilter {
     private final Map<Long, String> namesMap;
-    private final Page productsPage;
+    private final Page<ProductResponseDTO> productsPage;
 }

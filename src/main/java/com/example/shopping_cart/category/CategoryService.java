@@ -3,7 +3,6 @@ package com.example.shopping_cart.category;
 import com.example.shopping_cart.product.Product;
 import com.example.shopping_cart.product.ProductMapper;
 import com.example.shopping_cart.product.ProductResponseDTO;
-import com.example.shopping_cart.product.ProductService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -67,18 +66,18 @@ public class CategoryService {
         return categoryRepository.saveAll(categories);
     }
 
-    public List<CategoryResponseDTO> filterAllProductsByCategoryIdIn(
-            @NotNull List<CategoryRequestDTO> categoryRequestDTOList
-    ) {
-         List<Category> categories = categoryRequestDTOList.stream()
-                .map(CategoryRequestDTO::getCategoryId)
-                .distinct()
-                .map(this::findById)
-                .toList();
-        return categories.stream()
-                .map(CategoryMapper::toCategoryResponseDTOFilter)
-                .toList();
-    }
+//    public List<CategoryResponseDTO> filterAllProductsByCategoryIdIn(
+//            @NotNull List<CategoryRequestDTO> categoryRequestDTOList
+//    ) {
+//         List<Category> categories = categoryRequestDTOList.stream()
+//                .map(CategoryRequestDTO::getCategoryId)
+//                .distinct()
+//                .map(this::findById)
+//                .toList();
+//        return categories.stream()
+//                .map(CategoryMapper::toCategoryResponseDTOFilter)
+//                .toList();
+//    }
 
     public Category findById(Long id) {
         return categoryRepository.findById(id)
@@ -118,7 +117,7 @@ public class CategoryService {
                 .collect(Collectors.toMap(Category::getId, Category::getName));
 
         // Page of products dto
-        Page productsDTOPage = new PageImpl<>(
+        Page<ProductResponseDTO> productsDTOPage = new PageImpl<>(
                 productResponseDTOList, pageable, productResponseDTOList.size()
         );
 

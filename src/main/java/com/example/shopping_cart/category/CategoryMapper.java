@@ -1,6 +1,7 @@
 package com.example.shopping_cart.category;
 
 import com.example.shopping_cart.product.ProductMapper;
+import com.example.shopping_cart.product.ProductResponseDTO;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ public class CategoryMapper {
     }
 
     public static CategoryResponseDTOFilter toCategoryResponseDTOFilter(
-            @NotNull Page productsDTOPage,
+            @NotNull Page<ProductResponseDTO> productsDTOPage,
             @NotNull Map<Long, String> namesMap
             ) {
         return CategoryResponseDTOFilter.builder()

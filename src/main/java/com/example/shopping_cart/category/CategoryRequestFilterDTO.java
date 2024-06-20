@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -13,8 +12,8 @@ import java.util.List;
 @Setter
 @Builder
 public class CategoryRequestFilterDTO {
-    @NotNull("Page size must not be null") int pageSize;
-    @NotNull("Page index must not be null") int pageNumber;
+    @NotNull("Page size must not be null") Integer pageSize;
+    @NotNull("Page index must not be null") Integer pageNumber;
     @Valid
     private List<CategoryRequestDTO> categoryRequestDTOList;
 }
