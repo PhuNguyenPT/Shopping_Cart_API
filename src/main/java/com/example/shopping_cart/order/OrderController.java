@@ -25,16 +25,23 @@ public class OrderController {
             Authentication authentication,
             @RequestBody OrderRequestDTO orderRequestDTO
     ) {
-        return orderService.saveOrder(authentication, orderRequestDTO);
+        OrderResponseDTO orderResponseDTO = orderService.saveOrder(authentication, orderRequestDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(orderResponseDTO);
     }
 
     @GetMapping("/search/{order-id}")
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<?> searchOrder(
+            Authentication authentication,
             @PathVariable("order-id")
             @NotNull(message = "Order id must not be null")
             Long orderId
     ) {
-        return orderService.searchOrderById(orderId);
+        OrderResponseDTO orderResponseDTO = orderService.searchOrderById(authentication, orderId);
+        if (orderResponseDTO != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(orderResponseDTO);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found order with id" + orderId);
     }
 
     @DeleteMapping("/delete/{order-id}")
@@ -43,7 +50,7 @@ public class OrderController {
             @NotNull(message = "Order id must not be null")
             Long orderId
     ) {
-        return orderService.deleteBy(orderId);
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.deleteBy(orderId));
     }
 
 
@@ -52,6 +59,7 @@ public class OrderController {
             @PathVariable("order-id") Long orderId,
             @RequestBody @Valid OrderUpdateDTO orderUpdateDTO
     ) {
-        return orderService.updateOrderAttributes(orderId, orderUpdateDTO);
+        OrderResponseDTO orderResponseDTO = orderService.updateOrderAttributes(orderId, orderUpdateDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(orderResponseDTO);
     }
 }
