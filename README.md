@@ -42,7 +42,7 @@ To set up the backend of the Book Social Network project, follow these steps:
 ```bash
    java -jar target/shopping-cart-api-0.0.1-SNAPSHOT.jar
 ```
-5. Run Postman and send to the register api by POST
+5. Run Postman and send to the register api by POST 
 
 ```bash
    https://localhost:443/api/v1/auth/register
@@ -64,15 +64,15 @@ To set up the backend of the Book Social Network project, follow these steps:
    http://localhost:1080
 ```
 
-7. Copy the 6-digit activation code and send to the activate-account api by GET
+7. Copy the 6-digit activation code and send to the activate-account api by GET 
 
 ```bash
    // Replace the value with the actual 6-digit activation code
    https://localhost:443/api/v1/auth/activate-account?token=value
 ```
 
-8. Login to the account by POST and receive a token as response
-
+8. Login to the account by POST and receive a token as response 
+ 
 ```bash
    https://localhost:443/api/v1/auth/login   
 ```
@@ -102,7 +102,7 @@ To set up the backend of the Book Social Network project, follow these steps:
    }
 ```
 
-10. Access to user home page by GET
+10. Access to user home page by GET 
     
 ```bash
    https://localhost:443/api/v1/user/home
@@ -110,7 +110,7 @@ To set up the backend of the Book Social Network project, follow these steps:
    - Go to Authorization->Auth Type->Bearer Token and enter in the box '{{token}}' and Send <br/><br/>
 ![user-home](https://github.com/PhuNguyenPT/Shopping_Cart/assets/154642828/5af38fb1-6374-4677-a280-43fe49288db6) <br/><br/>
 
-## Admin Account
+## Admin Account 
    - Login by POST
 ```
    https://localhost:443/api/v1/auth/login
@@ -155,7 +155,7 @@ To set up the backend of the Book Social Network project, follow these steps:
        * `categoryIds` : *saved category ids from database*
        * `newCategoryNames` : *new category names to save to database* <br/><br/>
 
-2. GET: https://localhost/api/v1/products/search/{product-id} <br/>
+2. GET: https://localhost/api/v1/products/search/{product-id} `(NON-USER)` <br/>
    - Search Product by `product-id` <br/><br/>
    - Response Body 
      + Content-Type = application/json <br/><br/>
