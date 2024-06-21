@@ -253,7 +253,7 @@ To set up the backend of the Book Social Network project, follow these steps:
  
 ### Category
 
-1. GET: https://localhost/api/v1/categories `NON-USER` <br/><br/>
+1. GET: https://localhost/api/v1/categories `(NON-USER)` <br/><br/>
    - Return all the categories available <br/><br/> 
    - Response Body 
      + Content-Type = application/json <br/><br/>
@@ -274,7 +274,7 @@ To set up the backend of the Book Social Network project, follow these steps:
 ```
 <br/><br/>
 
-2. POST: https://localhost/api/v1/categories/filter `NON-USER` <br/><br/>
+2. POST: https://localhost/api/v1/categories/filter `(NON-USER)` <br/><br/>
    - Filter Product(s) by CategoryRequestDTOList of `category-id` with `pageSize` and `pageNumber` <br/><br/>   
    - Request Body 
      + Content-Type = application/json <br/><br/>
