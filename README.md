@@ -240,7 +240,7 @@ To set up the backend of the Book Social Network project, follow these steps:
    ]
 ```
  
-## Category
+### Category
 1. GET: https://localhost/api/v1/categories
    - Return all the categories available
      + Content-Type = application/json <br/><br/>
