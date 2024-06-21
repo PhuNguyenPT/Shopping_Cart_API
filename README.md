@@ -124,10 +124,13 @@ To set up the backend of the Book Social Network project, follow these steps:
    }
 ```
 ## Rest API
+- `(USER ONLY)` : require user login
+- `(ADMIN ONLY)` : require admin login
+- `(NON-USER)` : no require for login
 
 ### Product
 1. POST: https://localhost/api/v1/products/upload `(ADMIN ONLY)` <br/>
-   - Upload Product
+   - Upload Product <br/>
    - Request Body: <br/>
      + Content-Type = multipart/form-data <br/><br/>
      + Suported attributes for Product: 
@@ -153,36 +156,38 @@ To set up the backend of the Book Social Network project, follow these steps:
        * `newCategoryNames` : *new category names to save to database* <br/><br/>
 
 2. GET: https://localhost/api/v1/products/search/{product-id} <br/>
-   - Search Product by `product-id` <br/>
+   - Search Product by `product-id` <br/><br/>
+   - Response Body 
+     + Content-Type = application/json <br/><br/>
 
 3. DELETE: https://localhost/api/v1/products/delete/{product-id} `(ADMIN ONLY)` <br/>
-   - Delete Product by `product-id` but do not delete the `categories` <br/>
+   - Delete Product by `product-id` but do not delete the `categories` <br/><br/>
 
 4. PUT: https://localhost/api/v1/products/update/{product-id}/files/{file-id} `(ADMIN ONLY)` <br/>
-   - Update Files with `file-id` of Product with `product-id` by new File <br/>
-   - Request Body <br/>
+   - Update Files with `file-id` of Product with `product-id` by new File <br/><br/>
+   - Request Body 
      + Content-Type = multipart/form-data <br/>
      + Suported attributes for Product: 
-       * `files` <br/>
+       * `files` <br/><br/>
      + Attributes constraints for Product:
-       * `files` : *NotNull* <br/>
+       * `files` : *NotNull* <br/><br/>
      + Attributes explaination for Product:
-       * `files` : *multipart file* <br/>
+       * `files` : *multipart file* <br/><br/>
        
 5. POST: https://localhost/api/v1/products/{productId}/files `(ADMIN ONLY)` <br/>
-   - Create new File(s) for Product with `product-id` <br/>
-   - Request Body <br/>
+   - Create new File(s) for Product with `product-id` <br/><br/>
+   - Request Body 
      + Content-Type = multipart/form-data <br/>
      + Suported attributes for Product: 
-       * `files` <br/>
+       * `files` <br/><br/>
      + Attributes constraints for Product:
-       * `files` : *NotNull* <br/>
+       * `files` : *NotNull* <br/><br/>
      + Attributes explaination for Product:
-       * `files` : *multipart file* <br/>
+       * `files` : *multipart file* <br/><br/>
        
 6. PATCH: https://localhost/api/v1/products/update/{product-id} `(ADMIN ONLY)` <br/>
-   - Update Product attribute(s) with `product-id` <br/>   
-   - Request Body <br/>
+   - Update Product attribute(s) with `product-id` <br/><br/>   
+   - Request Body 
      + Content-Type = multipart/form-data <br/>
      + Suported attributes for Product: 
        * `name` 
@@ -191,7 +196,7 @@ To set up the backend of the Book Social Network project, follow these steps:
        * `description`
        * `categoryIds` <br/><br/>
 
-     + Attributes constraints for Product:
+     + Attributes constraints for Product: 
        * `name` : *Optional*
        * `price` : *Optional*
        * `stockQuantity` : *Optional*
@@ -206,15 +211,15 @@ To set up the backend of the Book Social Network project, follow these steps:
        * `categoryIds` : *saved category ids from database* <br/><br/>
 
 ### Shopping Cart
-1. POST: https://localhost/api/v1/carts/upload
-   - Upload `List` of (`Product id`, `Quantity`) for Shopping Cart
-     + Request Body Raw
+1. POST: https://localhost/api/v1/carts/upload `(USER ONLY)` <br/><br/>
+   - Upload `List` of (`Product id`, `Quantity`) for Shopping Cart (User authenticated `Bearer Token` needed in `AUTHORIZATION`) <br/><br/>
+   - Request Body 
      + Content-Type = application/json <br/><br/>
      + Suported attributes for Shopping Cart: 
        * `productId` 
        * `quantity` <br/><br/>
        
-     + Attributes constraints for Shopping Cart:
+     + Attributes constraints for Shopping Cart: 
        * `productId` : *NotNull*, *Min(1)*
        * `quantity` : *NotNull*, *Min(1)* <br/><br/>
        
@@ -239,10 +244,18 @@ To set up the backend of the Book Social Network project, follow these steps:
        }
    ]
 ```
+<br/><br/>
+
+2. GET: https://localhost/api/v1/carts `(USER ONLY)` <br/><br/>
+   - Retrieve `Shopping Cart` by User authenticated `Bearer Token` in `AUTHORIZATION` <br/><br/> 
+   - Response Body 
+     + Content-Type = application/json  <br/><br/>
  
 ### Category
-1. GET: https://localhost/api/v1/categories
-   - Return all the categories available
+
+1. GET: https://localhost/api/v1/categories `NON-USER` <br/><br/>
+   - Return all the categories available <br/><br/> 
+   - Response Body 
      + Content-Type = application/json <br/><br/>
      + Example Response Body Raw: 
 ```
@@ -259,11 +272,12 @@ To set up the backend of the Book Social Network project, follow these steps:
        }
    ]
 ```
+<br/><br/>
 
-2. POST: https://localhost/api/v1/categories/filter
-   - Filter Product(s) by CategoryRequestDTOList of `category-id` with `pageSize` and `pageNumber`<br/>   
-   - Request Body <br/>
-     + Content-Type = application/json <br/>
+2. POST: https://localhost/api/v1/categories/filter `NON-USER` <br/><br/>
+   - Filter Product(s) by CategoryRequestDTOList of `category-id` with `pageSize` and `pageNumber` <br/><br/>   
+   - Request Body 
+     + Content-Type = application/json <br/><br/>
      
      + Suported attributes for Product: 
        * `pageSize` 
