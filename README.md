@@ -240,3 +240,63 @@ To set up the backend of the Book Social Network project, follow these steps:
    ]
 ```
  
+## Category
+1. GET: https://localhost/api/v1/categories
+   - Return all the categories available
+     + Content-Type = application/json <br/><br/>
+     + Example Response Body Raw: 
+```
+   [
+       {
+           "id": 1,
+           "name": "Electronics",
+           "productResponseDTOList": null
+       },
+       {
+           "id": 2,
+           "name": "Gadgets",
+           "productResponseDTOList": null
+       }
+   ]
+```
+
+<br/><br/>
+2. POST: https://localhost/api/v1/categories/filter
+   - Filter Product(s) by CategoryRequestDTOList of `category-id` with `pageSize` and `pageNumber`<br/>   
+   - Request Body <br/>
+     + Content-Type = application/json <br/>
+     
+     + Suported attributes for Product: 
+       * `pageSize` 
+       * `pageNumber`
+       * `categoryRequestDTOList`:
+         * `categoryId`  <br/><br/>
+         
+     + Attributes constraints for Category filter: 
+       * `pageSize` : *NotNull*, *Min(1)*, *Max(20)
+       * `pageNumber` : *NotNull*, *Min(1)*
+       * `categoryRequestDTOList`:
+         * `categoryId` *NotNull*, *Min(1)*  <br/><br/>
+         
+     + Attributes explaination for Category filter: 
+       * `pageSize` : maximum number of Products in a page
+       * `pageNumber` : page number of which page
+       * `categoryRequestDTOList`:
+         * `categoryId` : category id  <br/><br/>
+         
+     + Example Response Body Raw: <br/>
+```
+   {
+     "pageSize": 20,
+     "pageNumber": 1,
+     "categoryRequestDTOList": [
+       {
+         "categoryId": 1
+       },
+       {
+         "categoryId": 2
+       }
+     ]
+   }
+```
+<br/><br/>
