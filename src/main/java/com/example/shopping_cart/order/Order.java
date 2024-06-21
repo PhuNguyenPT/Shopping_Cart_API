@@ -3,6 +3,7 @@ package com.example.shopping_cart.order;
 import com.example.shopping_cart.common.BaseEntity;
 import com.example.shopping_cart.product.Product;
 import com.example.shopping_cart.product_quantity.ProductQuantity;
+import com.example.shopping_cart.transaction.Transaction;
 import com.example.shopping_cart.user.MyUser;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.*;
@@ -59,4 +60,7 @@ public class Order extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "product_id")
     )
     private List<Product> products = new ArrayList<>();
+
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private Transaction transaction;
 }
