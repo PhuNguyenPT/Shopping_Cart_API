@@ -71,4 +71,20 @@ public class ShoppingCartMapper {
                 )
                 .build();
     }
+
+    public static ShoppingCartResponseDTO toShoppingCartResponseDTOFind(
+            @NotNull ShoppingCart shoppingCart
+    ) {
+        return ShoppingCartResponseDTO.builder()
+                .message("Find cart successfully")
+                .cartId(shoppingCart.getId())
+                .userId(shoppingCart.getUser().getId())
+                .totalAmount(shoppingCart.getTotalAmount())
+                .productQuantityResponseDTOList(
+                        shoppingCart.getQuantities().stream()
+                                .map(ProductQuantityMapper::toProductQuantityResponseDTOSave)
+                                .toList()
+                )
+                .build();
+    }
 }

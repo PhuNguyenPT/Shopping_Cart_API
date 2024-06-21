@@ -6,6 +6,7 @@ import com.example.shopping_cart.product_quantity.ProductQuantity;
 import com.example.shopping_cart.product_quantity.ProductQuantityRepository;
 import com.example.shopping_cart.user.MyUser;
 import com.example.shopping_cart.user.MyUserService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,5 +79,17 @@ public class ShoppingCartService {
         });
         ShoppingCart savedUpdatedShoppingCart = shoppingCartRepository.save(updatedShoppingCart);
         return ShoppingCartMapper.toShoppingCartResponseDTO(savedUpdatedShoppingCart);
+    }
+
+    public ShoppingCartResponseDTO findBy(
+            @NotNull Authentication authentication
+    ) {
+        MyUser authenticatedUser = myUserService.findByUserAuthentication(authentication);
+
+        ShoppingCart shoppingCart = authenticatedUser.getShoppingCart();
+        if (shoppingCart == null) {
+            throw new EntityNotFoundException("User shopping cart not found");
+        }
+        return ShoppingCartMapper.toShoppingCartResponseDTOFind(shoppingCart);
     }
 }

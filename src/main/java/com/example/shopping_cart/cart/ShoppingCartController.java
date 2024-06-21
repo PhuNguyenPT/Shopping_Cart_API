@@ -24,7 +24,19 @@ public class ShoppingCartController {
             @RequestBody @Valid
             List<ShoppingCartRequestDTO> shoppingCartRequestDTOList
     ) {
-        ShoppingCartResponseDTO shoppingCartResponseDTO = shoppingCartService.save(authentication, shoppingCartRequestDTOList);
+        ShoppingCartResponseDTO shoppingCartResponseDTO = shoppingCartService.save(
+                authentication, shoppingCartRequestDTOList
+        );
+        return ResponseEntity.status(HttpStatus.OK).body(shoppingCartResponseDTO);
+    }
+
+    @GetMapping("")
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity<?> findShoppingCart(
+            Authentication authentication
+    ) {
+        ShoppingCartResponseDTO shoppingCartResponseDTO =
+                shoppingCartService.findBy(authentication);
         return ResponseEntity.status(HttpStatus.OK).body(shoppingCartResponseDTO);
     }
 }
