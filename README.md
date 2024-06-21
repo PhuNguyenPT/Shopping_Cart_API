@@ -260,7 +260,6 @@ To set up the backend of the Book Social Network project, follow these steps:
    ]
 ```
 
-<br/><br/>
 2. POST: https://localhost/api/v1/categories/filter
    - Filter Product(s) by CategoryRequestDTOList of `category-id` with `pageSize` and `pageNumber`<br/>   
    - Request Body <br/>
