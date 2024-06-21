@@ -128,10 +128,54 @@ To set up the backend of the Book Social Network project, follow these steps:
 - `(ADMIN ONLY)` : require admin login
 - `(NON-USER)` : no require for login
 
+### Authentication
+1. POST: https://localhost/api/v1/auth/register `(NON-USER)` <br/>
+   - Register user 
+   - Request Body 
+     + Content-Type = application/json <br/><br/>
+     + Suported attributes for Authentication: 
+       * `firstName` 
+       * `lastName`
+       * `email`
+       * `password` <br/><br/>
+       
+     + Attributes constraints for Authentication: 
+       * `firstName` : *NotEmpty*, *NotBlank*
+       * `lastName` : *NotEmpty*, *NotBlank*
+       * `email` : *Email*, *NotEmpty*, *NotBlank*
+       * `password` : *NotEmpty*, *NotBlank*, *Size(min=8)* <br/><br/>
+       
+     + Attributes explaination for Authentication:
+       * `firstName` : first name 
+       * `lastName` : last name
+       * `email` : email
+       * `password` : password <br/><br/>
+       
+2. GET: https://localhost:443/api/v1/auth/activate-account?token=value `(NON-USER)` <br/>
+   - Use a browser to access to mail server at http://localhost:1080 <br/>
+   - Get the 6-digit code to replace the `value` in `activate-account?token=value` above <br/><br/>
+
+
+3. POST: https://localhost/api/v1/auth/login `(NON-USER)` <br/>
+   - Login by email and password <br/>
+   - Request Body 
+     + Content-Type = application/json <br/><br/>
+     + Suported attributes for Authentication: 
+       * `email`
+       * `password` <br/><br/>
+       
+     + Attributes constraints for Authentication: 
+       * `email` : *Email*, *NotEmpty*, *NotBlank*
+       * `password` : *NotEmpty*, *NotBlank*, *Size(min=8)* <br/><br/>
+       
+     + Attributes explaination for Authentication:
+       * `email` : email
+       * `password` : password <br/><br/>
+         
 ### Product
 1. POST: https://localhost/api/v1/products/upload `(ADMIN ONLY)` <br/>
    - Upload Product <br/>
-   - Request Body: <br/>
+   - Request Body: 
      + Content-Type = multipart/form-data <br/><br/>
      + Suported attributes for Product: 
        * `name` 
