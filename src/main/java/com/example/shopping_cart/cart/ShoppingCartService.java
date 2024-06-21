@@ -8,6 +8,8 @@ import com.example.shopping_cart.user.MyUser;
 import com.example.shopping_cart.user.MyUserService;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ShoppingCartService {
 
+    @Autowired
     private final ShoppingCartRepository shoppingCartRepository;
     private final MyUserService myUserService;
     private final ProductService productService;
@@ -35,13 +38,18 @@ public class ShoppingCartService {
         ShoppingCart savedShoppingCart = myUser.getShoppingCart();
 
         if (savedShoppingCart == null) {
-            ShoppingCart shoppingCart = ShoppingCart.builder()
-                    .products(new ArrayList<>())
-                    .quantities(new ArrayList<>())
-                    .user(myUser)
-                    .build();
-            savedShoppingCart = shoppingCartRepository.save(shoppingCart);
-            myUser.setShoppingCart(savedShoppingCart);
+            try {
+                ShoppingCart shoppingCart = ShoppingCart.builder()
+                        .products(new ArrayList<>())
+                        .quantities(new ArrayList<>())
+                        .user(myUser)
+                        .build();
+                savedShoppingCart = shoppingCartRepository.save(shoppingCart);
+                System.out.println("Saved shopping cart ID: " + savedShoppingCart.getId());
+                myUser.setShoppingCart(savedShoppingCart);
+            } catch (Exception ex) {
+                throw new DataIntegrityViolationException(ex.getMessage());
+            }
         }
 
         List<Product> products = shoppingCartRequestDTOList.stream()
