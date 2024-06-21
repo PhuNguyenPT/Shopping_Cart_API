@@ -357,3 +357,43 @@ To set up the backend of the Book Social Network project, follow these steps:
    }
 ```
 <br/><br/>
+
+### Order
+1. POST: https://localhost/api/v1/orders/upload `(ALL-USER)` <br/><br/>
+    - Make Order from the user data and their cart (identifying user through token, so using Bearer Token in Authorization before send)
+    - Response Body
+        + Content-Type = application/json <br/><br/>
+        + Example Response Body Raw:
+```
+    {
+        "status": "good",
+        "orderInfo": "good",
+        "anotherField": "good"
+    }
+```
+2. GET: https://localhost/api/v1/orders/search/{order-id} `(ALL-USER)` <br/><br/>
+    - Get Order information according to user and id (also use token)
+    - Response Body
+        + Content-Type = application/json <br/><br/>
+
+3. PATCH: https://localhost/api/v1/orders/update/{order-id} `(ALL-USER)` <br/><br/>
+    - Update Order information according to user and id
+    - Update Order attribute(s) with `product-id` <br/><br/>
+    - Request Body
+        + Content-Type = application/json <br/><br/>
+          * `status`
+          * `deliveryDate`
+          * `orderInfo`
+          * `anotherField` <br/><br/>
+
+        + Example Response Body Raw:
+```
+    {
+        "status": "good",
+        "deliveryDate": "2024-06-21T14:30:00",
+        "orderInfo": "Laptop",
+        "anotherField": "good"
+    }
+```
+4. DELETE: https://localhost/api/v1/orders/delete/{order-id} `(ADMIN ONLY)` <br/>
+    - Delete Order by `order-id` <br/><br/>

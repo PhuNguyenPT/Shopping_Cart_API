@@ -1,17 +1,14 @@
 package com.example.shopping_cart.order;
 
 import com.example.shopping_cart.product.Product;
-import com.example.shopping_cart.product.ProductUpdateDTO;
 import com.example.shopping_cart.product_quantity.ProductQuantity;
 import com.example.shopping_cart.user.MyUser;
-import com.example.shopping_cart.user.MyUserRepository;
 import com.example.shopping_cart.user.MyUserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -27,7 +24,7 @@ public class OrderService {
     private final MyUserService myUserService;
 
     @Transactional
-    public ResponseEntity<?> saveOrder(
+    public OrderResponseDTO saveOrder(
             @NotNull Authentication authentication,
             @NotNull OrderRequestDTO orderRequestDTO
             ) {
@@ -46,28 +43,40 @@ public class OrderService {
             order.setTotalAmount(myUser.getShoppingCart().getTotalAmount());
 
             Order savedOrder = orderRepository.save(order);
+            System.out.println(savedOrder.getQuantities());
+            System.out.println(order.getQuantities());
             OrderResponseDTO orderResponseDTO = OrderMapper.toOrderResponseDTO(savedOrder);
             orderResponseDTO.setMessage("Save order " + orderResponseDTO.getId() + " successfully.");
-            return ResponseEntity.status(HttpStatus.OK).body(orderResponseDTO);
+            return orderResponseDTO;
 
         } catch (RuntimeException e) {
             throw new RuntimeException("Cannot save order");
         }
     }
 
-    public ResponseEntity<?> searchOrderById(Long orderId) {
-        Order order = findById(orderId);
-        OrderResponseDTO orderResponseDTO = OrderMapper.toOrderResponseDTO(order);
-        orderResponseDTO.setMessage("Search order" + orderResponseDTO.getId() + " successfully.");
-        return ResponseEntity.status(HttpStatus.OK).body(orderResponseDTO);
+    public OrderResponseDTO searchOrderById(
+            @NotNull Authentication authentication,
+            Long orderId) {
+        MyUser myUser = myUserService.findByUserAuthentication(authentication);
+        List<Order> ordersOfMyUser = new ArrayList<>(myUser.getOrders());
+        for (Order order: ordersOfMyUser) {
+            if (order.getId().equals(orderId)) {
+                System.out.println(order.getQuantities());
+                OrderResponseDTO orderResponseDTO = OrderMapper.toOrderResponseDTO(order);
+                orderResponseDTO.setMessage("Search order" + orderResponseDTO.getId() + " successfully.");
+                return orderResponseDTO;
+            }
+        }
+        return null;
     }
 
 
     @Transactional
-    public ResponseEntity<?> deleteBy(Long orderId) {
+    public String deleteBy(Long orderId) {
         Order order = findById(orderId);
         orderRepository.deleteById(order.getId());
-        return ResponseEntity.ok("Order with id " + orderId + " is deleted successfully");
+        String responseMessage = "Order with id " + orderId + " is deleted successfully";
+        return responseMessage;
     }
 
     public Order findById(Long id) {
@@ -77,7 +86,7 @@ public class OrderService {
 
 
     @Transactional
-    public ResponseEntity<?> updateOrderAttributes(
+    public OrderResponseDTO updateOrderAttributes(
             Long id,
             @NotNull OrderUpdateDTO orderUpdateDTO
     ) {
@@ -98,6 +107,6 @@ public class OrderService {
         Order savedOrder = orderRepository.save(order);
         OrderResponseDTO orderResponseDTO = OrderMapper.toOrderResponseDTO(savedOrder);
         orderResponseDTO.setMessage("Update order " + orderResponseDTO.getId() + " successfully.");
-        return ResponseEntity.status(HttpStatus.OK).body(orderResponseDTO);
+        return orderResponseDTO;
     }
 }
