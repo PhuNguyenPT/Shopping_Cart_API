@@ -119,24 +119,41 @@ public class OrderService {
 
     @Transactional
     public OrderResponseDTO updateOrderAttributes(
-            Long id,
+            @NotNull Authentication authentication,
+            Long orderId,
             @NotNull OrderUpdateDTO orderUpdateDTO
     ) {
-        Order order = findById(id);
-        if (orderUpdateDTO.getStatus() != null) {
-            order.setStatus(orderUpdateDTO.getStatus());
+
+        MyUser myUser = myUserService.findByUserAuthentication(authentication);
+        List<Order> ordersOfMyUser = myUser.getOrders();
+        if (ordersOfMyUser == null) {
+            throw new EntityNotFoundException("Order(s) not found");
         }
-        if (orderUpdateDTO.getDeliveryDate() != null) {
-            order.setDeliveryDate(orderUpdateDTO.getDeliveryDate());
-        }
-        if (orderUpdateDTO.getOrderInfo() != null) {
-            order.setOrderInfo(orderUpdateDTO.getOrderInfo());
-        }
-        if (orderUpdateDTO.getAnotherField() != null) {
-            order.setAnotherField(orderUpdateDTO.getAnotherField());
+        Order updateOrder = this.findById(orderId);
+        if (!ordersOfMyUser.contains(updateOrder)) {
+            throw new EntityNotFoundException("Order with id " + orderId + " not found.");
         }
 
-        Order savedOrder = orderRepository.save(order);
+        if (orderUpdateDTO.getOrderInfo() != null) {
+            updateOrder.setOrderInfo(orderUpdateDTO.getOrderInfo());
+        }
+        if (orderUpdateDTO.getAnotherField() != null) {
+            updateOrder.setAnotherField(orderUpdateDTO.getAnotherField());
+        }
+        if (orderUpdateDTO.getPhoneNumber() != null) {
+            myUser.setPhoneNumber(orderUpdateDTO.getPhoneNumber());
+        }
+        if (orderUpdateDTO.getAddressRequestDTO().getHouseNumber() != null &&
+                orderUpdateDTO.getAddressRequestDTO().getStreetName() != null &&
+                orderUpdateDTO.getAddressRequestDTO().getWardName() != null &&
+                orderUpdateDTO.getAddressRequestDTO().getCity() != null &&
+                orderUpdateDTO.getAddressRequestDTO().getZipCode() != null
+        ) {
+            myUser.setAddress(AddressMapper.toAddress(orderUpdateDTO.getAddressRequestDTO()));
+        }
+
+
+        Order savedOrder = orderRepository.save(updateOrder);
         OrderResponseDTO orderResponseDTO = OrderMapper.toOrderResponseDTO(savedOrder);
         orderResponseDTO.setMessage("Update order " + orderResponseDTO.getId() + " successfully.");
         return orderResponseDTO;

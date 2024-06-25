@@ -55,10 +55,11 @@ public class OrderController {
     @PatchMapping("update/{order-id}")
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<?> updateOrder(
+            Authentication authentication,
             @PathVariable("order-id") Long orderId,
             @RequestBody @Valid OrderUpdateDTO orderUpdateDTO
     ) {
-        OrderResponseDTO orderResponseDTO = orderService.updateOrderAttributes(orderId, orderUpdateDTO);
+        OrderResponseDTO orderResponseDTO = orderService.updateOrderAttributes(authentication, orderId, orderUpdateDTO);
         return ResponseEntity.status(HttpStatus.OK).body(orderResponseDTO);
     }
 }
