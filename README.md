@@ -365,18 +365,18 @@ To set up the backend of the Book Social Network project, follow these steps:
      + Content-Type = application/json <br/><br/>
      + Example Request Body Raw:
 ```
-    {
-    "orderInfo": "good",
-    "anotherField": "good",
-    "phoneNumber": 987654321,
-    "addressRequestDTO": {
-        "houseNumber": "34",
-        "streetName": "street",
-        "wardName": "ward",
-        "city": "city",
-        "zipCode": "zipcode"
-    }
-}
+   {
+       "orderInfo": "good",
+       "anotherField": "good",
+       "phoneNumber": 123456789,
+       "addressRequestDTO": {
+           "houseNumber": "number",
+           "streetName": "street",
+           "wardName": "ward",
+           "city": "city",
+           "zipCode": "zipCode"
+       }
+   }
 ```
 2. GET: https://localhost/api/v1/orders/search/{order-id} `(USER-ONLY)` <br/><br/>
    - Get Order information according to user and id (also use token)
@@ -396,17 +396,17 @@ To set up the backend of the Book Social Network project, follow these steps:
         + Example Request Body Raw:
 ```
    {
-    "orderInfo": "good",
-    "anotherField": "good",
-    "phoneNumber": 987654321,
-    "addressRequestDTO": {
-        "houseNumber": "34",
-        "streetName": "hello",
-        "wardName": "ward",
-        "city": "city",
-        "zipCode": "zipcode"
-    }
-}
+       "orderInfo": "good",
+       "anotherField": "good",
+       "phoneNumber": 123456789,
+       "addressRequestDTO": {
+           "houseNumber": "number",
+           "streetName": "street",
+           "wardName": "ward",
+           "city": "city",
+           "zipCode": "zipCode"
+       }
+   }
 ```
 4. DELETE: https://localhost/api/v1/orders/delete/{order-id} `(ADMIN ONLY)` <br/><br/>
    - Delete Order by `order-id` <br/><br/>
