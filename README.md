@@ -396,11 +396,17 @@ To set up the backend of the Book Social Network project, follow these steps:
         + Example Response Body Raw:
 ```
    {
-      "status": "good",
-      "deliveryDate": "2024-06-21T14:30:00",
-      "orderInfo": "Laptop",
-      "anotherField": "good"
-   }
+    "orderInfo": "good",
+    "anotherField": "good",
+    "phoneNumber": 987654321,
+    "addressRequestDTO": {
+        "houseNumber": "34",
+        "streetName": "hello",
+        "wardName": "ward",
+        "city": "city",
+        "zipCode": "zipcode"
+    }
+}
 ```
 4. DELETE: https://localhost/api/v1/orders/delete/{order-id} `(ADMIN ONLY)` <br/><br/>
    - Delete Order by `order-id` <br/><br/>
