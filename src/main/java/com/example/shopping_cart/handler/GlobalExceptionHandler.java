@@ -2,6 +2,7 @@ package com.example.shopping_cart.handler;
 
 import com.example.shopping_cart.file.FileProperties;
 import jakarta.mail.MessagingException;
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -280,6 +281,18 @@ public class GlobalExceptionHandler {
         String errorMessage = "The requested entity was not found: " + e.getMessage();
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ExceptionResponse.builder()
+                        .businessErrorDescription(errorMessage)
+                        .error(e.getMessage())
+                        .build()
+                );
+    }
+
+    @ExceptionHandler(EntityExistsException.class)
+    public ResponseEntity<?> handleEntityExistsException(@NotNull EntityExistsException e) {
+        String errorMessage = "The requested entity exists: " + e.getMessage();
+
+        return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(ExceptionResponse.builder()
                         .businessErrorDescription(errorMessage)
                         .error(e.getMessage())
