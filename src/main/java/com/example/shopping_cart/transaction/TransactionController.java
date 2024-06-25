@@ -15,7 +15,7 @@ public class TransactionController {
     private final TransactionService transactionService;
 
     @PostMapping("/upload")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<?> save(
             Authentication authentication,
             @RequestBody TransactionRequestDTO transactionRequestDTO
