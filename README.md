@@ -254,47 +254,6 @@ To set up the backend of the Book Social Network project, follow these steps:
        * `description` : *product description*
        * `categoryIds` : *saved category ids from database* <br/><br/>
 
-### Shopping Cart
-1. POST: https://localhost/api/v1/carts/upload `(USER ONLY)` <br/><br/>
-   - Upload `List` of (`Product id`, `Quantity`) for Shopping Cart (User authenticated `Bearer Token` needed in `AUTHORIZATION`) <br/><br/>
-   - Request Body 
-     + Content-Type = application/json <br/><br/>
-     + Suported attributes for Shopping Cart: 
-       * `productId` 
-       * `quantity` <br/><br/>
-       
-     + Attributes constraints for Shopping Cart: 
-       * `productId` : *NotNull*, *Min(1)*
-       * `quantity` : *NotNull*, *Min(1)* <br/><br/>
-       
-     + Attributes explaination for Product:
-       * `productId` : *product id*
-       * `quantity` : *product quantity* <br/><br/>
-       
-     + Example in Request Body Raw::
-```
-   [
-       {
-           "productId": 1,
-           "quantity": 7
-       },
-       {
-           "productId": 2,
-           "quantity": 9
-       },
-       {
-           "productId": 3,
-           "quantity": 1
-       }
-   ]
-```
-<br/><br/>
-
-2. GET: https://localhost/api/v1/carts `(USER ONLY)` <br/><br/>
-   - Retrieve `Shopping Cart` by User authenticated `Bearer Token` in `AUTHORIZATION` <br/><br/> 
-   - Response Body 
-     + Content-Type = application/json  <br/><br/>
- 
 ### Category
 
 1. GET: https://localhost/api/v1/categories `(NON-USER)` <br/><br/>
@@ -358,12 +317,53 @@ To set up the backend of the Book Social Network project, follow these steps:
 ```
 <br/><br/>
 
+### Shopping Cart
+1. POST: https://localhost/api/v1/carts/upload `(USER ONLY)` <br/><br/>
+   - Upload `List` of (`Product id`, `Quantity`) for Shopping Cart (User authenticated `Bearer Token` needed in `AUTHORIZATION`) <br/><br/>
+   - Request Body 
+     + Content-Type = application/json <br/><br/>
+     + Suported attributes for Shopping Cart: 
+       * `productId` 
+       * `quantity` <br/><br/>
+       
+     + Attributes constraints for Shopping Cart: 
+       * `productId` : *NotNull*, *Min(1)*
+       * `quantity` : *NotNull*, *Min(1)* <br/><br/>
+       
+     + Attributes explaination for Product:
+       * `productId` : *product id*
+       * `quantity` : *product quantity* <br/><br/>
+       
+     + Example in Request Body Raw::
+```
+   [
+       {
+           "productId": 1,
+           "quantity": 7
+       },
+       {
+           "productId": 2,
+           "quantity": 9
+       },
+       {
+           "productId": 3,
+           "quantity": 1
+       }
+   ]
+```
+<br/><br/>
+
+2. GET: https://localhost/api/v1/carts `(USER ONLY)` <br/><br/>
+   - Retrieve `Shopping Cart` by User authenticated `Bearer Token` in `AUTHORIZATION` <br/><br/> 
+   - Response Body 
+     + Content-Type = application/json  <br/><br/>
+ 
 ### Order
 1. POST: https://localhost/api/v1/orders/upload `(USER-ONLY)` <br/><br/>
-    - Make Order from the user data and their cart (identifying user through token, so using Bearer Token in Authorization before send)
-    - Response Body
-        + Content-Type = application/json <br/><br/>
-        + Example Response Body Raw:
+   - Make Order from the user data and their cart (identifying user through token, so using Bearer Token in Authorization before send)
+   - Response Body
+     + Content-Type = application/json <br/><br/>
+     + Example Response Body Raw:
 ```
     {
         "status": "good",
@@ -372,28 +372,73 @@ To set up the backend of the Book Social Network project, follow these steps:
     }
 ```
 2. GET: https://localhost/api/v1/orders/search/{order-id} `(USER-ONLY)` <br/><br/>
-    - Get Order information according to user and id (also use token)
-    - Response Body
-        + Content-Type = application/json <br/><br/>
+   - Get Order information according to user and id (also use token)
+   - Response Body
+     + Content-Type = application/json <br/><br/>
 
 3. PATCH: https://localhost/api/v1/orders/update/{order-id} `(USER-ONLY)` <br/><br/>
-    - Update Order information according to user and id
-    - Update Order attribute(s) with `product-id` <br/><br/>
-    - Request Body
-        + Content-Type = application/json <br/><br/>
-          * `status`
-          * `deliveryDate`
-          * `orderInfo`
-          * `anotherField` <br/><br/>
+   - Update Order information according to user and id
+   - Update Order attribute(s) with `product-id` <br/><br/>
+   - Request Body
+     + Content-Type = application/json <br/><br/>
+       * `status`
+       * `deliveryDate`
+       * `orderInfo`
+       * `anotherField` <br/><br/>
 
         + Example Response Body Raw:
 ```
-    {
-        "status": "good",
-        "deliveryDate": "2024-06-21T14:30:00",
-        "orderInfo": "Laptop",
-        "anotherField": "good"
-    }
+   {
+      "status": "good",
+      "deliveryDate": "2024-06-21T14:30:00",
+      "orderInfo": "Laptop",
+      "anotherField": "good"
+   }
 ```
-4. DELETE: https://localhost/api/v1/orders/delete/{order-id} `(ADMIN ONLY)` <br/>
-    - Delete Order by `order-id` <br/><br/>
+4. DELETE: https://localhost/api/v1/orders/delete/{order-id} `(ADMIN ONLY)` <br/><br/>
+   - Delete Order by `order-id` <br/><br/>
+
+### Transaction
+1. POST: https://localhost/api/v1/transactions/upload (`USER-ONLY`) <br/><br/>
+   - Upload transaction of User authenticated `Bearer Token` in `AUTHORIZATION`
+   - Request Body
+     + Content-Type = application/json  <br/><br/>
+     + Suported attributes for Transaction: 
+       * `orderId` 
+       * `transactionType`
+       * `currency` <br/><br/>
+
+     + Attributes constraints for Product: 
+       * `orderId` : *NotNull*, *Min(1)*
+       * `transactionType` : *NotNull*, *NotBlank*
+       * `currency` : *NotNull*, *NotBlank* <br/><br/>
+
+     + Attributes explaination for Product:
+       * `orderId` : *order id*
+       * `transactionType` : *transaction type* (can be categorized as INTERNET_BANKING, CREDIT_CARD, CASH) 
+       * `currency` : *currency* (can be categorized as VND, USD, EUR) <br/><br/>
+       
+     + Example Response Body Raw:
+```
+   {
+      "orderId": 1,
+      "transactionType": "CREDIT_CARD",
+      "currency": "VND"
+   }
+```
+
+2. GET: https://localhost/api/v1/transactions <br/><br/>
+   - Find all Transaction(s) as Page, of User authenticated `Bearer Token` in `AUTHORIZATION` (`USER-ONLY`) 
+   - Request Body
+     + Content-Type = application/json  <br/><br/>
+     + Suported attributes for Transaction finding: 
+       * `pageSize` 
+       * `pageNumber` <br/><br/>
+         
+     + Attributes constraints for Transaction finding: 
+       * `pageSize` : *NotNull*, *Min(1)*, *Max(20)
+       * `pageNumber` : *NotNull*, *Min(1)* <br/><br/>
+       
+     + Attributes explaination for Transaction finding: 
+       * `pageSize` : maximum number of Products in a page
+       * `pageNumber` : page number of which page <br/><br/>
