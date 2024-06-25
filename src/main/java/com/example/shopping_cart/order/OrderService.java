@@ -4,7 +4,6 @@ import com.example.shopping_cart.cart.ShoppingCart;
 import com.example.shopping_cart.cart.ShoppingCartService;
 import com.example.shopping_cart.product.Product;
 import com.example.shopping_cart.product_quantity.ProductQuantity;
-import com.example.shopping_cart.product_quantity.ProductQuantityRepository;
 import com.example.shopping_cart.product_quantity.ProductQuantityService;
 import com.example.shopping_cart.user.AddressMapper;
 import com.example.shopping_cart.user.MyUser;
@@ -39,7 +38,7 @@ public class OrderService {
         if (shoppingCart.getQuantities().isEmpty()) {
             throw new EntityNotFoundException("There is no Product in Your Cart");
         }
-        Order order = OrderMapper.toOrder(orderRequestDTO);
+        Order order = OrderMapper.toOrderSave(orderRequestDTO);
         order.setUser(myUser);
         //Add Order to User
         myUser.addOrder(order);
