@@ -26,6 +26,7 @@ public class OrderMapper {
                                 .map(ProductQuantityMapper::toProductQuantityResponseDTOSaveOrder)
                                 .toList()
                 )
+                .phoneNumber(order.getUser().getPhoneNumber())
                 .addressResponseDTO(AddressMapper.toAddressResponseDTO(order.getUser().getAddress()))
                 .build();
     }

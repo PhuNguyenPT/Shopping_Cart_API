@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,5 +25,6 @@ public class OrderResponseDTO {
     private final String anotherField;
     private final List<ProductQuantityResponseDTO> productQuantityResponseDTOList;
 
+    private final BigInteger phoneNumber;
     private final AddressResponseDTO addressResponseDTO;
 }

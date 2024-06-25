@@ -40,9 +40,10 @@ public class OrderService {
         }
         Order order = OrderMapper.toOrderSave(orderRequestDTO);
         order.setUser(myUser);
-        //Add Order to User
-        myUser.addOrder(order);
 
+
+        //Add Phone Number to User
+        myUser.setPhoneNumber(orderRequestDTO.getPhoneNumber());
         //Add Address to User
         myUser.setAddress(AddressMapper.toAddress(orderRequestDTO.getAddressRequestDTO()));
 
@@ -76,8 +77,10 @@ public class OrderService {
 
 
         Order savedOrder = orderRepository.save(order);
-        System.out.println(savedOrder.getQuantities());
-        System.out.println(order.getQuantities());
+
+        //Add Order to User
+        myUser.addOrder(order);
+
         OrderResponseDTO orderResponseDTO = OrderMapper.toOrderResponseDTO(savedOrder);
         orderResponseDTO.setMessage("Save order " + orderResponseDTO.getId() + " successfully.");
         return orderResponseDTO;
