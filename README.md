@@ -366,10 +366,17 @@ To set up the backend of the Book Social Network project, follow these steps:
      + Example Response Body Raw:
 ```
     {
-        "status": "good",
-        "orderInfo": "good",
-        "anotherField": "good"
+    "orderInfo": "good",
+    "anotherField": "good",
+    "phoneNumber": 987654321,
+    "addressRequestDTO": {
+        "houseNumber": "34",
+        "streetName": "street",
+        "wardName": "ward",
+        "city": "city",
+        "zipCode": "zipcode"
     }
+}
 ```
 2. GET: https://localhost/api/v1/orders/search/{order-id} `(USER-ONLY)` <br/><br/>
    - Get Order information according to user and id (also use token)
