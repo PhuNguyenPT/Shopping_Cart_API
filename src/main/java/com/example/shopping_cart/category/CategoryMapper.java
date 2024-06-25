@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 @Service
-public class CategoryMapper {
+public class    CategoryMapper {
 
     public static CategoryResponseDTO toCategoryResponseDTO(
             @NotNull Category category

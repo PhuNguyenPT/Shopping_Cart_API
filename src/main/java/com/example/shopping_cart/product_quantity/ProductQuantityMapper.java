@@ -22,4 +22,19 @@ public class ProductQuantityMapper {
                 )
                 .build();
     }
+
+    public static ProductQuantityResponseDTO toProductQuantityResponseDTOSaveOrder(
+            @NotNull ProductQuantity productQuantity
+    ) {
+        return ProductQuantityResponseDTO.builder()
+                .orderId(productQuantity.getOrder().getId())
+                .productQuantityId(productQuantity.getId())
+                .productId(productQuantity.getProduct().getId())
+                .quantity(productQuantity.getQuantity())
+                .totalAmount(productQuantity.getTotalAmount())
+                .productResponseDTO(
+                        ProductMapper.toProductResponseDTOOrder(productQuantity.getProduct())
+                )
+                .build();
+    }
 }

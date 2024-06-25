@@ -37,14 +37,12 @@ public class OrderController {
             @NotNull(message = "Order id must not be null")
             Long orderId
     ) {
-        OrderResponseDTO orderResponseDTO = orderService.searchOrderById(authentication, orderId);
-        if (orderResponseDTO != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(orderResponseDTO);
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found order with id" + orderId);
+        OrderResponseDTO orderResponseDTO = orderService.findByIdAndAuthentication(authentication, orderId);
+        return ResponseEntity.status(HttpStatus.OK).body(orderResponseDTO);
     }
 
     @DeleteMapping("/delete/{order-id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> deleteOrder(
             @PathVariable("order-id")
             @NotNull(message = "Order id must not be null")
@@ -55,6 +53,7 @@ public class OrderController {
 
 
     @PatchMapping("update/{order-id}")
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<?> updateOrder(
             @PathVariable("order-id") Long orderId,
             @RequestBody @Valid OrderUpdateDTO orderUpdateDTO

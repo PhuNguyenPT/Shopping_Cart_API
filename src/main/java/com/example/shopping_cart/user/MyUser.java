@@ -49,7 +49,7 @@ public class MyUser extends BaseEntity implements UserDetails, Principal {
 
     @OneToMany(mappedBy = "user")
     @JsonIgnore
-    private List<Order> orders = new ArrayList<>();;
+    private List<Order> orders = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinTable(name = "user_cart",
@@ -70,6 +70,13 @@ public class MyUser extends BaseEntity implements UserDetails, Principal {
             transactions = new ArrayList<>();
         }
         return transactions.add(transaction);
+    }
+
+    public boolean addOrder(Order order) {
+        if (orders == null) {
+            orders = new ArrayList<>();
+        }
+        return orders.add(order);
     }
 
     @Override

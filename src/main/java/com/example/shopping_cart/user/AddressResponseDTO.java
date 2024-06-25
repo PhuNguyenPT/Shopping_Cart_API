@@ -1,17 +1,15 @@
 package com.example.shopping_cart.user;
 
-import jakarta.persistence.Embeddable;
-import lombok.AllArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Embeddable
+@Getter
+@Setter
 @Builder
-public class Address {
+public class AddressResponseDTO {
     private String houseNumber;
     private String streetName;
     private String wardName;

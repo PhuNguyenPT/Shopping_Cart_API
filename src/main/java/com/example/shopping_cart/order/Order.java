@@ -7,6 +7,8 @@ import com.example.shopping_cart.transaction.Transaction;
 import com.example.shopping_cart.user.MyUser;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;

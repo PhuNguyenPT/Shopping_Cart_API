@@ -1,6 +1,7 @@
 package com.example.shopping_cart.order;
 
 import com.example.shopping_cart.product_quantity.ProductQuantityResponseDTO;
+import com.example.shopping_cart.user.AddressResponseDTO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,4 +23,6 @@ public class OrderResponseDTO {
     private final String orderInfo;
     private final String anotherField;
     private final List<ProductQuantityResponseDTO> productQuantityResponseDTOList;
+
+    private final AddressResponseDTO addressResponseDTO;
 }
