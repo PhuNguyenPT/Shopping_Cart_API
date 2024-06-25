@@ -2,6 +2,8 @@ package com.example.shopping_cart.order;
 
 import com.example.shopping_cart.product_quantity.ProductQuantity;
 import com.example.shopping_cart.product_quantity.ProductQuantityMapper;
+import com.example.shopping_cart.user.Address;
+import com.example.shopping_cart.user.AddressMapper;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +12,9 @@ import java.time.LocalDateTime;
 
 @Service
 public class OrderMapper {
-    public static OrderResponseDTO toOrderResponseDTO(@NotNull Order order) {
+    public static OrderResponseDTO toOrderResponseDTO(
+            @NotNull Order order
+    ) {
         return OrderResponseDTO.builder()
                 .id(order.getId())
                 .name(order.getUser().getName())
@@ -21,9 +25,10 @@ public class OrderMapper {
                 .anotherField(order.getAnotherField())
                 .productQuantityResponseDTOList(
                         order.getQuantities().stream()
-                                .map(ProductQuantityMapper::toProductQuantityResponseDTOSave)
+                                .map(ProductQuantityMapper::toProductQuantityResponseDTOSaveOrder)
                                 .toList()
                 )
+                .addressResponseDTO(AddressMapper.toAddressResponseDTO(order.getUser().getAddress()))
                 .build();
     }
 

@@ -88,6 +88,24 @@ public class ProductMapper {
                 .build();
     }
 
+    public static ProductResponseDTO toProductResponseDTOOrder(
+            @NotNull Product product
+    ) {
+        return ProductResponseDTO.builder()
+                .name(product.getName())
+                .price(product.getPrice())
+                .description(product.getDescription())
+                .fileResponseDTOList(
+                        Collections.singletonList(
+                                product.getFiles().stream()
+                                        .map(FileMapper::toFileResponseDTOShoppingCart)
+                                        .findFirst()
+                                        .orElseThrow(() -> new RuntimeException("Cannot find file(s) in the shopping cart product"))
+                        )
+                )
+                .build();
+    }
+
     public static ProductResponseDTO toProductResponseDTOCategory(
             @NotNull Product product
     ) {
