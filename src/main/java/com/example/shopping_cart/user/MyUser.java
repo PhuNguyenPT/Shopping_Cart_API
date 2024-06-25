@@ -66,18 +66,18 @@ public class MyUser extends BaseEntity implements UserDetails, Principal {
     @JsonIgnore
     private List<Transaction> transactions = new ArrayList<>();
 
-    public boolean addTransaction(Transaction transaction) {
+    public void addTransaction(Transaction transaction) {
         if (transactions == null) {
             transactions = new ArrayList<>();
         }
-        return transactions.add(transaction);
+        transactions.add(transaction);
     }
 
-    public boolean addOrder(Order order) {
+    public void addOrder(Order order) {
         if (orders == null) {
             orders = new ArrayList<>();
         }
-        return orders.add(order);
+        orders.add(order);
     }
 
     @Override
