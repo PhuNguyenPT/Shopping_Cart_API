@@ -13,6 +13,5 @@ import java.util.Optional;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     List<Category> findAllByIdIn(List<Long> ids);
     @NotNull
-    Optional<Category> findById(@NotNull Long id);
     Category findByName(String name);
 }
