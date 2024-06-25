@@ -84,7 +84,6 @@ public class CategoryService {
                 .orElseThrow(() -> new EntityNotFoundException("Cannot find category with id " + id));
     }
 
-
     public CategoryResponseDTOFilter filterAllProductsByCategoryIdIn(
             @NotNull CategoryRequestFilterDTO categoryRequestFilterDTO
     ) {
