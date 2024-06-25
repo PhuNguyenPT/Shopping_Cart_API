@@ -30,10 +30,10 @@ public class Category extends BaseEntity {
     @JsonIgnore
     private List<Product> products = new ArrayList<>();
 
-    public void addProduct(Product product) {
+    public boolean addProduct(Product product) {
         if (products == null) {
             products = new ArrayList<>();
         }
-        products.add(product);
+        return products.add(product);
     }
 }
