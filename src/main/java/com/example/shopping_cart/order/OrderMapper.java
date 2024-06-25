@@ -1,7 +1,7 @@
 package com.example.shopping_cart.order;
 
 import com.example.shopping_cart.product_quantity.ProductQuantityMapper;
-import com.example.shopping_cart.user.AddressMapper;
+import com.example.shopping_cart.address.AddressMapper;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 

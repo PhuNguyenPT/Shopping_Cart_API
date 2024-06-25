@@ -5,7 +5,7 @@ import com.example.shopping_cart.cart.ShoppingCartService;
 import com.example.shopping_cart.product.Product;
 import com.example.shopping_cart.product_quantity.ProductQuantity;
 import com.example.shopping_cart.product_quantity.ProductQuantityService;
-import com.example.shopping_cart.user.AddressMapper;
+import com.example.shopping_cart.address.AddressMapper;
 import com.example.shopping_cart.user.MyUser;
 import com.example.shopping_cart.user.MyUserService;
 import jakarta.persistence.EntityNotFoundException;

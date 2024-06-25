@@ -1,4 +1,4 @@
-package com.example.shopping_cart.user;
+package com.example.shopping_cart.address;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;

@@ -1,7 +1,7 @@
 package com.example.shopping_cart.order;
 
 import com.example.shopping_cart.product_quantity.ProductQuantityResponseDTO;
-import com.example.shopping_cart.user.AddressResponseDTO;
+import com.example.shopping_cart.address.AddressResponseDTO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
