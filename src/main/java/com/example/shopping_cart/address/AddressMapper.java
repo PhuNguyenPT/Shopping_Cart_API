@@ -1,4 +1,4 @@
-package com.example.shopping_cart.user;
+package com.example.shopping_cart.address;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;

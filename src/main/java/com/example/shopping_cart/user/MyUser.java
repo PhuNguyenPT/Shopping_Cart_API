@@ -1,5 +1,6 @@
 package com.example.shopping_cart.user;
 
+import com.example.shopping_cart.address.Address;
 import com.example.shopping_cart.common.BaseEntity;
 import com.example.shopping_cart.order.Order;
 import com.example.shopping_cart.cart.ShoppingCart;
