@@ -361,9 +361,9 @@ To set up the backend of the Book Social Network project, follow these steps:
 ### Order
 1. POST: https://localhost/api/v1/orders/upload `(USER-ONLY)` <br/><br/>
    - Make Order from the user data and their cart (identifying user through token, so using Bearer Token in Authorization before send)
-   - Response Body
+   - Request Body
      + Content-Type = application/json <br/><br/>
-     + Example Response Body Raw:
+     + Example Request Body Raw:
 ```
     {
     "orderInfo": "good",
@@ -388,12 +388,12 @@ To set up the backend of the Book Social Network project, follow these steps:
    - Update Order attribute(s) with `product-id` <br/><br/>
    - Request Body
      + Content-Type = application/json <br/><br/>
-       * `status`
-       * `deliveryDate`
        * `orderInfo`
-       * `anotherField` <br/><br/>
+       * `anotherField`
+       * `phoneNumber`
+       * `addressRequestDTO`<br/><br/>
 
-        + Example Response Body Raw:
+        + Example Request Body Raw:
 ```
    {
     "orderInfo": "good",
