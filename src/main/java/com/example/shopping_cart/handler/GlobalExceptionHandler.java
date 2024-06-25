@@ -6,6 +6,8 @@ import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -30,6 +32,7 @@ import org.springframework.web.multipart.support.MissingServletRequestPartExcept
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.*;
+
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
@@ -252,7 +255,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<?> handleRuntimeException(@NotNull RuntimeException e) {
-        e.printStackTrace();
+        Logger logger = LoggerFactory.getLogger(getClass());
+        logger.error("An unexpected error occurred:", e);
 
         // Return a ResponseEntity with the custom error message and HTTP status
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
