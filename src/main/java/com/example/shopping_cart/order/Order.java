@@ -66,3 +66,4 @@ public class Order extends BaseEntity {
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Transaction transaction;
 }
+

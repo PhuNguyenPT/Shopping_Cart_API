@@ -16,7 +16,6 @@ import lombok.Setter;
 @Setter
 @Builder
 public class OrderRequestDTO {
-    private final String status;
     private final String orderInfo;
     private final String anotherField;
 
