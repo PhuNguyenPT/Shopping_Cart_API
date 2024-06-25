@@ -99,6 +99,7 @@ public class TransactionService {
         // Map to TransactionResponseDTO List
         List<TransactionResponseDTO> transactionResponseDTOList = userTransactions.stream()
                 .map(TransactionMapper::toTransactionResponseDTO)
+                .peek(transactionResponseDTO -> transactionResponseDTO.setMessage("Find successfully"))
                 .toList();
 
         // Create a Page of TransactionResponseDTO
