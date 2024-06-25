@@ -32,7 +32,7 @@ public class ShoppingCart extends BaseEntity {
     @Column(name = "total_amount")
     private BigDecimal totalAmount;
 
-    @OneToOne(mappedBy = "shoppingCart", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "shoppingCart")
     private MyUser user;
 
     @ManyToMany(fetch = FetchType.EAGER)

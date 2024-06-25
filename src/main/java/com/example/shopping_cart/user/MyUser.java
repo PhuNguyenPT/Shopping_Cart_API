@@ -51,7 +51,7 @@ public class MyUser extends BaseEntity implements UserDetails, Principal {
     @JsonIgnore
     private List<Order> orders = new ArrayList<>();;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinTable(name = "user_cart",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "cart_id")
@@ -64,6 +64,13 @@ public class MyUser extends BaseEntity implements UserDetails, Principal {
     @OneToMany(mappedBy = "user")
     @JsonIgnore
     private List<Transaction> transactions = new ArrayList<>();
+
+    public boolean addTransaction(Transaction transaction) {
+        if (transactions == null) {
+            transactions = new ArrayList<>();
+        }
+        return transactions.add(transaction);
+    }
 
     @Override
     public String getName() {
