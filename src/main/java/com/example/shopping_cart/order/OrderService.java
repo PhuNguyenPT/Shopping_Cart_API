@@ -10,6 +10,10 @@ import com.example.shopping_cart.user.MyUser;
 import com.example.shopping_cart.user.MyUserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -86,12 +90,32 @@ public class OrderService {
         return orderResponseDTO;
     }
 
+    public Page<OrderResponseDTO> findAllThroughAuthentication (
+            @NotNull Authentication authentication,
+            @NotNull OrderRequestFindDTO orderRequestFindDTO
+    ) {
+        Pageable pageable = PageRequest.of(orderRequestFindDTO.getPageNumber(), orderRequestFindDTO.getPageSize());
+        MyUser myUser = myUserService.findByUserAuthentication(authentication);
+        List<Order> ordersOfMyUser = myUser.getOrders();
+        if (ordersOfMyUser.isEmpty()) {
+            throw new EntityNotFoundException("Order(s) not found");
+        }
+        List<OrderResponseDTO> orderResponseDTOList = ordersOfMyUser.stream()
+                .map(OrderMapper::toOrderResponseDTO)
+                .toList();
+        return new PageImpl<>(
+                orderResponseDTOList,
+                pageable,
+                orderResponseDTOList.size()
+        );
+    }
+
     public OrderResponseDTO findByIdAndAuthentication(
             @NotNull Authentication authentication,
             Long orderId) {
         MyUser myUser = myUserService.findByUserAuthentication(authentication);
         List<Order> ordersOfMyUser = myUser.getOrders();
-        if (ordersOfMyUser == null) {
+        if (ordersOfMyUser.isEmpty()) {
             throw new EntityNotFoundException("Order(s) not found");
         }
         Order foundOrder = this.findById(orderId);
