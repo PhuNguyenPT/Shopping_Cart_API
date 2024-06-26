@@ -67,7 +67,8 @@ public class ProductController {
             @RequestParam("files")
             @NotNull(message = "Please provide at least one file")
             List<MultipartFile> multipartFiles) {
-        return productService.createProductFilesByProductId(productId, multipartFiles);
+        ProductResponseDTO productResponseDTO = productService.createProductFilesByProductId(productId, multipartFiles);
+        return ResponseEntity.status(HttpStatus.CREATED).body(productResponseDTO);
     }
 
     @PutMapping("/update/{product-id}/files/{file-id}")
@@ -79,7 +80,8 @@ public class ProductController {
             @NotNull(message = "Please provide a file to update")
             MultipartFile multipartFile
     ) {
-        return productService.updateFilesByProductId(productId, fileId, multipartFile);
+        ProductResponseDTO productResponseDTO = productService.updateFileByProductIdAndFileId(productId, fileId, multipartFile);
+        return ResponseEntity.status(HttpStatus.CREATED).body(productResponseDTO);
     }
 
     @PatchMapping("/update/{product-id}")
@@ -88,6 +90,7 @@ public class ProductController {
             @PathVariable(value = "product-id") Long id,
             @ModelAttribute @Valid ProductUpdateDTO productUpdateDTO
     ) {
-        return productService.updateProductAttributes(id, productUpdateDTO);
+        ProductResponseDTO productResponseDTO = productService.updateProductAttributes(id, productUpdateDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(productResponseDTO);
     }
 }
