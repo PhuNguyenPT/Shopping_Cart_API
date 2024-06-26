@@ -394,9 +394,9 @@ To set up the backend of the Book Social Network project, follow these steps:
 }
 ```
 
-2. GET: https://localhost/api/v1/products/search/{product-id} `(NON-USER)` <br/>
-   - Search Product by `product-id` <br/><br/>
-   - Response Body 
+2. GET: https://localhost/api/v1/products/search/{product-name} `(NON-USER)` #(DEPRECATED)# <br/> 
+   - Search Product by `product-name` <br/><br/>
+   - Response Body
      + Content-Type = application/json <br/><br/>
 ```dtd
 {
@@ -428,6 +428,110 @@ To set up the backend of the Book Social Network project, follow these steps:
 }
 ```
 
+2. GET: https://localhost/api/v1/products/search?product-name={product-name}&page-size=20&page-number=1 `(NON-USER)` <br/> 
+   - Search Product by `product-name` with `page-size` and `page-number` <br/><br/>
+   - Request parameters:
+     + Suported attributes for Product:
+       * `product-name`
+       * `page-size`
+       * `page-number` <br/><br/>
+       
+     + Attributes constraints for Product:
+       * `product-name`
+       * `pageSize` : *NotNull*, *Min(1)*, *Max(20)
+       * `pageNumber` : *NotNull*, *Min(1)* <br/><br/>
+
+     + Attributes explaination for Product:    
+       * `product-name` : *product name*
+       * `pageSize` : *page size*
+       * `pageNumber` : *page number* <br/><br/>     
+       
+   - Response body:    
+     + Return ProductResponseDTO
+```bash
+  {
+    "content": [
+        {
+            "message": ,
+            "id": ,
+            "name": ,
+            "price": ,
+            "stockQuantity": ,
+            "description": ,
+            "createdDate": ,
+            "lastModifiedDate": ,
+            "categoryResponseDTOList": [
+                {
+                    "id": ,
+                    "name": ,
+                    "productResponseDTOList": 
+                },
+                {
+                    "id": ,
+                    "name": ,
+                    "productResponseDTOList": 
+                }
+            ], 
+            "fileResponseDTOList": [
+                {
+                    "message": ,
+                    "id": ,
+                    "name": ,
+                    "fileType": ,
+                    "size": ,
+                    "fileByte": ,
+                }
+            ]
+        },
+        {
+            "message": ,
+            "id": ,
+            "name": ,
+            "price": ,
+            "stockQuantity": ,
+            "description": ,
+            "createdDate": ,
+            "lastModifiedDate": ,
+            "categoryResponseDTOList": [
+                {
+                    "id": ,
+                    "name": ,
+                    "productResponseDTOList": 
+                },
+                {
+                    "id": ,
+                    "name": ,
+                    "productResponseDTOList": 
+                }
+            ],
+            "fileResponseDTOList": [
+                {
+                    "message": ,
+                    "id": ,
+                    "name": ,
+                    "fileType": ,
+                    "size": ,
+                    "fileByte": ,
+                }, 
+                {
+                    "message": ,
+                    "id": ,
+                    "name":,
+                    "fileType": ,
+                    "size": ,
+                    "fileByte": 
+                }
+            ]
+        }   
+    ],
+    "page": {
+        "size": ,
+        "number": ,
+        "totalElements": ,
+        "totalPages": 
+    }                           
+```
+
 3. DELETE: https://localhost/api/v1/products/delete/{product-id} `(ADMIN ONLY)` <br/>
    - Delete Product by `product-id` but do not delete the `categories` <br/><br/>
 
@@ -437,8 +541,10 @@ To set up the backend of the Book Social Network project, follow these steps:
      + Content-Type = multipart/form-data <br/>
      + Suported attributes for Product: 
        * `files` <br/><br/>
+       
      + Attributes constraints for Product:
        * `files` : *NotNull* <br/><br/>
+       
      + Attributes explaination for Product:
        * `files` : *multipart file* <br/><br/>
        
@@ -448,8 +554,10 @@ To set up the backend of the Book Social Network project, follow these steps:
      + Content-Type = multipart/form-data <br/>
      + Suported attributes for Product: 
        * `files` <br/><br/>
+       
      + Attributes constraints for Product:
        * `files` : *NotNull* <br/><br/>
+       
      + Attributes explaination for Product:
        * `files` : *multipart file* <br/><br/>
        
