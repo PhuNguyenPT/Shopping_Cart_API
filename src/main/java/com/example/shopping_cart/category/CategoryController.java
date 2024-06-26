@@ -16,7 +16,7 @@ public class CategoryController {
         return categoryService.findAll();
     }
 
-    @PostMapping("/filter")
+    @GetMapping("/filter")
     public ResponseEntity<?> filterAllBy(
             @RequestBody @Valid
             CategoryRequestFilterDTO categoryRequestFilterDTO
