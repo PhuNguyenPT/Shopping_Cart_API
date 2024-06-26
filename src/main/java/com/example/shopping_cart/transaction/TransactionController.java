@@ -2,7 +2,6 @@ package com.example.shopping_cart.transaction;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -10,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/transactions")
@@ -35,18 +36,82 @@ public class TransactionController {
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<?> findAll(
             Authentication authentication,
-            @RequestParam(value = "page-size")
-            @NotNull(message = "Page size must not be null")
+            @RequestParam(value = "page-size", defaultValue = "20")
             @Min(value = 1) @Max(value = 20)
             Integer pageSize,
-            @RequestParam(value = "page-number")
-            @NotNull(message = "Page index must not be null")
+            @RequestParam(value = "page-number", defaultValue = "1")
             @Min(value = 1)
-            Integer pageNumber
+            Integer pageNumber,
+            @RequestParam(value = "sort", required = false) String sortAttribute,
+            @RequestParam(value = "direction", defaultValue = "desc") String direction
     ) {
-        Page<TransactionResponseDTO> transactionResponseDTO =
-                transactionService.findAllByAuthenticationAndPage(authentication, pageNumber, pageSize);
+        Page<TransactionResponseDTO> transactionResponseDTOPage;
+        if (sortAttribute != null) {
+            transactionResponseDTOPage =
+                    transactionService.findAllByAuthenticationAndPageAndDirectionAndSortAttribute(
+                            authentication, pageNumber, pageSize, direction, sortAttribute
+                    );
+        } else {
+            transactionResponseDTOPage =
+                    transactionService.findAllByAuthenticationAndPageAndDirection(
+                            authentication, pageNumber, pageSize, direction
+                    );
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(transactionResponseDTOPage);
+    }
 
-        return ResponseEntity.status(HttpStatus.OK).body(transactionResponseDTO);
+    @GetMapping("/search/{user-id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> findBy(
+            @PathVariable(value = "user-id") UUID userID,
+            @RequestParam(value = "page-size", defaultValue = "20")
+            @Min(value = 1) @Max(value = 20)
+            Integer pageSize,
+            @RequestParam(value = "page-number", defaultValue = "1")
+            @Min(value = 1)
+            Integer pageNumber,
+            @RequestParam(value = "sort", required = false) String sortAttribute,
+            @RequestParam(value = "direction", defaultValue = "desc") String direction
+    ) {
+        Page<TransactionResponseDTO> transactionResponseDTOPage;
+        if (sortAttribute != null) {
+            transactionResponseDTOPage =
+                    transactionService.findAllByUserIdAndPageAndDirectionAndSortAttribute(
+                            userID, pageNumber, pageSize, direction, sortAttribute
+                    );
+        } else {
+            transactionResponseDTOPage =
+                    transactionService.findAllByUserIdAndPageAndDirection(
+                            userID, pageNumber, pageSize, direction
+                    );
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(transactionResponseDTOPage);
+    }
+
+    @GetMapping("/search")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> findAllBy(
+            @RequestParam(value = "page-size", defaultValue = "20")
+            @Min(value = 1) @Max(value = 20)
+            Integer pageSize,
+            @RequestParam(value = "page-number", defaultValue = "1")
+            @Min(value = 1)
+            Integer pageNumber,
+            @RequestParam(value = "sort", required = false) String sortAttribute,
+            @RequestParam(value = "direction", defaultValue = "desc") String direction
+    ) {
+        Page<TransactionResponseDTO> transactionResponseDTOPage;
+        if (sortAttribute != null) {
+            transactionResponseDTOPage =
+                    transactionService.findAllByPageAndDirectionAndSortAttribute(
+                            pageNumber, pageSize, direction, sortAttribute
+                    );
+        } else {
+            transactionResponseDTOPage =
+                    transactionService.findAllByPageAndDirection(
+                            pageNumber, pageSize, direction
+                    );
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(transactionResponseDTOPage);
     }
 }
