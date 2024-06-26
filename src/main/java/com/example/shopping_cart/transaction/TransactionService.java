@@ -105,11 +105,10 @@ public class TransactionService {
                 .toList();
 
         // Create a Page of TransactionResponseDTO
-        Page<TransactionResponseDTO> transactionResponseDTOPage = new PageImpl<>(
+
+        return new PageImpl<>(
                 transactionResponseDTOList, pageable, transactionResponseDTOList.size()
         );
-
-        return transactionResponseDTOPage;
     }
 
     public Transaction findById(Long id) {
