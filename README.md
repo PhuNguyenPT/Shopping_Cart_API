@@ -1026,7 +1026,7 @@ To set up the backend of the Book Social Network project, follow these steps:
 
 - Response Body:
   + Content-Type = application/json <br/><br/>
-  + Suported attributes for Oder:
+  + Supported attributes for Oder:
 ```json
 {
   "message": "Update order 29 successfully.",
@@ -1087,7 +1087,7 @@ To set up the backend of the Book Social Network project, follow these steps:
    - Upload transaction of User authenticated `Bearer Token` in `AUTHORIZATION`
    - Request Body
      + Content-Type = application/json  <br/><br/>
-     + Suported attributes for Transaction: 
+     + Supported attributes for Transaction: 
        * `orderId` 
        * `transactionType`
        * `currency` <br/><br/>
@@ -1111,17 +1111,68 @@ To set up the backend of the Book Social Network project, follow these steps:
    }
 ```
 
-2. GET: https://localhost/api/v1/transactions?page-number=20&page-size=1 (`USER-ONLY`)  <br/><br/> 
+2. GET: https://localhost/api/v1/transactions?page-number=1&page-size=20&sort=amount&direction=asc (`USER-ONLY`)  <br/><br/> 
    - Find all Transaction(s) as Page, of User authenticated `Bearer Token` in `AUTHORIZATION` 
    - Request Parameters
-     + Suported attributes for Transaction finding: 
-       * `pageSize` 
-       * `pageNumber` <br/><br/>
-         
-     + Attributes constraints for Transaction finding: 
-       * `pageSize` : *NotNull*, *Min(1)*, *Max(20)
-       * `pageNumber` : *NotNull*, *Min(1)* <br/><br/>
+     + Supported attributes for Transaction finding: 
+       * `page-size` 
+       * `page-number` 
+       * `sort`
+       * `direction` <br/><br/>
        
-     + Attributes explaination for Transaction finding: 
-       * `pageSize` : maximum number of Products in a page
-       * `pageNumber` : page number of which page <br/><br/>
+     + Attributes constraints for Transaction finding: 
+       * `page-size` : *DefaultValue(20)*, *Min(1)*, *Max(20)
+       * `page-number` : *DefaultValue(1)*, *Min(1)* 
+       * `sort` : *Optional*
+       * `direction` : *DefaultValue("desc")* <br/><br/>
+       
+     + Attributes explanation for Transaction finding: 
+       * `page-size` : *maximum number of Products in a page*
+       * `page-number` : *page number of which page*
+       * `sort` : *sort by attributes* `("amount", "created-date", "last-modified-date")`
+       * `direction` : *sort by direction* `("asc", "desc")` <br/><br/>
+
+3. GET: https://localhost/api/v1/transactions/search/{user-id}?page-number=1&page-size=20&sort=amount&direction=desc (`ADMIN-ONLY`)  <br/><br/>
+  - Find all Transaction(s) as `Page` of  a user with `user-id`, authenticated `Bearer Token` in `AUTHORIZATION`
+  - Request Parameters
+    + Supported attributes for Transaction finding:
+      * `user-id`
+      * `page-size`
+      * `page-number`
+      * `sort`
+      * `direction` <br/><br/>
+
+    + Attributes constraints for Transaction finding:
+      * `user-id` : *NotNull*
+      * `page-size` : *DefaultValue(20)*, *Min(1)*, *Max(20)
+      * `page-number` : *DefaultValue(1)*, *Min(1)*
+      * `sort` : *Optional*
+      * `direction` : *DefaultValue("desc")* <br/><br/>
+
+    + Attributes explanation for Transaction finding:
+      * `user-id` : *user UUID*
+      * `page-size` : *maximum number of Products in a page*
+      * `page-number` : *page number of which page*
+      * `sort` : *sort by attributes* `("amount", "created-date", "last-modified-date")`
+      * `direction` : *sort by direction* `("asc", "desc")` <br/><br/>
+
+4. GET: https://localhost/api/v1/transactions/search?page-number=1&page-size=20&sort=amount&direction=desc (`ADMIN-ONLY`)  <br/><br/>
+- Find all Transaction(s) as `Page` of  `All Users`, authenticated `Bearer Token` in `AUTHORIZATION`
+- Request Parameters
+  + Supported attributes for Transaction finding:
+    * `page-size`
+    * `page-number`
+    * `sort`
+    * `direction` <br/><br/>
+
+  + Attributes constraints for Transaction finding:
+    * `page-size` : *DefaultValue(20)*, *Min(1)*, *Max(20)
+    * `page-number` : *DefaultValue(1)*, *Min(1)*
+    * `sort` : *Optional*
+    * `direction` : *DefaultValue("desc")* <br/><br/>
+
+  + Attributes explanation for Transaction finding:
+    * `page-size` : *maximum number of Products in a page*
+    * `page-number` : *page number of which page*
+    * `sort` : *sort by attributes* `("amount", "created-date", "last-modified-date")`
+    * `direction` : *sort by direction* `("asc", "desc")` <br/><br/>
