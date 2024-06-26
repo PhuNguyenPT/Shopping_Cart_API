@@ -79,7 +79,7 @@ To set up the backend of the Book Social Network project, follow these steps:
 
    - Example in Request Body Raw:
 
-```bash
+```json
    {
       "email": "test@gmail.com",
       "password": "password"
@@ -96,7 +96,7 @@ To set up the backend of the Book Social Network project, follow these steps:
    ![environment](https://github.com/PhuNguyenPT/Shopping_Cart/assets/154642828/6e219860-2a8c-4795-add8-35704d775949) <br/><br/>
    
    - Navigate to Response Body in step 8 to select token "value" and right-click to choose Set: New Envinronment -> token:
-```bash
+```json
    {
       "token": "select_this_value"
    }
@@ -112,12 +112,12 @@ To set up the backend of the Book Social Network project, follow these steps:
 
 ## Admin Account 
    - Login by POST
-```
+```bash
    https://localhost:443/api/v1/auth/login
 ```
    - Example in Request Body Raw:
 
-```
+```json
    {
       "email": "admin@email.com",
       "password": "password"
@@ -193,7 +193,7 @@ To set up the backend of the Book Social Network project, follow these steps:
      + Return Page of MyUserResponseDTOList <br/><br/>
      + Content-Type = application/json <br/><br/>
      + Suported attributes for MyUser:
-```bash
+```json
 {
     "content": [
         {
@@ -239,7 +239,7 @@ To set up the backend of the Book Social Network project, follow these steps:
 ```
 <br/><br/>
          
-2. GET: https://localhost/api/v1/users/search/{user-id} `(ADMIN ONLY)` <br/>
+1. GET: https://localhost/api/v1/users/search/{user-id} `(ADMIN ONLY)` <br/>
    - Search user attributes with `user-id`
    - Response Body:
      + Content-Type = application/json <br/><br/>
@@ -288,7 +288,7 @@ To set up the backend of the Book Social Network project, follow these steps:
          * `city` : *city*
          * `zipCode` : *zip code* <br/><br/>
         
-3. GET: https://localhost/api/v1/users/account `(USER ONLY)` <br/>
+2. GET: https://localhost/api/v1/users/account `(USER ONLY)` <br/>
    - Find user attributes by User authenticated `Bearer Token` in `AUTHORIZATION`
    - Response Body:
      + Content-Type = application/json <br/><br/>
@@ -364,7 +364,7 @@ To set up the backend of the Book Social Network project, follow these steps:
        * `categoryIds` : *saved category ids from database*
        * `newCategoryNames` : *new category names to save to database* <br/><br/>
      + Response Body
-```dtd
+```json
 {
     "message": "Save product successfully,with categories,with files",
     "id": 4,
@@ -398,7 +398,7 @@ To set up the backend of the Book Social Network project, follow these steps:
    - Search Product by `product-name` <br/><br/>
    - Response Body
      + Content-Type = application/json <br/><br/>
-```dtd
+```json
 {
     "message": "Search product successfully,with categories,with files",
     "id": 4,
@@ -448,7 +448,7 @@ To set up the backend of the Book Social Network project, follow these steps:
        
    - Response body:    
      + Return ProductResponseDTO
-```bash
+```json
   {
     "content": [
         {
@@ -593,7 +593,7 @@ To set up the backend of the Book Social Network project, follow these steps:
    - Response Body 
      + Content-Type = application/json <br/><br/>
      + Example Response Body Raw: 
-```
+```json
    [
        {
            "id": 1,
@@ -633,7 +633,7 @@ To set up the backend of the Book Social Network project, follow these steps:
          * `categoryId` : category id  <br/><br/>
          
      + Example Response Body Raw: <br/>
-```
+```json
    {
      "pageSize": 20,
      "pageNumber": 1,
@@ -667,7 +667,7 @@ To set up the backend of the Book Social Network project, follow these steps:
        * `quantity` : *product quantity* <br/><br/>
        
      + Example in Request Body Raw::
-```
+```json
    [
        {
            "productId": 1,
@@ -688,7 +688,7 @@ To set up the backend of the Book Social Network project, follow these steps:
 - Response Body:
   + Content-Type = application/json <br/><br/>
   + Suported attributes for Cart:
-```dtd
+```json
 {
     "message": "Upload cart successfully",
     "cartId": 1,
@@ -739,7 +739,7 @@ To set up the backend of the Book Social Network project, follow these steps:
    - Response Body 
      + Content-Type = application/json  <br/><br/>
      + Suported attributes for Cart:
-```dtd
+```json
 {
     "message": "Search cart successfully",
     "cartId": 1,
@@ -791,7 +791,7 @@ To set up the backend of the Book Social Network project, follow these steps:
    - Request Body
      + Content-Type = application/json <br/><br/>
      + Example Request Body Raw:
-```
+```json
    {
        "orderInfo": "good",
        "anotherField": "good",
@@ -809,7 +809,7 @@ To set up the backend of the Book Social Network project, follow these steps:
   - Response Body:
     + Content-Type = application/json <br/><br/>
     + Suported attributes for Oder:
-```dtd
+```json
 {
   "message": "Save order 29 successfully.",
   "id": 29,
@@ -868,7 +868,7 @@ To set up the backend of the Book Social Network project, follow these steps:
        * `pageNumber`
        * `pageSize`
      + Example Request Body Raw:
-```
+```json
   {
     "pageNumber": 1,
     "pageSize": 20
@@ -877,7 +877,7 @@ To set up the backend of the Book Social Network project, follow these steps:
 - Response Body:
   + Content-Type = application/json <br/><br/>
   + Suported attributes for Oder:
-```dtd
+```json
 {
     "content": [
       {
@@ -946,7 +946,7 @@ To set up the backend of the Book Social Network project, follow these steps:
    - Response Body:
      + Content-Type = application/json <br/><br/>
      + Supported attributes for Order:
-```dtd
+```json
 {
   "message": "Search order 29 successfully.",
   "id": 29,
@@ -1009,7 +1009,7 @@ To set up the backend of the Book Social Network project, follow these steps:
        * `addressRequestDTO`<br/><br/>
 
         + Example Request Body Raw:
-```
+```json
    {
        "orderInfo": "good",
        "anotherField": "good",
@@ -1027,7 +1027,7 @@ To set up the backend of the Book Social Network project, follow these steps:
 - Response Body:
   + Content-Type = application/json <br/><br/>
   + Suported attributes for Oder:
-```dtd
+```json
 {
   "message": "Update order 29 successfully.",
   "id": 29,
@@ -1103,7 +1103,7 @@ To set up the backend of the Book Social Network project, follow these steps:
        * `currency` : *currency* (can be categorized as VND, USD, EUR) <br/><br/>
        
      + Example Response Body Raw:
-```
+```json
    {
       "orderId": 1,
       "transactionType": "CREDIT_CARD",
