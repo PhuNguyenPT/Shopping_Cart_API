@@ -197,43 +197,43 @@ To set up the backend of the Book Social Network project, follow these steps:
 {
     "content": [
         {
-            "message": ,
-            "id": ,
-            "firstName": ,
-            "lastName": ,
-            "dateOfBirth": ,
-            "phoneNumber": ,
-            "email": ,
+            "message": "",
+            "id": 1,
+            "firstName": "firstname1",
+            "lastName": "lastname1",
+            "dateOfBirth": "yyyy-MM-dd",
+            "phoneNumber": 987654321,
+            "email": "hello1@email.com",
             "addressResponseDTO": {
-                "houseNumber": ,
-                "streetName": ,
-                "wardName": ,
-                "city": ,
-                "zipCode": 
+                "houseNumber": "12",
+                "streetName": "street1",
+                "wardName": "ward1",
+                "city": "city1",
+                "zipCode": "zipcode1"
             } 
         },
         {
-            "message": ,
-            "id": ,
-            "firstName": ,
-            "lastName": ,
-            "dateOfBirth": ,
-            "phoneNumber": ,
-            "email": ,
+            "message": "",
+            "id": 2,
+            "firstName": "firstname2",
+            "lastName": "lastname2",
+            "dateOfBirth": "yyyy-MM-dd",
+            "phoneNumber": 987654321,
+            "email": "hello2@email.com",
             "addressResponseDTO": {
-                "houseNumber": ,
-                "streetName": ,
-                "wardName": ,
-                "city": ,
-                "zipCode": 
+                "houseNumber": "12",
+                "streetName": "street2",
+                "wardName": "ward2",
+                "city": "city2",
+                "zipCode": "zipcode2"
             } 
         }
     ],
     "page": {
-        "size": ,
-        "number": ,
-        "totalElements": ,
-        "totalPages": 
+        "size": 20,
+        "number": 1,
+        "totalElements": 22,
+        "totalPages": 2
     }
 }
 ```
@@ -381,7 +381,7 @@ To set up the backend of the Book Social Network project, follow these steps:
           "name": "hello.png",
           "fileType": "image/png",
           "size": 674315,
-          "fileByte":
+          "fileByte": null
         }
     ],
     "categoryResponseDTOList": [
@@ -412,10 +412,10 @@ To set up the backend of the Book Social Network project, follow these steps:
         {
           "message": null,
           "id": 4,
-          "name": "hello.png",
+          "name": "image.png",
           "fileType": "image/png",
           "size": 674315,
-          "fileByte":
+          "fileByte": null
         }
     ],
     "categoryResponseDTOList": [
@@ -450,86 +450,87 @@ To set up the backend of the Book Social Network project, follow these steps:
      + Return ProductResponseDTO
 ```json
   {
-    "content": [
+  "content": [
+    {
+      "message": "",
+      "id": 1,
+      "name": "Product1",
+      "price": 99,
+      "stockQuantity": 99,
+      "description": "Descript1",
+      "createdDate": "2024-06-01T12:13:57.4699588+07:00",
+      "lastModifiedDate": "",
+      "categoryResponseDTOList": [
         {
-            "message": ,
-            "id": ,
-            "name": ,
-            "price": ,
-            "stockQuantity": ,
-            "description": ,
-            "createdDate": ,
-            "lastModifiedDate": ,
-            "categoryResponseDTOList": [
-                {
-                    "id": ,
-                    "name": ,
-                    "productResponseDTOList": 
-                },
-                {
-                    "id": ,
-                    "name": ,
-                    "productResponseDTOList": 
-                }
-            ], 
-            "fileResponseDTOList": [
-                {
-                    "message": ,
-                    "id": ,
-                    "name": ,
-                    "fileType": ,
-                    "size": ,
-                    "fileByte": ,
-                }
-            ]
+          "id": "1",
+          "name": "NAME1",
+          "productResponseDTOList": ""
         },
         {
-            "message": ,
-            "id": ,
-            "name": ,
-            "price": ,
-            "stockQuantity": ,
-            "description": ,
-            "createdDate": ,
-            "lastModifiedDate": ,
-            "categoryResponseDTOList": [
-                {
-                    "id": ,
-                    "name": ,
-                    "productResponseDTOList": 
-                },
-                {
-                    "id": ,
-                    "name": ,
-                    "productResponseDTOList": 
-                }
-            ],
-            "fileResponseDTOList": [
-                {
-                    "message": ,
-                    "id": ,
-                    "name": ,
-                    "fileType": ,
-                    "size": ,
-                    "fileByte": ,
-                }, 
-                {
-                    "message": ,
-                    "id": ,
-                    "name":,
-                    "fileType": ,
-                    "size": ,
-                    "fileByte": 
-                }
-            ]
-        }   
-    ],
-    "page": {
-        "size": ,
-        "number": ,
-        "totalElements": ,
-        "totalPages": 
-    }                           
+          "id": "2",
+          "name": "Name2",
+          "productResponseDTOList": ""
+        }
+      ],
+      "fileResponseDTOList": [
+        {
+          "message": "",
+          "id": 1,
+          "name": "image.png",
+          "fileType": "image/png",
+          "size": 2313,
+          "fileByte": ""
+        }
+      ]
+    },
+    {
+      "message": "",
+      "id": 2,
+      "name": "Product2",
+      "price": 99,
+      "stockQuantity": 99,
+      "description": "",
+      "createdDate": "2024-06-26T12:13:57.4699588+07:00",
+      "lastModifiedDate": "2024-06-26T12:13:57.4699588+07:00",
+      "categoryResponseDTOList": [
+        {
+          "id": 2,
+          "name": "name2",
+          "productResponseDTOList": null
+        },
+        {
+          "id": 3,
+          "name": "name3",
+          "productResponseDTOList": null
+        }
+      ],
+      "fileResponseDTOList": [
+        {
+          "message": "",
+          "id": 2,
+          "name": "image.png",
+          "fileType": "image/png",
+          "size": 2222,
+          "fileByte": ""
+        },
+        {
+          "message": "",
+          "id": 2,
+          "name": "image.png",
+          "fileType": "image/png",
+          "size": 2121,
+          "fileByte": ""
+        }
+      ]
+    }
+  ],
+  "page": {
+    "size": 20,
+    "number": 1,
+    "totalElements": 22,
+    "totalPages": 2
+  }
+}
 ```
 
 3. DELETE: https://localhost/api/v1/products/delete/{product-id} `(ADMIN ONLY)` <br/>
@@ -718,7 +719,7 @@ To set up the backend of the Book Social Network project, follow these steps:
                         "name": null,
                         "fileType": null,
                         "size": null,
-                        "fileByte":
+                        "fileByte": null
                     }
                 ],
                 "categoryResponseDTOList": [
@@ -769,7 +770,7 @@ To set up the backend of the Book Social Network project, follow these steps:
                         "name": null,
                         "fileType": null,
                         "size": null,
-                        "fileByte":
+                        "fileByte": null
                     }
                 ],
                 "categoryResponseDTOList": [
@@ -843,7 +844,7 @@ To set up the backend of the Book Social Network project, follow these steps:
                 "name": null,
                 "fileType": null,
                 "size": null,
-                "fileByte":
+                "fileByte": null
               }
           ],
           "categoryResponseDTOList": null
@@ -913,7 +914,7 @@ To set up the backend of the Book Social Network project, follow these steps:
                       "name": null,
                       "fileType": null,
                       "size": null,
-                      "fileByte":
+                      "fileByte": null
                     }
                 ],
                 "categoryResponseDTOList": null
@@ -980,7 +981,7 @@ To set up the backend of the Book Social Network project, follow these steps:
                 "name": null,
                 "fileType": null,
                 "size": null,
-                "fileByte":
+                "fileByte": null
               }
           ],
           "categoryResponseDTOList": null
@@ -1061,7 +1062,7 @@ To set up the backend of the Book Social Network project, follow these steps:
                 "name": null,
                 "fileType": null,
                 "size": null,
-                "fileByte":
+                "fileByte": null
               }
           ],
           "categoryResponseDTOList": null
