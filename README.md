@@ -171,7 +171,171 @@ To set up the backend of the Book Social Network project, follow these steps:
      + Attributes explaination for Authentication:
        * `email` : email
        * `password` : password <br/><br/>
+
+### MyUser
+1. POST: https://localhost/api/v1/users `(ADMIN ONLY)` <br/>
+   - Find all users attributes available in database
+   - Request Body:
+     + Content-Type = application/json <br/><br/>
+     + Suported attributes for MyUser findAll: 
+       * `pageSize` 
+       * `pageNumber` <br/><br/>
+       
+     + Attributes constraints for MyUser findAll: 
+       * `pageSize` : *NotNull*, *Min(1)*, *Max(20)
+       * `pageNumber` : *NotNull*, *Min(1)* <br/><br/>
+       
+     + Attributes explaination for Category filter: 
+       * `pageSize` : maximum number of Products in a page
+       * `pageNumber` : page number of which page <br/><br/>
+       
+   - Response Body:
+     + Content-Type = application/json <br/><br/>
+     + Suported attributes for MyUser:
+```bash
+{
+    "content": [
+        {
+            "message": ,
+            "id": ,
+            "firstName": ,
+            "lastName": ,
+            "dateOfBirth": ,
+            "phoneNumber": ,
+            "email": ,
+            "addressResponseDTO": {
+                "houseNumber": ,
+                "streetName": ,
+                "wardName": ,
+                "city": ,
+                "zipCode": 
+            } 
+        },
+        {
+            "message": ,
+            "id": ,
+            "firstName": ,
+            "lastName": ,
+            "dateOfBirth": ,
+            "phoneNumber": ,
+            "email": ,
+            "addressResponseDTO": {
+                "houseNumber": ,
+                "streetName": ,
+                "wardName": ,
+                "city": ,
+                "zipCode": 
+            } 
+        }
+    ],
+    "page": {
+        "size": ,
+        "number": ,
+        "totalElements": ,
+        "totalPages": 
+    }
+}
+```
+<br/><br/>
          
+2. GET: https://localhost/api/v1/users/search/{user-id} `(ADMIN ONLY)` <br/>
+   - Search user attributes with `user-id`
+   - Response Body:
+     + Content-Type = application/json <br/><br/>
+     + Suported attributes for MyUser:
+       * `message` 
+       * `id`
+       * `firstName`
+       * `lastName`
+       * `dateOfBirth`
+       * `phoneNumber`
+       * `email`
+       * `addressResponseDTO` :
+         * `houseNumber`
+         * `streetName`
+         * `wardName`
+         * `city`
+         * `zipCode` <br/><br/>
+         
+     + Attributes constraints for MyUser:
+       * `message` : *Optional*
+       * `id` : *Optional*
+       * `firstName` : *Optional*
+       * `lastName` : *Optional*
+       * `dateOfBirth` : *Optional*
+       * `phoneNumber` : *Optional*
+       * `email` : *Optional*
+       * `addressResponseDTO` :
+         * `houseNumber` : *Optional*
+         * `streetName` : *Optional*
+         * `wardName` : *Optional*
+         * `city` : *Optional*
+         * `zipCode` : *Optional* <br/><br/>
+        
+     + Attributes explaination for MyUser:
+       * `message` : *response message*
+       * `id` : *user UUID*
+       * `firstName` : *first name*
+       * `lastName` : *last name*
+       * `dateOfBirth` : *date of birth*
+       * `phoneNumber` : *phone number*
+       * `email` : *email*
+       * `addressResponseDTO` :
+         * `houseNumber` : *house number*
+         * `streetName` : *street name*
+         * `wardName` : *ward name*
+         * `city` : *city*
+         * `zipCode` : *zip code* <br/><br/>
+        
+3. GET: https://localhost/api/v1/users/account `(USER ONLY)` <br/>
+   - Find user attributes by User authenticated `Bearer Token` in `AUTHORIZATION`
+   - Response Body:
+     + Content-Type = application/json <br/><br/>
+     + Suported attributes for MyUser:
+       * `message` 
+       * `id`
+       * `firstName`
+       * `lastName`
+       * `dateOfBirth`
+       * `phoneNumber`
+       * `email`
+       * `addressResponseDTO` :
+         * `houseNumber`
+         * `streetName`
+         * `wardName`
+         * `city`
+         * `zipCode` <br/><br/>
+         
+     + Attributes constraints for MyUser:
+       * `message` : *Optional*
+       * `id` : *Optional*
+       * `firstName` : *Optional*
+       * `lastName` : *Optional*
+       * `dateOfBirth` : *Optional*
+       * `phoneNumber` : *Optional*
+       * `email` : *Optional*
+       * `addressResponseDTO` :
+         * `houseNumber` : *Optional*
+         * `streetName` : *Optional*
+         * `wardName` : *Optional*
+         * `city` : *Optional*
+         * `zipCode` : *Optional* <br/><br/>
+        
+     + Attributes explaination for MyUser:
+       * `message` : *response message*
+       * `id` : *user UUID*
+       * `firstName` : *first name*
+       * `lastName` : *last name*
+       * `dateOfBirth` : *date of birth*
+       * `phoneNumber` : *phone number*
+       * `email` : *email*
+       * `addressResponseDTO` :
+         * `houseNumber` : *house number*
+         * `streetName` : *street name*
+         * `wardName` : *ward name*
+         * `city` : *city*
+         * `zipCode` : *zip code* <br/><br/>
+              
 ### Product
 1. POST: https://localhost/api/v1/products/upload `(ADMIN ONLY)` <br/>
    - Upload Product <br/>
