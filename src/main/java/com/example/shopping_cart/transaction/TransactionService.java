@@ -321,20 +321,23 @@ public class TransactionService {
         List<Transaction> sortedTransaction = new ArrayList<>();
         switch (sortAttribute) {
             case AMOUNT -> {
-                // Sorted Transactions by highest AMOUNT
-                 sortedTransaction = transactions.stream()
+                // Sorted Transactions by highest AMOUNT (filter out null amounts)
+                sortedTransaction = transactions.stream()
+                        .filter(transaction -> transaction.getAmount() != null)
                         .sorted(Comparator.comparing(Transaction::getAmount))
                         .collect(Collectors.toCollection(ArrayList::new));
             }
             case CREATED_DATE -> {
-                // Sorted Transactions by earliest CREATED_DATE
+                // Sorted Transactions by earliest CREATED_DATE (filter out null created dates)
                 sortedTransaction = transactions.stream()
+                        .filter(transaction -> transaction.getCreatedDate() != null)
                         .sorted(Comparator.comparing(Transaction::getCreatedDate))
                         .collect(Collectors.toCollection(ArrayList::new));
             }
             case LAST_MODIFIED_DATE -> {
-                // Sorted Transactions by earliest LAST_MODIFIED_DATE
+                // Sorted Transactions by earliest LAST_MODIFIED_DATE (filter out null modified dates)
                 sortedTransaction = transactions.stream()
+                        .filter(transaction -> transaction.getLastModifiedDate() != null)
                         .sorted(Comparator.comparing(Transaction::getLastModifiedDate))
                         .collect(Collectors.toCollection(ArrayList::new));
             }
