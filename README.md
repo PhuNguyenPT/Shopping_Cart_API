@@ -543,12 +543,25 @@ To set up the backend of the Book Social Network project, follow these steps:
        }
    }
 ```
-2. GET: https://localhost/api/v1/orders/search/{order-id} `(USER-ONLY)` <br/><br/>
+2. POST: https://localhost/api/v1/orders `(USER-ONLY)` <br/><br/>
+   - Get All Order infomation according to user (use token)
+   - Request Body
+     + Content-Type = application/json <br/><br/>
+       * `pageNumber`
+       * `pageSize`
+     + Example Request Body Raw:
+```
+  {
+    "pageNumber": 1,
+    "pageSize": 20
+  }
+```
+3. GET: https://localhost/api/v1/orders/search/{order-id} `(USER-ONLY)` <br/><br/>
    - Get Order information according to user and id (also use token)
-   - Response Body
+   - Request Body
      + Content-Type = application/json <br/><br/>
 
-3. PATCH: https://localhost/api/v1/orders/update/{order-id} `(USER-ONLY)` <br/><br/>
+4. PATCH: https://localhost/api/v1/orders/update/{order-id} `(USER-ONLY)` <br/><br/>
    - Update Order information according to user and id
    - Update Order attribute(s) with `product-id` <br/><br/>
    - Request Body
@@ -573,7 +586,7 @@ To set up the backend of the Book Social Network project, follow these steps:
        }
    }
 ```
-4. DELETE: https://localhost/api/v1/orders/delete/{order-id} `(ADMIN ONLY)` <br/><br/>
+5. DELETE: https://localhost/api/v1/orders/delete/{order-id} `(ADMIN ONLY)` <br/><br/>
    - Delete Order by `order-id` <br/><br/>
 
 ### Transaction
