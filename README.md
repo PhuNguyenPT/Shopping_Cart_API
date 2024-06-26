@@ -518,11 +518,106 @@ To set up the backend of the Book Social Network project, follow these steps:
 ```
 <br/><br/>
 
+- Response Body:
+  + Content-Type = application/json <br/><br/>
+  + Suported attributes for Cart:
+```dtd
+{
+    "message": "Upload cart successfully",
+    "cartId": 1,
+    "userId": "4b740504-11b6-4652-97dc-7f22c819990c",
+    "totalAmount": 167892.0,
+    "productQuantityResponseDTOList": [
+        {
+            "productQuantityId": 40,
+            "productId": 1,
+            "shoppingCartId": 1,
+            "orderId": null,
+            "quantity": 7,
+            "totalAmount": 69132.0,
+            "productResponseDTO": {
+                "message": null,
+                "id": null,
+                "name": "Product 1",
+                "price": 9876.0,
+                "stockQuantity": 30,
+                "description": "Product 1",
+                "createdDate": null,
+                "lastModifiedDate": null,
+                "fileResponseDTOList": [
+                    {
+                        "message": null,
+                        "id": 1,
+                        "name": null,
+                        "fileType": null,
+                        "size": null,
+                        "fileByte":
+                    }
+                ],
+                "categoryResponseDTOList": [
+                  {
+                    "id": 3,
+                    "name": "3",
+                    "productResponseDTOList": null
+                  }
+                ]
+            }
+        }
+  ]
+}
+```
+
 2. GET: https://localhost/api/v1/carts `(USER ONLY)` <br/><br/>
    - Retrieve `Shopping Cart` by User authenticated `Bearer Token` in `AUTHORIZATION` <br/><br/> 
    - Response Body 
      + Content-Type = application/json  <br/><br/>
- 
+     + Suported attributes for Cart:
+```dtd
+{
+    "message": "Search cart successfully",
+    "cartId": 1,
+    "userId": "4b740504-11b6-4652-97dc-7f22c819990c",
+    "totalAmount": 167892.0,
+    "productQuantityResponseDTOList": [
+        {
+            "productQuantityId": 40,
+            "productId": 1,
+            "shoppingCartId": 1,
+            "orderId": null,
+            "quantity": 7,
+            "totalAmount": 69132.0,
+            "productResponseDTO": {
+                "message": null,
+                "id": null,
+                "name": "Product 1",
+                "price": 9876.0,
+                "stockQuantity": 30,
+                "description": "Product 1",
+                "createdDate": null,
+                "lastModifiedDate": null,
+                "fileResponseDTOList": [
+                    {
+                        "message": null,
+                        "id": 1,
+                        "name": null,
+                        "fileType": null,
+                        "size": null,
+                        "fileByte":
+                    }
+                ],
+                "categoryResponseDTOList": [
+                  {
+                    "id": 3,
+                    "name": "3",
+                    "productResponseDTOList": null
+                  }
+                ]
+            }
+        }
+  ]
+}
+```
+
 ### Order
 1. POST: https://localhost/api/v1/orders/upload `(USER-ONLY)` <br/><br/>
    - Make Order from the user data and their cart (identifying user through token, so using Bearer Token in Authorization before send)
