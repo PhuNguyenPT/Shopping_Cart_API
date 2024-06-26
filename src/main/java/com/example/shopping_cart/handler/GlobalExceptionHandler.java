@@ -135,6 +135,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleMethodArgumentNotValidException(
             @NotNull MethodArgumentNotValidException e
     ) {
+        Logger logger = LoggerFactory.getLogger(getClass());
+        logger.error("An unexpected error occurred:", e);
         // Create a map to store error messages for each field
         Map<String, String> errorMessages = new HashMap<>();
 
@@ -143,7 +145,11 @@ public class GlobalExceptionHandler {
                 errorMessages.put(error.getField(), error.getDefaultMessage()));
 
         // Return a ResponseEntity with the error messages and HTTP status
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessages);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                ExceptionResponse.builder()
+                        .errors(errorMessages)
+                        .build()
+        );
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
@@ -180,11 +186,23 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleMissingServletRequestParameterException(
             @NotNull MissingServletRequestParameterException e
     ) {
+        Logger logger = LoggerFactory.getLogger(getClass());
+        logger.error("An unexpected error occurred:", e);
+
         // Create a custom error message
-        String errorMessage = "Missing request parameter: " + e.getParameterName();
+        Map<String, String> errorMessages = new HashMap<>();
+
+        // Add error messages for each field
+        Arrays.stream(Objects.requireNonNull(e.getDetailMessageArguments())).forEach(o ->
+                errorMessages.put(o.toString(), e.getMessage())
+        );
 
         // Return a ResponseEntity with the custom error message and HTTP status
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                ExceptionResponse.builder()
+                        .errors(errorMessages)
+                        .build()
+        );
     }
 
     @ExceptionHandler(MissingPathVariableException.class)
@@ -260,8 +278,18 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleHandlerMethodValidationException(
             @NotNull HandlerMethodValidationException e
     ) {
+        Map<String, String> errorMessages = new HashMap<>();
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getDetailMessageArguments());
+        e.getAllValidationResults().forEach(parameterValidationResult ->
+            errorMessages.put(parameterValidationResult.getMethodParameter().getParameterName(),
+                    parameterValidationResult.getResolvableErrors().get(0).getDefaultMessage())
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                ExceptionResponse.builder()
+                        .errors(errorMessages)
+                        .build()
+        );
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
