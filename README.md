@@ -173,10 +173,9 @@ To set up the backend of the Book Social Network project, follow these steps:
        * `password` : password <br/><br/>
 
 ### MyUser
-1. POST: https://localhost/api/v1/users `(ADMIN ONLY)` <br/>
+1. GET: https://localhost/api/v1/users?page-number=20&page-size=1 `(ADMIN ONLY)` <br/>
    - Find all users attributes available in database
    - Request Body:
-     + Content-Type = application/json <br/><br/>
      + Suported attributes for MyUser findAll: 
        * `pageSize` 
        * `pageNumber` <br/><br/>
@@ -239,7 +238,7 @@ To set up the backend of the Book Social Network project, follow these steps:
 ```
 <br/><br/>
          
-1. GET: https://localhost/api/v1/users/search/{user-id} `(ADMIN ONLY)` <br/>
+2. GET: https://localhost/api/v1/users/search/{user-id} `(ADMIN ONLY)` <br/>
    - Search user attributes with `user-id`
    - Response Body:
      + Content-Type = application/json <br/><br/>
@@ -288,7 +287,7 @@ To set up the backend of the Book Social Network project, follow these steps:
          * `city` : *city*
          * `zipCode` : *zip code* <br/><br/>
         
-2. GET: https://localhost/api/v1/users/account `(USER ONLY)` <br/>
+3. GET: https://localhost/api/v1/users/account `(USER ONLY)` <br/>
    - Find user attributes by User authenticated `Bearer Token` in `AUTHORIZATION`
    - Response Body:
      + Content-Type = application/json <br/><br/>
