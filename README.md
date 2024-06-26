@@ -543,6 +543,62 @@ To set up the backend of the Book Social Network project, follow these steps:
        }
    }
 ```
+
+  - Response Body:
+    + Content-Type = application/json <br/><br/>
+    + Suported attributes for Oder:
+```dtd
+{
+  "message": "Save order 29 successfully.",
+  "id": 29,
+  "name": "admin@email.com",
+  "totalAmount": 167892.00,
+  "status": "PROCESSING",
+  "deliveryDate": "2024-06-26T10:46:19.753213",
+  "orderInfo": "good",
+  "anotherField": "good",
+  "productQuantityResponseDTOList": [
+    {
+      "productQuantityId": 40,
+      "productId": 1,
+      "shoppingCartId": null,
+      "orderId": 29,
+      "quantity": 7,
+      "totalAmount": 69132.00,
+      "productResponseDTO": {
+        "message": null,
+        "id": null,
+        "name": "Product 1",
+        "price": 9876.0,
+        "stockQuantity": null,
+        "description": "Product 1",
+        "createdDate": null,
+        "lastModifiedDate": null,
+        "fileResponseDTOList": [
+              {
+                "message": null,
+                "id": 1,
+                "name": null,
+                "fileType": null,
+                "size": null,
+                "fileByte":
+              }
+          ],
+          "categoryResponseDTOList": null
+        }
+      }
+    ],
+    "phoneNumber": 987654321,
+    "addressResponseDTO": {
+      "houseNumber": "34",
+      "streetName": "street",
+      "wardName": "ward",
+      "city": "city",
+      "zipCode": "zipcode"
+  }
+}
+```
+    
 2. POST: https://localhost/api/v1/orders `(USER-ONLY)` <br/><br/>
    - Get All Order infomation according to user (use token)
    - Request Body
@@ -556,10 +612,129 @@ To set up the backend of the Book Social Network project, follow these steps:
     "pageSize": 20
   }
 ```
+- Response Body:
+  + Content-Type = application/json <br/><br/>
+  + Suported attributes for Oder:
+```dtd
+{
+    "content": [
+      {
+        "message": null,
+        "id": 29,
+        "name": "admin@email.com",
+        "totalAmount": 167892.00,
+        "status": "PROCESSING",
+        "deliveryDate": "2024-06-26T10:46:19.753213",
+        "orderInfo": "good",
+        "anotherField": "good",
+        "productQuantityResponseDTOList": [
+          {
+            "productQuantityId": 40,
+            "productId": 1,
+            "shoppingCartId": null,
+            "orderId": 29,
+            "quantity": 7,
+            "totalAmount": 69132.00,
+            "productResponseDTO": {
+              "message": null,
+              "id": null,
+              "name": "Product 1",
+              "price": 9876.0,
+              "stockQuantity": null,
+              "description": "Product 1",
+              "createdDate": null,
+              "lastModifiedDate": null,
+              "fileResponseDTOList": [
+                    {
+                      "message": null,
+                      "id": 1,
+                      "name": null,
+                      "fileType": null,
+                      "size": null,
+                      "fileByte":
+                    }
+                ],
+                "categoryResponseDTOList": null
+              }
+            }
+          ],
+          "phoneNumber": 987654321,
+          "addressResponseDTO": {
+            "houseNumber": "34",
+            "streetName": "street",
+            "wardName": "ward",
+            "city": "city",
+            "zipCode": "zipcode"
+        }
+      }
+    ],
+    "page": {
+      "size": 20,
+      "number": 1,
+      "totalElements": 21,
+      "totalPages": 2
+    }
+}
+```
+
 3. GET: https://localhost/api/v1/orders/search/{order-id} `(USER-ONLY)` <br/><br/>
    - Get Order information according to user and id (also use token)
    - Request Body
      + Content-Type = application/json <br/><br/>
+   - Response Body:
+     + Content-Type = application/json <br/><br/>
+     + Supported attributes for Order:
+```dtd
+{
+  "message": "Search order 29 successfully.",
+  "id": 29,
+  "name": "admin@email.com",
+  "totalAmount": 167892.00,
+  "status": "PROCESSING",
+  "deliveryDate": "2024-06-26T10:46:19.753213",
+  "orderInfo": "good",
+  "anotherField": "good",
+  "productQuantityResponseDTOList": [
+    {
+      "productQuantityId": 40,
+      "productId": 1,
+      "shoppingCartId": null,
+      "orderId": 29,
+      "quantity": 7,
+      "totalAmount": 69132.00,
+      "productResponseDTO": {
+        "message": null,
+        "id": null,
+        "name": "Product 1",
+        "price": 9876.0,
+        "stockQuantity": null,
+        "description": "Product 1",
+        "createdDate": null,
+        "lastModifiedDate": null,
+        "fileResponseDTOList": [
+              {
+                "message": null,
+                "id": 1,
+                "name": null,
+                "fileType": null,
+                "size": null,
+                "fileByte":
+              }
+          ],
+          "categoryResponseDTOList": null
+        }
+      }
+    ],
+    "phoneNumber": 987654321,
+    "addressResponseDTO": {
+      "houseNumber": "34",
+      "streetName": "street",
+      "wardName": "ward",
+      "city": "city",
+      "zipCode": "zipcode"
+  }
+}
+```
 
 4. PATCH: https://localhost/api/v1/orders/update/{order-id} `(USER-ONLY)` <br/><br/>
    - Update Order information according to user and id
@@ -586,6 +761,62 @@ To set up the backend of the Book Social Network project, follow these steps:
        }
    }
 ```
+
+- Response Body:
+  + Content-Type = application/json <br/><br/>
+  + Suported attributes for Oder:
+```dtd
+{
+  "message": "Update order 29 successfully.",
+  "id": 29,
+  "name": "admin@email.com",
+  "totalAmount": 167892.00,
+  "status": "PROCESSING",
+  "deliveryDate": "2024-06-26T10:46:19.753213",
+  "orderInfo": "good",
+  "anotherField": "good",
+  "productQuantityResponseDTOList": [
+    {
+      "productQuantityId": 40,
+      "productId": 1,
+      "shoppingCartId": null,
+      "orderId": 29,
+      "quantity": 7,
+      "totalAmount": 69132.00,
+      "productResponseDTO": {
+        "message": null,
+        "id": null,
+        "name": "Product 1",
+        "price": 9876.0,
+        "stockQuantity": null,
+        "description": "Product 1",
+        "createdDate": null,
+        "lastModifiedDate": null,
+        "fileResponseDTOList": [
+              {
+                "message": null,
+                "id": 1,
+                "name": null,
+                "fileType": null,
+                "size": null,
+                "fileByte":
+              }
+          ],
+          "categoryResponseDTOList": null
+        }
+      }
+    ],
+    "phoneNumber": 987654321,
+    "addressResponseDTO": {
+      "houseNumber": "34",
+      "streetName": "street",
+      "wardName": "ward",
+      "city": "city",
+      "zipCode": "zipcode"
+  }
+}
+```
+
 5. DELETE: https://localhost/api/v1/orders/delete/{order-id} `(ADMIN ONLY)` <br/><br/>
    - Delete Order by `order-id` <br/><br/>
 
