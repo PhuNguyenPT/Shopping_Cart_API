@@ -2,12 +2,14 @@ package com.example.shopping_cart.product;
 
 import com.example.shopping_cart.category.CategoryMapper;
 import com.example.shopping_cart.file.FileMapper;
+import com.example.shopping_cart.file.FileResponseDTO;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -125,4 +127,91 @@ public class ProductMapper {
                 )
                 .build();
     }
+
+    public static ProductResponseDTO toProductResponseDTOUpdate(
+            @NotNull Product product,
+            FileResponseDTO fileResponseDTO
+    ) {
+        return ProductResponseDTO.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .price(product.getPrice())
+                .stockQuantity(product.getStockQuantity())
+                .description(product.getDescription())
+                .createdDate(
+                        ZonedDateTime.of(
+                                product.getCreatedDate(),
+                                product.getCreatedTimeZone()
+                        )
+                )
+                .lastModifiedDate(
+                        Optional.ofNullable(product.getLastModifiedDate())
+                                .map(lastModifiedDate -> {
+                                            if (product.getModifiedTimeZone() != null) {
+                                                return ZonedDateTime.of(
+                                                        lastModifiedDate,
+                                                        ZoneId.of(String.valueOf(product.getModifiedTimeZone()))
+                                                );
+                                            }
+                                            return null;
+                                        }
+                                )
+                                .orElse(null)
+                )
+                .fileResponseDTOList(
+                        product.getFiles().stream()
+                                .map(file -> FileMapper.toFileResponseDTOUpdateProduct(file, fileResponseDTO))
+                                .toList()
+                )
+                .categoryResponseDTOList(
+                        product.getCategories().stream()
+                                .map(CategoryMapper::toCategoryResponseDTO)
+                                .toList()
+                )
+                .build();
+    }
+
+    public static ProductResponseDTO toProductResponseDTOCreateFiles(
+            @NotNull Product product,
+            List<FileResponseDTO> fileResponseDTOList
+    ) {
+        return ProductResponseDTO.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .price(product.getPrice())
+                .stockQuantity(product.getStockQuantity())
+                .description(product.getDescription())
+                .createdDate(
+                        ZonedDateTime.of(
+                                product.getCreatedDate(),
+                                product.getCreatedTimeZone()
+                        )
+                )
+                .lastModifiedDate(
+                        Optional.ofNullable(product.getLastModifiedDate())
+                                .map(lastModifiedDate -> {
+                                            if (product.getModifiedTimeZone() != null) {
+                                                return ZonedDateTime.of(
+                                                        lastModifiedDate,
+                                                        ZoneId.of(String.valueOf(product.getModifiedTimeZone()))
+                                                );
+                                            }
+                                            return null;
+                                        }
+                                )
+                                .orElse(null)
+                )
+                .fileResponseDTOList(
+                        product.getFiles().stream()
+                                .map(file -> FileMapper.toFileResponseDTOSaveProductFiles(file, fileResponseDTOList))
+                                .toList()
+                )
+                .categoryResponseDTOList(
+                        product.getCategories().stream()
+                                .map(CategoryMapper::toCategoryResponseDTO)
+                                .toList()
+                )
+                .build();
+    }
+
 }
