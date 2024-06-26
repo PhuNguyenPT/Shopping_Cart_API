@@ -4,11 +4,17 @@ import com.example.shopping_cart.category.Category;
 import com.example.shopping_cart.category.CategoryRepository;
 import com.example.shopping_cart.category.CategoryService;
 import com.example.shopping_cart.file.*;
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,18 +32,21 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
     private final CategoryService categoryService;
 
+    public Product findByName(String name) {
+        return productRepository.findByName(name)
+                .orElseThrow(() -> new EntityNotFoundException("Product " + name + " not found"));
+    }
+
     @Transactional
-    public ResponseEntity<?> save(
+    public ProductResponseDTO save(
             @NotNull
             ProductRequestDTO productRequestDTOS
     ) {
 
         // Check if the product already exists
-        Product existingProduct = productRepository.findByName(productRequestDTOS.name());
+        Product existingProduct = findByName(productRequestDTOS.name());
         if (existingProduct != null) {
-            ProductResponseDTO existingProductResponseDTO = ProductMapper.toProductResponseDTO(existingProduct);
-            existingProductResponseDTO.setMessage("Product already exists");
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(existingProductResponseDTO);
+            throw new EntityExistsException("Product already exists");
         }
 
         // Handle Existing Categories
@@ -82,7 +91,7 @@ public class ProductService {
         ProductResponseDTO productResponseDTO = ProductMapper.toProductResponseDTO(savedProduct);
         productResponseDTO.setMessage(this.buildMessage(productResponseDTO));
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(productResponseDTO);
+        return productResponseDTO;
     }
 
     private String buildMessage(
@@ -101,15 +110,40 @@ public class ProductService {
         return String.valueOf(message);
     }
 
-    public ResponseEntity<?> findBy(String productName) {
-        List<Product> products = productRepository.findByNameContainingIgnoreCase(productName);
-        if (products.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
+    public List<Product> findByNameContainingIgnoreCase(String name) {
+        List<Product> products = productRepository.findByNameContainingIgnoreCase(name);
+        if (products == null || products.isEmpty()) {
+            throw new EntityNotFoundException("Product(s) " + name + " not found");
         }
-        return ResponseEntity.ok(
-                products.stream()
+        return products;
+    }
+
+    public List<ProductResponseDTO> findBy(String productName) {
+        List<Product> products = findByNameContainingIgnoreCase(productName);
+        return products.stream()
                         .map(ProductMapper::toProductResponseDTO)
-                        .toList()
+                        .toList();
+    }
+
+    public Product findById(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() ->
+                        new EntityNotFoundException("Product with id " +
+                                id + " not found"));
+    }
+
+    public Page<ProductResponseDTO> findByProductNameAndPage(
+            String productName, Integer pageNumber, Integer pageSize
+    ) {
+        List<Product> products = findByNameContainingIgnoreCase(productName);
+        List<ProductResponseDTO> productResponseDTOList = products.stream()
+                .map(ProductMapper::toProductResponseDTO)
+                .toList();
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return new PageImpl<>(
+                productResponseDTOList,
+                pageable,
+                productResponseDTOList.size()
         );
     }
 
@@ -176,12 +210,5 @@ public class ProductService {
         ProductResponseDTO productResponseDTO = ProductMapper.toProductResponseDTO(savedProduct);
         productResponseDTO.setMessage("Update successfully");
         return ResponseEntity.status(HttpStatus.OK).body(productResponseDTO);
-    }
-
-    public Product findById(Long id) {
-        return productRepository.findById(id)
-                .orElseThrow(() ->
-                        new EntityNotFoundException("Product with id " +
-                                id + " not found"));
     }
 }

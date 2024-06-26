@@ -3,6 +3,8 @@ package com.example.shopping_cart.product;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +25,8 @@ public class ProductController {
             @ModelAttribute @Valid
             ProductRequestDTO productRequestDTO
     ) {
-        return productService.save(productRequestDTO);
+        ProductResponseDTO productResponseDTO = productService.save(productRequestDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(productResponseDTO);
     }
 
     @GetMapping("/search/{product-name}")
@@ -31,7 +34,20 @@ public class ProductController {
             @PathVariable(value = "product-name", required = false)
             String productName
     ) {
-        return productService.findBy(productName);
+        List<ProductResponseDTO> productResponseDTO = productService.findBy(productName);
+        return ResponseEntity.status(HttpStatus.OK).body(productResponseDTO);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchByProductNameAndPage(
+            @RequestParam(value = "product-name", required = false) String productName,
+            @RequestParam(value = "page-size") @NotNull(message = "Page size must not be null")
+            Integer pageSize,
+            @RequestParam(value = "page-number") @NotNull(message = "Page number must not be null")
+            Integer pageNumber
+    ) {
+        Page<ProductResponseDTO> productResponseDTOPage = productService.findByProductNameAndPage(productName, pageNumber, pageSize);
+        return ResponseEntity.status(HttpStatus.OK).body(productResponseDTOPage);
     }
 
     @DeleteMapping("/delete/{product-id}")
