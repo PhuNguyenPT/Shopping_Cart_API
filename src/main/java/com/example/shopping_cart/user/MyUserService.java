@@ -47,6 +47,16 @@ public class MyUserService {
         return MyUserMapper.toMyUserResponseDTOFind(foundUser);
     }
 
+    public MyUser findByEmail(String email) {
+        return myUserRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("User with email " + email + " not found"));
+    }
+
+    public MyUser findByEmailOrElseReturnNull(String email) {
+        return myUserRepository.findByEmail(email)
+                .orElse(null);
+    }
+
     public MyUser findByUserAuthentication(
             @NotNull Authentication authentication
     ) {
@@ -60,5 +70,9 @@ public class MyUserService {
     ) {
         MyUser authenticatedUser = findByUserAuthentication(authentication);
         return MyUserMapper.toMyUserResponseDTOFind(authenticatedUser);
+    }
+
+    public MyUser save(MyUser myUser) {
+        return myUserRepository.save(myUser);
     }
 }

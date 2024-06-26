@@ -59,6 +59,7 @@ public class MyRole implements GrantedAuthority {
     }
     public enum Value {
         ADMIN,
-        USER
+        USER,
+        DELIVERER
     }
 }
