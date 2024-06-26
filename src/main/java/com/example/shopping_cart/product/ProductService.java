@@ -12,9 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -149,20 +147,18 @@ public class ProductService {
 
     @Transactional
     public ResponseEntity<?> deleteBy(Long productId) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(EntityNotFoundException::new);
+        Product product = findById(productId);
         productRepository.deleteById(product.getId());
         return ResponseEntity.ok("Product with id " + productId + " is deleted successfully");
     }
 
     @Transactional
-    public ResponseEntity<?> updateFilesByProductId(
+    public ProductResponseDTO updateFileByProductIdAndFileId(
             Long productId,
             Long fileId,
             MultipartFile multipartFile
     ) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(EntityNotFoundException::new);
+        Product product = findById(productId);
         FileResponseDTO fileResponseDTO = fileService.updateFile(multipartFile, product, fileId);
         fileResponseDTO.setMessage("Update files " + fileResponseDTO.getName() + " successfully");
 //        URI location = ServletUriComponentsBuilder
@@ -170,25 +166,24 @@ public class ProductService {
 //                .path("/{id}")
 //                .buildAndExpand(fileResponseDTO.getId())
 //                .toUri();
-        return ResponseEntity.status(HttpStatus.CREATED).body(fileResponseDTO);
+        return ProductMapper.toProductResponseDTOUpdate(product, fileResponseDTO);
     }
 
     @Transactional
-    public ResponseEntity<?> createProductFilesByProductId(
+    public ProductResponseDTO createProductFilesByProductId(
             Long productId,
             @NotNull List<MultipartFile> multipartFiles) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(EntityNotFoundException::new);
-        return fileService.saveFilesByProduct(product, multipartFiles);
-
+        Product product = findById(productId);
+        List<FileResponseDTO> fileResponseDTOList = fileService.saveFilesByProduct(product, multipartFiles);
+        ProductResponseDTO productResponseDTO = ProductMapper.toProductResponseDTOCreateFiles(product, fileResponseDTOList);
+        return productResponseDTO;
     }
 
-    public ResponseEntity<?> updateProductAttributes(
+    public ProductResponseDTO updateProductAttributes(
             Long id,
             @NotNull ProductUpdateDTO productUpdateDTO
     ) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(EntityNotFoundException::new);
+        Product product = findById(id);
         if (productUpdateDTO.getName() != null) {
             product.setName(productUpdateDTO.getName());
         }
@@ -209,6 +204,6 @@ public class ProductService {
         Product savedProduct = productRepository.save(product);
         ProductResponseDTO productResponseDTO = ProductMapper.toProductResponseDTO(savedProduct);
         productResponseDTO.setMessage("Update successfully");
-        return ResponseEntity.status(HttpStatus.OK).body(productResponseDTO);
+        return productResponseDTO;
     }
 }
