@@ -1,6 +1,8 @@
 package com.example.shopping_cart.product;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -42,8 +44,10 @@ public class ProductController {
     public ResponseEntity<?> searchByProductNameAndPage(
             @RequestParam(value = "product-name", required = false) String productName,
             @RequestParam(value = "page-size") @NotNull(message = "Page size must not be null")
+            @Min(value = 1) @Max(value = 20)
             Integer pageSize,
             @RequestParam(value = "page-number") @NotNull(message = "Page number must not be null")
+            @Min(value = 1)
             Integer pageNumber
     ) {
         Page<ProductResponseDTO> productResponseDTOPage = productService.findByProductNameAndPage(productName, pageNumber, pageSize);
