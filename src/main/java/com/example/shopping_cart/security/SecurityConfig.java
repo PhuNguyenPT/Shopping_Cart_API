@@ -32,6 +32,7 @@ public class SecurityConfig {
                                 "/home",
                                 "/",
                                 "/products/search/*",
+                                "/products/search",
                                 "/categories/*",
                                 "/categories"
                                         )
