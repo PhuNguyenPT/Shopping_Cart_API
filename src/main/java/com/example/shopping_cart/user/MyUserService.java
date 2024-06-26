@@ -20,9 +20,10 @@ public class MyUserService {
     private final MyUserRepository myUserRepository;
 
     public Page<MyUserResponseDTO> findAll(
-            @NotNull MyUserRequestDTO myUserRequestDTO
+            Integer pageNumber,
+            Integer pageSize
     ) {
-        Pageable pageable = PageRequest.of(myUserRequestDTO.getPageNumber(), myUserRequestDTO.getPageSize());
+
         List<MyUser> myUsers = myUserRepository.findAll();
         if (myUsers.isEmpty()) {
             throw new EntityNotFoundException("No user(s) found");
@@ -30,6 +31,9 @@ public class MyUserService {
         List<MyUserResponseDTO> myUserResponseDTOList = myUsers.stream()
                 .map(MyUserMapper::toMyUserResponseDTOFind)
                 .toList();
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+
         return new PageImpl<>(
                 myUserResponseDTOList,
                 pageable,
