@@ -280,9 +280,9 @@ public class GlobalExceptionHandler {
     ) {
         Map<String, String> errorMessages = new HashMap<>();
 
-        e.getAllValidationResults().stream().forEach(parameterValidationResult ->
+        e.getAllValidationResults().forEach(parameterValidationResult ->
             errorMessages.put(parameterValidationResult.getMethodParameter().getParameterName(),
-                    parameterValidationResult.getResolvableErrors().get(0).getDefaultMessage()  )
+                    parameterValidationResult.getResolvableErrors().get(0).getDefaultMessage())
         );
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
