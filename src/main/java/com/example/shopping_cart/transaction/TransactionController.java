@@ -1,5 +1,8 @@
 package com.example.shopping_cart.transaction;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -32,12 +35,18 @@ public class TransactionController {
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<?> findAll(
             Authentication authentication,
-            @RequestBody TransactionRequestDTOFind transactionRequestDTOFind
+            @RequestParam(value = "page-size")
+            @NotNull(message = "Page size must not be null")
+            @Min(value = 1) @Max(value = 20)
+            Integer pageSize,
+            @RequestParam(value = "page-number")
+            @NotNull(message = "Page index must not be null")
+            @Min(value = 1)
+            Integer pageNumber
     ) {
         Page<TransactionResponseDTO> transactionResponseDTO =
-                transactionService.findAllByAuthenticationAndPage(
-                        authentication, transactionRequestDTOFind
-                );
+                transactionService.findAllByAuthenticationAndPage(authentication, pageNumber, pageSize);
+
         return ResponseEntity.status(HttpStatus.OK).body(transactionResponseDTO);
     }
 }

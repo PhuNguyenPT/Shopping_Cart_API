@@ -75,7 +75,9 @@ public class TransactionService {
 
     public Page<TransactionResponseDTO> findAllByAuthenticationAndPage(
             Authentication authentication,
-            @NotNull TransactionRequestDTOFind transactionRequestDTOFind
+//            @NotNull TransactionRequestDTOFind transactionRequestDTOFind
+            Integer pageNumber,
+            Integer pageSize
     ) {
         // Handle authenticated user
         MyUser authenticatedUser = myUserService.findByUserAuthentication(authentication);
@@ -92,8 +94,8 @@ public class TransactionService {
 
         // Create pageable
         Pageable pageable = PageRequest.of(
-                transactionRequestDTOFind.getPageNumber(),
-                transactionRequestDTOFind.getPageSize()
+                pageNumber,
+                pageSize
         );
 
         // Map to TransactionResponseDTO List
