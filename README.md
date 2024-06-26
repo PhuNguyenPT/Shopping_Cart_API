@@ -363,11 +363,70 @@ To set up the backend of the Book Social Network project, follow these steps:
        * `description` : *product description*
        * `categoryIds` : *saved category ids from database*
        * `newCategoryNames` : *new category names to save to database* <br/><br/>
+     + Response Body
+```dtd
+{
+    "message": "Save product successfully,with categories,with files",
+    "id": 4,
+    "name": "Product 8",
+    "price": 9876.0,
+    "stockQuantity": 30,
+    "description": "Product 8",
+    "createdDate": "2024-06-26T12:13:57.4699588+07:00",
+    "lastModifiedDate": null,
+    "fileResponseDTOList": [
+        {
+          "message": null,
+          "id": 4,
+          "name": "hello.png",
+          "fileType": "image/png",
+          "size": 674315,
+          "fileByte":
+        }
+    ],
+    "categoryResponseDTOList": [
+        {
+          "id": 4,
+          "name": "hello",
+          "productResponseDTOList": null
+        }
+    ]
+}
+```
 
 2. GET: https://localhost/api/v1/products/search/{product-id} `(NON-USER)` <br/>
    - Search Product by `product-id` <br/><br/>
    - Response Body 
      + Content-Type = application/json <br/><br/>
+```dtd
+{
+    "message": "Search product successfully,with categories,with files",
+    "id": 4,
+    "name": "Product 8",
+    "price": 9876.0,
+    "stockQuantity": 30,
+    "description": "Product 8",
+    "createdDate": "2024-06-26T12:13:57.4699588+07:00",
+    "lastModifiedDate": null,
+    "fileResponseDTOList": [
+        {
+          "message": null,
+          "id": 4,
+          "name": "hello.png",
+          "fileType": "image/png",
+          "size": 674315,
+          "fileByte":
+        }
+    ],
+    "categoryResponseDTOList": [
+        {
+          "id": 4,
+          "name": "hello",
+          "productResponseDTOList": null
+        }
+    ]
+}
+```
 
 3. DELETE: https://localhost/api/v1/products/delete/{product-id} `(ADMIN ONLY)` <br/>
    - Delete Product by `product-id` but do not delete the `categories` <br/><br/>
