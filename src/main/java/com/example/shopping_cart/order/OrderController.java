@@ -1,9 +1,11 @@
 package com.example.shopping_cart.order;
 
 
+import com.example.shopping_cart.user.MyUserResponseDTO;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -18,6 +20,16 @@ import org.springframework.security.access.prepost.PreAuthorize;
 public class OrderController {
 
     private final OrderService orderService;
+
+    @PostMapping("")
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity<?> findAll(
+            Authentication authentication,
+            @RequestBody OrderRequestFindDTO orderRequestFindDTO
+    ) {
+        Page<OrderResponseDTO> orderResponseDTOPage = orderService.findAllThroughAuthentication(authentication, orderRequestFindDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(orderResponseDTOPage);
+    }
 
     @PostMapping("/upload")
     @PreAuthorize("hasAuthority('USER')")
