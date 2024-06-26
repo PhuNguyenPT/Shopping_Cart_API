@@ -1,7 +1,9 @@
 package com.example.shopping_cart.user;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +21,22 @@ public class MyUserController {
     private final MyUserService myUserService;
 
     @NotNull
-    @PostMapping("")
+    @GetMapping("")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> findAll(
-            @RequestBody MyUserRequestDTO myUserRequestDTO
+//            @RequestBody MyUserRequestDTO myUserRequestDTO
+            @RequestParam(value = "page-size")
+            @NotNull(message = "Page size must not be null")
+            @Min(value = 1) @Max(value = 20)
+            Integer pageSize,
+            @RequestParam(value = "page-number")
+            @NotNull(message = "Page index must not be null")
+            @Min(value = 1)
+            Integer pageNumber
     ) {
-        Page<MyUserResponseDTO> myUsersMyUserResponseDTOPage = myUserService.findAll(myUserRequestDTO);
+        Page<MyUserResponseDTO> myUsersMyUserResponseDTOPage =
+                myUserService.findAll(pageNumber, pageSize);
+//                myUserService.findAll(myUserRequestDTO);
         return ResponseEntity.status(HttpStatus.OK).body(myUsersMyUserResponseDTOPage);
     }
 
