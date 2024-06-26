@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Base64;
+import java.util.List;
 
 @Service
 public class FileMapper {
@@ -81,19 +82,7 @@ public class FileMapper {
                 .name(file.getName())
                 .fileType(file.getFileType())
                 .size(file.getSize())
-                .build();
-    }
-
-    public FileResponseDTO toFileResponseDTOUpdate(
-            @NotNull File file
-    ) {
-//        var compressedFileByte = Base64.decodeBase64(file.getFileContent(), 0, file.getFileContent().length);
-//        var fileByte = FileUtil.decompressByte(compressedFileByte);
-        return FileResponseDTO.builder()
-                .id(file.getId())
-                .name(file.getName())
-                .fileType(file.getFileType())
-                .size(file.getSize())
+                .fileByte(file.getFileContent())
                 .build();
     }
 
@@ -111,6 +100,57 @@ public class FileMapper {
                 .build();
     }
 
+    public static FileResponseDTO toFileResponseDTOUpdate(
+            @NotNull File file
+    ) {
+        var compressedFileByte = Base64.getDecoder().decode(file.getFileContent());
+        var fileByte = FileUtil.decompressByte(compressedFileByte);
+        return FileResponseDTO.builder()
+                .id(file.getId())
+                .name(file.getName())
+                .fileType(file.getFileType())
+                .size(file.getSize())
+                .fileByte(fileByte)
+                .build();
+    }
+
+    public static FileResponseDTO toFileResponseDTOUpdateProduct(
+            @NotNull File file,
+            @NotNull FileResponseDTO fileResponseDTO
+    ) {
+        if (file.getId() == fileResponseDTO.getId()) {
+            return fileResponseDTO;
+        }
+        var compressedFileByte = Base64.getDecoder().decode(file.getFileContent());
+        var fileByte = FileUtil.decompressByte(compressedFileByte);
+        return FileResponseDTO.builder()
+                .id(file.getId())
+                .name(file.getName())
+                .fileType(file.getFileType())
+                .size(file.getSize())
+                .fileByte(fileByte)
+                .build();
+    }
+
+    public static FileResponseDTO toFileResponseDTOSaveProductFiles(
+            @NotNull File file,
+            @NotNull List<FileResponseDTO> fileResponseDTOList
+    ) {
+        for (FileResponseDTO fileResponseDTO : fileResponseDTOList) {
+            if (file.getId() == fileResponseDTO.getId()) {
+                return fileResponseDTO;
+            }
+        }
+        var compressedFileByte = Base64.getDecoder().decode(file.getFileContent());
+        var fileByte = FileUtil.decompressByte(compressedFileByte);
+        return FileResponseDTO.builder()
+                .id(file.getId())
+                .name(file.getName())
+                .fileType(file.getFileType())
+                .size(file.getSize())
+                .fileByte(fileByte)
+                .build();
+    }
     public static FileResponseDTO toFileResponseDTOShoppingCart(
             @NotNull File file
     ) {

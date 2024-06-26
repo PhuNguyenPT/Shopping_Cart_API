@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -54,7 +55,7 @@ public class FileService {
         );
     }
 
-    public ResponseEntity<?> saveFilesByProduct(
+    public List<FileResponseDTO> saveFilesByProduct(
             Product product,
             @NotNull List<MultipartFile> multipartFiles) {
 
@@ -63,7 +64,7 @@ public class FileService {
                 .map(multipartFile -> FileMapper.toFileSave(multipartFile, product))
                 .toList();
         if (files.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No non-empty files provided");
+            throw new MultipartException("File(s) upload not found");
         }
         List<File> savedFiles = files.stream()
                 .map(fileRepository::save)
@@ -77,7 +78,7 @@ public class FileService {
                                         fileResponseDTO.getName() +
                                         " successfully"));
 //        return ResponseEntity.ok("Saved " + savedFiles.size() + " files successfully.");
-        return ResponseEntity.status(HttpStatus.CREATED).body(fileResponseDTOList);
+        return fileResponseDTOList;
     }
 
     public ResponseEntity<?> findFiles(String fileName) {
@@ -135,7 +136,7 @@ public class FileService {
             throw new RuntimeException("Cannot compress file byte in Base64");
         }
         File savedFile = fileRepository.save(file);
-        return fileMapper.toFileResponseDTOUpdate(savedFile);
+        return FileMapper.toFileResponseDTOUpdate(savedFile);
     }
 
     public List<File> saveAllFilesByProduct(

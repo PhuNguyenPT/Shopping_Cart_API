@@ -21,6 +21,6 @@ public class ProductResponseDTO {
     private final String description;
     private final ZonedDateTime createdDate;
     private final ZonedDateTime lastModifiedDate;
-    private final List<FileResponseDTO> fileResponseDTOList;
     private final List<CategoryResponseDTO> categoryResponseDTOList;
+    private final List<FileResponseDTO> fileResponseDTOList;
 }
