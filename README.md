@@ -1115,7 +1115,6 @@ To set up the backend of the Book Social Network project, follow these steps:
 2. GET: https://localhost/api/v1/transactions?page-number={page-number}&page-size={page-size} (`USER-ONLY`)  <br/><br/> 
    - Find all Transaction(s) as Page, of User authenticated `Bearer Token` in `AUTHORIZATION` 
    - Request Parameters
-     + Content-Type = application/json  <br/><br/>
      + Suported attributes for Transaction finding: 
        * `pageSize` 
        * `pageNumber` <br/><br/>
