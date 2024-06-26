@@ -190,7 +190,7 @@ To set up the backend of the Book Social Network project, follow these steps:
        * `pageNumber` : page number of which page <br/><br/>
        
    - Response Body:
-     + Return Page of MyUserResponseDTOList
+     + Return Page of MyUserResponseDTOList <br/><br/>
      + Content-Type = application/json <br/><br/>
      + Suported attributes for MyUser:
 ```bash
