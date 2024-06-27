@@ -46,7 +46,6 @@ public class ShoppingCartService {
                         .user(myUser)
                         .build();
                 savedShoppingCart = shoppingCartRepository.save(shoppingCart);
-                System.out.println("Saved shopping cart ID: " + savedShoppingCart.getId());
                 myUser.setShoppingCart(savedShoppingCart);
             } catch (Exception ex) {
                 throw new DataIntegrityViolationException(ex.getMessage());

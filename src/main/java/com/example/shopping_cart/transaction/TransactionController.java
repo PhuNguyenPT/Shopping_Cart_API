@@ -42,21 +42,14 @@ public class TransactionController {
             @RequestParam(value = "page-number", defaultValue = "1")
             @Min(value = 1)
             Integer pageNumber,
-            @RequestParam(value = "sort", required = false) String sortAttribute,
+            @RequestParam(value = "sort", required = false, defaultValue = "createdDate")
+            String sortAttribute,
             @RequestParam(value = "direction", defaultValue = "desc") String direction
     ) {
-        Page<TransactionResponseDTO> transactionResponseDTOPage;
-        if (sortAttribute != null) {
-            transactionResponseDTOPage =
+        Page<TransactionResponseDTO> transactionResponseDTOPage =
                     transactionService.findAllByAuthenticationAndPageAndDirectionAndSortAttribute(
                             authentication, pageNumber, pageSize, direction, sortAttribute
                     );
-        } else {
-            transactionResponseDTOPage =
-                    transactionService.findAllByAuthenticationAndPageAndDirection(
-                            authentication, pageNumber, pageSize, direction
-                    );
-        }
         return ResponseEntity.status(HttpStatus.OK).body(transactionResponseDTOPage);
     }
 
@@ -70,21 +63,14 @@ public class TransactionController {
             @RequestParam(value = "page-number", defaultValue = "1")
             @Min(value = 1)
             Integer pageNumber,
-            @RequestParam(value = "sort", required = false) String sortAttribute,
+            @RequestParam(value = "sort", required = false, defaultValue = "createdDate")
+            String sortAttribute,
             @RequestParam(value = "direction", defaultValue = "desc") String direction
     ) {
-        Page<TransactionResponseDTO> transactionResponseDTOPage;
-        if (sortAttribute != null) {
-            transactionResponseDTOPage =
+        Page<TransactionResponseDTO> transactionResponseDTOPage =
                     transactionService.findAllByUserIdAndPageAndDirectionAndSortAttribute(
                             userID, pageNumber, pageSize, direction, sortAttribute
                     );
-        } else {
-            transactionResponseDTOPage =
-                    transactionService.findAllByUserIdAndPageAndDirection(
-                            userID, pageNumber, pageSize, direction
-                    );
-        }
         return ResponseEntity.status(HttpStatus.OK).body(transactionResponseDTOPage);
     }
 
@@ -97,21 +83,14 @@ public class TransactionController {
             @RequestParam(value = "page-number", defaultValue = "1")
             @Min(value = 1)
             Integer pageNumber,
-            @RequestParam(value = "sort", required = false) String sortAttribute,
+            @RequestParam(value = "sort", required = false, defaultValue = "created-date")
+            String sortAttribute,
             @RequestParam(value = "direction", defaultValue = "desc") String direction
     ) {
-        Page<TransactionResponseDTO> transactionResponseDTOPage;
-        if (sortAttribute != null) {
-            transactionResponseDTOPage =
+        Page<TransactionResponseDTO> transactionResponseDTOPage =
                     transactionService.findAllByPageAndDirectionAndSortAttribute(
                             pageNumber, pageSize, direction, sortAttribute
                     );
-        } else {
-            transactionResponseDTOPage =
-                    transactionService.findAllByPageAndDirection(
-                            pageNumber, pageSize, direction
-                    );
-        }
         return ResponseEntity.status(HttpStatus.OK).body(transactionResponseDTOPage);
     }
 }
