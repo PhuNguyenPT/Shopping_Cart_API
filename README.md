@@ -1538,7 +1538,6 @@ before send)
     * `direction` : *sort by direction* `("asc", "desc")` <br/><br/>
   - Example Body Raw
 ```json
-```json
 {
     "content": [
         {
