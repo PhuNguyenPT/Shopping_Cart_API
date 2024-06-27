@@ -6,6 +6,7 @@ import com.example.shopping_cart.order.Status;
 import com.example.shopping_cart.product.Product;
 import com.example.shopping_cart.product.ProductService;
 import com.example.shopping_cart.product_quantity.ProductQuantity;
+import com.example.shopping_cart.sort.SortDirectionMapper;
 import com.example.shopping_cart.user.MyUser;
 import com.example.shopping_cart.user.MyUserService;
 import jakarta.persistence.EntityExistsException;
@@ -102,7 +103,7 @@ public class TransactionService {
         List<Transaction> userTransactions = authenticatedUser.getTransactions();
 
         TransactionSort sortEnumAttribute = TransactionSortMapper.toTransactionSortDefaultCreatedDate(sortAttribute);
-        Sort.Direction sortDirection = TransactionSortMapper.toSortDirectionDefaultDesc(direction);
+        Sort.Direction sortDirection = SortDirectionMapper.toSortDirectionDefaultDesc(direction);
 
         List<Transaction> sortedTransaction = sort(
                 sortEnumAttribute,
@@ -141,7 +142,7 @@ public class TransactionService {
         List<Transaction> userTransactions = myUser.getTransactions();
 
         TransactionSort sortEnumAttribute = TransactionSortMapper.toTransactionSortDefaultCreatedDate(sortAttribute);
-        Sort.Direction sortDirection = TransactionSortMapper.toSortDirectionDefaultDesc(direction);
+        Sort.Direction sortDirection = SortDirectionMapper.toSortDirectionDefaultDesc(direction);
 
         List<Transaction> sortedTransaction = sort(
                 sortEnumAttribute,
@@ -174,7 +175,7 @@ public class TransactionService {
         }
 
         TransactionSort sortEnumAttribute = TransactionSortMapper.toTransactionSortDefaultCreatedDate(sortAttribute);
-        Sort.Direction sortDirection = TransactionSortMapper.toSortDirectionDefaultDesc(direction);
+        Sort.Direction sortDirection = SortDirectionMapper.toSortDirectionDefaultDesc(direction);
 
         List<Transaction> sortedTransactions = findAllByDirectionAndSortAttribute(sortDirection, sortEnumAttribute);
 
