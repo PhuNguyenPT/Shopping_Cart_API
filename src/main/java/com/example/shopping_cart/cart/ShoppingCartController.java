@@ -3,7 +3,6 @@ package com.example.shopping_cart.cart;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,14 +41,11 @@ public class ShoppingCartController {
             Integer pageSize,
             @RequestParam(value = "page-number", defaultValue = "1")
             @Min(value = 1)
-            Integer pageNumber,
-            @RequestParam(value = "sort", required = false, defaultValue = "created-date")
-            String sortAttribute,
-            @RequestParam(value = "direction", defaultValue = "desc") String direction
+            Integer pageNumber
     ) {
         ShoppingCartResponseDTOFind shoppingCartResponseDTOFind =
-                shoppingCartService.findByPageAndDirectionAndSortAttribute(
-                        authentication, pageNumber, pageSize, direction, sortAttribute
+                shoppingCartService.findByPage(
+                        authentication, pageNumber, pageSize
                 );
         return ResponseEntity.status(HttpStatus.OK).body(shoppingCartResponseDTOFind);
     }

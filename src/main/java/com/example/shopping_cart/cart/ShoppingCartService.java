@@ -1,8 +1,6 @@
 package com.example.shopping_cart.cart;
 
 import com.example.shopping_cart.product.Product;
-import com.example.shopping_cart.product.ProductMapper;
-import com.example.shopping_cart.product.ProductResponseDTO;
 import com.example.shopping_cart.product.ProductService;
 import com.example.shopping_cart.product_quantity.*;
 import com.example.shopping_cart.user.MyUser;
@@ -91,10 +89,9 @@ public class ShoppingCartService {
         return shoppingCartRepository.save(shoppingCart);
     }
 
-    public ShoppingCartResponseDTOFind findByPageAndDirectionAndSortAttribute(
+    public ShoppingCartResponseDTOFind findByPage(
             @NotNull Authentication authentication,
-            Integer pageNumber, Integer pageSize, String direction,
-            String sortAttribute
+            Integer pageNumber, Integer pageSize
     ) {
         MyUser authenticatedUser = myUserService.findByUserAuthentication(authentication);
 
@@ -122,6 +119,8 @@ public class ShoppingCartService {
 
         return ShoppingCartMapper.toShoppingCartResponseDTOFind(shoppingCart, productQuantityResponseDTOPage);
     }
+
+
 
     public ShoppingCartResponseDTO updateBy(
             Authentication authentication,
