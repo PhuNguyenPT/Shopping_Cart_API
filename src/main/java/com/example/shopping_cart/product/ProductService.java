@@ -125,12 +125,23 @@ public class ProductService {
             String productName, Integer pageNumber, Integer pageSize, String direction,
             String sortAttribute
     ) {
-        List<Product> products = findByNameContainingIgnoreCase(productName);
-
         ProductSort productSort = ProductSortMapper.toProductionSortDefaultCreatedDate(sortAttribute);
         Sort.Direction sortDirection = SortDirectionMapper.toSortDirectionDefaultDesc(direction);
 
-        List<Product> sortedProducts = sort(productSort, products, sortDirection);
+        List<Product> products;
+        if (productName != null) {
+             products = findByNameContainingIgnoreCase(productName);
+        } else {
+            products = new ArrayList<>();
+        }
+
+        List<Product> sortedProducts;
+        if (!products.isEmpty()) {
+            sortedProducts = sort(productSort, products, sortDirection);
+        }
+        else {
+            sortedProducts = findAllByDirectionAndSortAttribute(sortDirection, productSort);
+        }
 
         List<ProductResponseDTO> productResponseDTOList = sortedProducts.stream()
                 .map(ProductMapper::toProductResponseDTO)
