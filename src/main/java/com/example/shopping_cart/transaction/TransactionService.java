@@ -321,7 +321,7 @@ public class TransactionService {
         List<Transaction> sortedTransaction = new ArrayList<>();
         switch (sortAttribute) {
             case AMOUNT -> {
-                // Sorted Transactions by highest AMOUNT (filter out null amounts)
+                // Sorted Transactions by lowest AMOUNT (filter out null amounts)
                 sortedTransaction = transactions.stream()
                         .filter(transaction -> transaction.getAmount() != null)
                         .sorted(Comparator.comparing(Transaction::getAmount))
