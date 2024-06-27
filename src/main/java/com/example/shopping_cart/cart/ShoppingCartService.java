@@ -91,10 +91,9 @@ public class ShoppingCartService {
         return shoppingCartRepository.save(shoppingCart);
     }
 
-    public ShoppingCartResponseDTOFind findByPageAndDirectionAndSortAttribute(
+    public ShoppingCartResponseDTOFind findByPage(
             @NotNull Authentication authentication,
-            Integer pageNumber, Integer pageSize, String direction,
-            String sortAttribute
+            Integer pageNumber, Integer pageSize
     ) {
         MyUser authenticatedUser = myUserService.findByUserAuthentication(authentication);
 
@@ -122,6 +121,8 @@ public class ShoppingCartService {
 
         return ShoppingCartMapper.toShoppingCartResponseDTOFind(shoppingCart, productQuantityResponseDTOPage);
     }
+
+
 
     public ShoppingCartResponseDTO updateBy(
             Authentication authentication,
