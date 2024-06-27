@@ -3,6 +3,9 @@ package com.example.shopping_cart.transaction;
 import com.example.shopping_cart.order.Order;
 import com.example.shopping_cart.order.OrderService;
 import com.example.shopping_cart.order.Status;
+import com.example.shopping_cart.product.Product;
+import com.example.shopping_cart.product.ProductService;
+import com.example.shopping_cart.product_quantity.ProductQuantity;
 import com.example.shopping_cart.user.MyUser;
 import com.example.shopping_cart.user.MyUserService;
 import jakarta.persistence.EntityExistsException;
@@ -23,6 +26,7 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final MyUserService myUserService;
     private final OrderService orderService;
+    private final ProductService productService;
 
     public TransactionResponseDTO saveByAuthentication(
             @NotNull Authentication authentication,
@@ -61,6 +65,15 @@ public class TransactionService {
         // Update order transaction and order status
         order.setTransaction(savedTransaction);
         order.setStatus(Status.PAID.name());
+        List<ProductQuantity> orderQuantities = order.getQuantities();
+
+        for (ProductQuantity productQuantity : orderQuantities) {
+            Long stockQuantity = productQuantity.getProduct().getStockQuantity();
+            Product product = productQuantity.getProduct();
+            stockQuantity = stockQuantity - productQuantity.getQuantity();
+            product.setStockQuantity(stockQuantity);
+            productService.save(product);
+        }
 
         // Add transaction to user
         authenticatedUser.addTransaction(savedTransaction);
@@ -69,54 +82,6 @@ public class TransactionService {
                 TransactionMapper.toTransactionResponseDTO(savedTransaction);
         transactionResponseDTO.setMessage("Save transaction successfully");
         return transactionResponseDTO;
-    }
-
-    public Page<TransactionResponseDTO> findAllByAuthenticationAndPageAndDirection(
-            Authentication authentication,
-//            @NotNull TransactionRequestDTOFind transactionRequestDTOFind
-            Integer pageNumber,
-            Integer pageSize,
-            String direction
-    ) {
-        // Handle authenticated user
-        MyUser authenticatedUser = myUserService.findByUserAuthentication(authentication);
-
-        // If transactions is empty or null
-        if (authenticatedUser.getTransactions() == null ||
-                authenticatedUser.getTransactions().isEmpty()
-        ) {
-            throw new EntityNotFoundException("User transaction not found");
-        }
-
-        // Get user transactions
-        List<Transaction> userTransactions = authenticatedUser.getTransactions();
-
-        Sort.Direction sortDirection = TransactionMapper.toSortDirectionDefaultDesc(direction);
-
-        TransactionSort defaultSortAttribute = TransactionMapper.toTransactionSortDefaultCreatedDate("");
-
-        List<Transaction> sortedTransaction = sort(
-                defaultSortAttribute,
-                userTransactions,
-                sortDirection
-        );
-
-        // Map to TransactionResponseDTO List
-        List<TransactionResponseDTO> transactionResponseDTOList = sortedTransaction.stream()
-                .map(TransactionMapper::toTransactionResponseDTO)
-                .peek(transactionResponseDTO -> transactionResponseDTO.setMessage("Find successfully"))
-                .toList();
-
-        // Create pageable
-        Pageable pageable = PageRequest.of(
-                pageNumber,
-                pageSize
-        );
-
-        // Create a Page of TransactionResponseDTO
-        return new PageImpl<>(
-                transactionResponseDTOList, pageable, transactionResponseDTOList.size()
-        );
     }
 
     public Page<TransactionResponseDTO> findAllByAuthenticationAndPageAndDirectionAndSortAttribute(
@@ -136,8 +101,8 @@ public class TransactionService {
         // Get user transactions
         List<Transaction> userTransactions = authenticatedUser.getTransactions();
 
-        TransactionSort sortEnumAttribute = TransactionMapper.toTransactionSortDefaultCreatedDate(sortAttribute);
-        Sort.Direction sortDirection = TransactionMapper.toSortDirectionDefaultDesc(direction);
+        TransactionSort sortEnumAttribute = TransactionSortMapper.toTransactionSortDefaultCreatedDate(sortAttribute);
+        Sort.Direction sortDirection = TransactionSortMapper.toSortDirectionDefaultDesc(direction);
 
         List<Transaction> sortedTransaction = sort(
                 sortEnumAttribute,
@@ -163,42 +128,6 @@ public class TransactionService {
         );
     }
 
-    public Page<TransactionResponseDTO> findAllByUserIdAndPageAndDirection(
-            UUID userID, Integer pageNumber, Integer pageSize, String direction
-    ) {
-        // Find User by User Id
-        MyUser myUser = myUserService.findById(userID);
-        if (myUser.getTransactions() == null || myUser.getTransactions().isEmpty()) {
-            throw new EntityNotFoundException("Transactions not found");
-        }
-        // Get Transactions from User
-        List<Transaction> userTransactions = myUser.getTransactions();
-
-        Sort.Direction sortDirection = TransactionMapper.toSortDirectionDefaultDesc(direction);
-
-        TransactionSort defaultSortAttribute = TransactionMapper.toTransactionSortDefaultCreatedDate("");
-
-        List<Transaction> sortedTransaction = sort(
-                defaultSortAttribute,
-                userTransactions,
-                sortDirection
-        );
-
-        // Map to Transaction Response DTO
-        List<TransactionResponseDTO> transactionResponseDTOList = sortedTransaction.stream()
-                .map(TransactionMapper::toTransactionResponseDTO)
-                .toList();
-
-        // Create a Pageable
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-
-        return new PageImpl<>(
-                transactionResponseDTOList,
-                pageable,
-                transactionResponseDTOList.size()
-        );
-    }
-
     public Page<TransactionResponseDTO> findAllByUserIdAndPageAndDirectionAndSortAttribute(
             UUID userID, Integer pageNumber, Integer pageSize, String direction,
             String sortAttribute
@@ -211,8 +140,8 @@ public class TransactionService {
         // Get Transactions from User
         List<Transaction> userTransactions = myUser.getTransactions();
 
-        TransactionSort sortEnumAttribute = TransactionMapper.toTransactionSortDefaultCreatedDate(sortAttribute);
-        Sort.Direction sortDirection = TransactionMapper.toSortDirectionDefaultDesc(direction);
+        TransactionSort sortEnumAttribute = TransactionSortMapper.toTransactionSortDefaultCreatedDate(sortAttribute);
+        Sort.Direction sortDirection = TransactionSortMapper.toSortDirectionDefaultDesc(direction);
 
         List<Transaction> sortedTransaction = sort(
                 sortEnumAttribute,
@@ -235,32 +164,6 @@ public class TransactionService {
         );
     }
 
-    public Page<TransactionResponseDTO> findAllByPageAndDirection(
-            Integer pageNumber, Integer pageSize, String direction
-    ) {
-        if (findAllByDefaultCreatedDateDesc() == null ||
-                findAllByDefaultCreatedDateDesc().isEmpty()) {
-            throw new EntityNotFoundException("Transaction(s) not found");
-        }
-
-        TransactionSort sortEnumAttribute = TransactionMapper.toTransactionSortDefaultCreatedDate("");
-        Sort.Direction sortDirection = TransactionMapper.toSortDirectionDefaultDesc(direction);
-
-        List<Transaction> sortedTransactions = findAllByDirectionAndSortAttribute(sortDirection, sortEnumAttribute);
-
-        List<TransactionResponseDTO> transactionResponseDTOList = sortedTransactions.stream()
-                .map(TransactionMapper::toTransactionResponseDTO)
-                .toList();
-
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-
-        return new PageImpl<>(
-                transactionResponseDTOList,
-                pageable,
-                transactionResponseDTOList.size()
-        );
-    }
-
     public Page<TransactionResponseDTO> findAllByPageAndDirectionAndSortAttribute(
             Integer pageNumber, Integer pageSize, String direction,
             String sortAttribute
@@ -270,8 +173,8 @@ public class TransactionService {
             throw new EntityNotFoundException("Transaction(s) not found");
         }
 
-        TransactionSort sortEnumAttribute = TransactionMapper.toTransactionSortDefaultCreatedDate(sortAttribute);
-        Sort.Direction sortDirection = TransactionMapper.toSortDirectionDefaultDesc(direction);
+        TransactionSort sortEnumAttribute = TransactionSortMapper.toTransactionSortDefaultCreatedDate(sortAttribute);
+        Sort.Direction sortDirection = TransactionSortMapper.toSortDirectionDefaultDesc(direction);
 
         List<Transaction> sortedTransactions = findAllByDirectionAndSortAttribute(sortDirection, sortEnumAttribute);
 
@@ -321,7 +224,7 @@ public class TransactionService {
         List<Transaction> sortedTransaction = new ArrayList<>();
         switch (sortAttribute) {
             case AMOUNT -> {
-                // Sorted Transactions by highest AMOUNT (filter out null amounts)
+                // Sorted Transactions by lowest AMOUNT (filter out null amounts)
                 sortedTransaction = transactions.stream()
                         .filter(transaction -> transaction.getAmount() != null)
                         .sorted(Comparator.comparing(Transaction::getAmount))
