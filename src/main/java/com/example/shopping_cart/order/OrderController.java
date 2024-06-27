@@ -1,7 +1,6 @@
 package com.example.shopping_cart.order;
 
 
-import com.example.shopping_cart.user.MyUserResponseDTO;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -32,10 +31,16 @@ public class OrderController {
             Integer pageSize,
             @RequestParam(value = "page-number", defaultValue = "1")
             @Min(value = 1)
-            Integer pageNumber
+            Integer pageNumber,
+            @RequestParam(value = "sort", required = false, defaultValue = "createdDate")
+            String sortAttribute,
+            @RequestParam(value = "direction", defaultValue = "desc")
+            String direction
     ) {
         Page<OrderResponseDTO> orderResponseDTOPage =
-                orderService.findAllThroughAuthentication(authentication, pageNumber, pageSize);
+                orderService.findAllThroughAuthenticationAndPageAndDirectionAndSortAttribute(
+                            authentication,pageNumber, pageSize, sortAttribute, direction
+                    );
         return ResponseEntity.status(HttpStatus.OK).body(orderResponseDTOPage);
     }
 
