@@ -76,6 +76,7 @@ public class ShoppingCartService {
                 productQuantityRepository.save(productQuantity);
             }
         });
+        updatedShoppingCart.setCreatedBy(myUser.getFullName());
         ShoppingCart savedUpdatedShoppingCart = shoppingCartRepository.save(updatedShoppingCart);
         return ShoppingCartMapper.toShoppingCartResponseDTO(savedUpdatedShoppingCart);
     }
