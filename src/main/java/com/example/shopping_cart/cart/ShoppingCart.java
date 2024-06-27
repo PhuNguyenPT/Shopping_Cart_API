@@ -45,4 +45,11 @@ public class ShoppingCart extends BaseEntity {
 
     @OneToMany(mappedBy = "shoppingCart", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductQuantity> quantities = new ArrayList<>();
+
+    public void addQuantity(ProductQuantity productQuantity) {
+        if (quantities == null) {
+            quantities = new ArrayList<>();
+        }
+        quantities.add(productQuantity);
+    }
 }
