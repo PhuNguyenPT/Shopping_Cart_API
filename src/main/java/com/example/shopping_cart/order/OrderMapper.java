@@ -6,6 +6,9 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Optional;
 
 
 @Service
@@ -28,6 +31,28 @@ public class OrderMapper {
                 )
                 .phoneNumber(order.getUser().getPhoneNumber())
                 .addressResponseDTO(AddressMapper.toAddressResponseDTO(order.getUser().getAddress()))
+                .createdDate(
+                        ZonedDateTime.of(
+                                order.getCreatedDate(),
+                                        order.getCreatedTimeZone()
+                        )
+                )
+                .lastModifiedDate(
+                        Optional.ofNullable(order.getLastModifiedDate())
+                                .map(lastModifiedDate -> {
+                                            if (order.getModifiedTimeZone() != null) {
+                                                return ZonedDateTime.of(
+                                                        lastModifiedDate,
+                                                        ZoneId.of(String.valueOf(order.getModifiedTimeZone()))
+                                                );
+                                            }
+                                            return null;
+                                        }
+                                )
+                                .orElse(null)
+                )
+                .createdBy(order.getCreatedBy())
+                .lastModifiedBy(order.getLastModifyBy())
                 .build();
     }
 

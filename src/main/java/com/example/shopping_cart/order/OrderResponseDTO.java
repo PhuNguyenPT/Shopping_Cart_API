@@ -9,6 +9,7 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Getter
@@ -23,6 +24,11 @@ public class OrderResponseDTO {
     private final LocalDateTime deliveryDate;
     private final String orderInfo;
     private final String anotherField;
+    private final ZonedDateTime createdDate;
+    private final ZonedDateTime lastModifiedDate;
+    private final String createdBy;
+    private final String lastModifiedBy;
+
     private final List<ProductQuantityResponseDTO> productQuantityResponseDTOList;
 
     private final BigInteger phoneNumber;

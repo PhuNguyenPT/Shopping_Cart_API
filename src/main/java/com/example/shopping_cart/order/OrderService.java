@@ -6,19 +6,20 @@ import com.example.shopping_cart.product.Product;
 import com.example.shopping_cart.product_quantity.ProductQuantity;
 import com.example.shopping_cart.product_quantity.ProductQuantityService;
 import com.example.shopping_cart.address.AddressMapper;
+import com.example.shopping_cart.sort.SortDirectionMapper;
+import com.example.shopping_cart.transaction.Transaction;
+import com.example.shopping_cart.transaction.TransactionSort;
 import com.example.shopping_cart.user.MyUser;
 import com.example.shopping_cart.user.MyUserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.transaction.annotation.Transactional;
@@ -88,24 +89,35 @@ public class OrderService {
         return orderResponseDTO;
     }
 
-    public Page<OrderResponseDTO> findAllThroughAuthentication (
+    public Page<OrderResponseDTO> findAllThroughAuthenticationAndPageAndDirectionAndSortAttribute(
             @NotNull Authentication authentication,
             Integer pageNumber,
-            Integer pageSize
+            Integer pageSize,
+            String sortAttribute,
+            String direction
     ) {
         MyUser myUser = myUserService.findByUserAuthentication(authentication);
         List<Order> ordersOfMyUser = myUser.getOrders();
         if (ordersOfMyUser.isEmpty()) {
             throw new EntityNotFoundException("Order(s) not found");
         }
-        List<OrderResponseDTO> orderResponseDTOList = ordersOfMyUser.stream()
+
+        OrderSort sortEnumAttribute = OrderSortMapper.toOrderSortDefaultCreatedDate(sortAttribute);
+        Sort.Direction sortDirection = SortDirectionMapper.toSortDirectionDefaultDesc(direction);
+
+        List<Order> sortedOrder = sort(
+                sortEnumAttribute,
+                ordersOfMyUser,
+                sortDirection
+        );
+        List<OrderResponseDTO> orderResponseDTOList = sortedOrder.stream()
                 .map(OrderMapper::toOrderResponseDTO)
+                .peek(orderResponseDTO -> orderResponseDTO.setMessage("Find order successfully"))
                 .toList();
 
-        orderResponseDTOList.stream().forEach(orderResponseDTO -> orderResponseDTO.setMessage("Find order successfully"));
-
         Pageable pageable = PageRequest.of(
-                pageNumber, pageSize
+                pageNumber,
+                pageSize
         );
 
         return new PageImpl<>(
@@ -186,5 +198,37 @@ public class OrderService {
         OrderResponseDTO orderResponseDTO = OrderMapper.toOrderResponseDTO(savedOrder);
         orderResponseDTO.setMessage("Update order " + orderResponseDTO.getId() + " successfully.");
         return orderResponseDTO;
+    }
+    private static List<Order> sort(
+            @NotNull OrderSort sortAttribute,
+            List<Order> orders,
+            Sort.Direction direction
+    ) {
+        List<Order> sortedOrder = new ArrayList<>();
+        switch (sortAttribute) {
+            case AMOUNT -> {
+                sortedOrder = orders.stream()
+                        .filter(order -> order.getTotalAmount() != null)
+                        .sorted(Comparator.comparing(Order::getTotalAmount))
+                        .collect(Collectors.toCollection(ArrayList::new));
+            }
+            case CREATED_DATE -> {
+                sortedOrder = orders.stream()
+                        .filter(order -> order.getCreatedDate() != null)
+                        .sorted(Comparator.comparing(Order::getCreatedDate))
+                        .collect(Collectors.toCollection(ArrayList::new));
+            }
+            case LAST_MODIFIED_DATE -> {
+                sortedOrder = orders.stream()
+                        .filter(order -> order.getLastModifiedDate() != null)
+                        .sorted(Comparator.comparing(Order::getLastModifiedDate))
+                        .collect(Collectors.toCollection(ArrayList::new));
+            }
+        }
+
+        if (direction.isDescending()) {
+            Collections.reverse(sortedOrder);
+        }
+        return sortedOrder;
     }
 }
