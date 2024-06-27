@@ -35,6 +35,10 @@ public class ProductService {
                 .orElseThrow(() -> new EntityNotFoundException("Product " + name + " not found"));
     }
 
+    public Product save(Product product) {
+        return productRepository.save(product);
+    }
+
     @Transactional
     public ProductResponseDTO save(
             @NotNull
