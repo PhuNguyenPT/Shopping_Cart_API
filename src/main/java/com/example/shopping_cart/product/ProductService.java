@@ -4,23 +4,19 @@ import com.example.shopping_cart.category.Category;
 import com.example.shopping_cart.category.CategoryRepository;
 import com.example.shopping_cart.category.CategoryService;
 import com.example.shopping_cart.file.*;
+import com.example.shopping_cart.sort.SortDirectionMapper;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +31,11 @@ public class ProductService {
                 .orElseThrow(() -> new EntityNotFoundException("Product " + name + " not found"));
     }
 
+    public Product findByNameOrElseNull(String name) {
+        return productRepository.findByName(name)
+                .orElse(null);
+    }
+
     public Product save(Product product) {
         return productRepository.save(product);
     }
@@ -46,7 +47,7 @@ public class ProductService {
     ) {
 
         // Check if the product already exists
-        Product existingProduct = findByName(productRequestDTOS.name());
+        Product existingProduct = findByNameOrElseNull(productRequestDTOS.name());
         if (existingProduct != null) {
             throw new EntityExistsException("Product already exists");
         }
@@ -120,11 +121,28 @@ public class ProductService {
         return products;
     }
 
-    public List<ProductResponseDTO> findBy(String productName) {
+    public Page<ProductResponseDTO> findAllByNameAndPageAndDirectionAndSortAttribute(
+            String productName, Integer pageNumber, Integer pageSize, String direction,
+            String sortAttribute
+    ) {
         List<Product> products = findByNameContainingIgnoreCase(productName);
-        return products.stream()
-                        .map(ProductMapper::toProductResponseDTO)
-                        .toList();
+
+        ProductSort productSort = ProductSortMapper.toProductionSortDefaultCreatedDate(sortAttribute);
+        Sort.Direction sortDirection = SortDirectionMapper.toSortDirectionDefaultDesc(direction);
+
+        List<Product> sortedProducts = sort(productSort, products, sortDirection);
+
+        List<ProductResponseDTO> productResponseDTOList = sortedProducts.stream()
+                .map(ProductMapper::toProductResponseDTO)
+                .toList();
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+
+        return new PageImpl<>(
+                productResponseDTOList,
+                pageable,
+                productResponseDTOList.size()
+        );
     }
 
     public Product findById(Long id) {
@@ -134,20 +152,20 @@ public class ProductService {
                                 id + " not found"));
     }
 
-    public Page<ProductResponseDTO> findByProductNameAndPage(
-            String productName, Integer pageNumber, Integer pageSize
-    ) {
-        List<Product> products = findByNameContainingIgnoreCase(productName);
-        List<ProductResponseDTO> productResponseDTOList = products.stream()
-                .map(ProductMapper::toProductResponseDTO)
-                .toList();
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        return new PageImpl<>(
-                productResponseDTOList,
-                pageable,
-                productResponseDTOList.size()
-        );
-    }
+//    public Page<ProductResponseDTO> findByProductNameAndPage(
+//            String productName, Integer pageNumber, Integer pageSize
+//    ) {
+//        List<Product> products = findByNameContainingIgnoreCase(productName);
+//        List<ProductResponseDTO> productResponseDTOList = products.stream()
+//                .map(ProductMapper::toProductResponseDTO)
+//                .toList();
+//        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+//        return new PageImpl<>(
+//                productResponseDTOList,
+//                pageable,
+//                productResponseDTOList.size()
+//        );
+//    }
 
     @Transactional
     public ResponseEntity<?> deleteBy(Long productId) {
@@ -179,8 +197,7 @@ public class ProductService {
             @NotNull List<MultipartFile> multipartFiles) {
         Product product = findById(productId);
         List<FileResponseDTO> fileResponseDTOList = fileService.saveFilesByProduct(product, multipartFiles);
-        ProductResponseDTO productResponseDTO = ProductMapper.toProductResponseDTOCreateFiles(product, fileResponseDTOList);
-        return productResponseDTO;
+        return ProductMapper.toProductResponseDTOCreateFiles(product, fileResponseDTOList);
     }
 
     public ProductResponseDTO updateProductAttributes(
@@ -209,5 +226,60 @@ public class ProductService {
         ProductResponseDTO productResponseDTO = ProductMapper.toProductResponseDTO(savedProduct);
         productResponseDTO.setMessage("Update successfully");
         return productResponseDTO;
+    }
+
+    public List<Product> findAllByDirectionAndSortAttribute(
+            @NotNull Sort.Direction sortDirection,
+            ProductSort productSort
+    ) {
+        Sort sort;
+        if (sortDirection.isAscending()) {
+            // If Sort Direction is ASC
+            sort = Sort.by(Sort.Order.asc(productSort.getValue()));
+        } else {
+            // If Sort Direction is DESC
+            sort = Sort.by(Sort.Order.desc(productSort.getValue()));
+        }
+        return productRepository.findAll(sort);
+    }
+
+    public List<Product> findAll(Sort sort) {
+        return productRepository.findAll(sort);
+    }
+
+    private static List<Product> sort(
+            @NotNull ProductSort productSort,
+            List<Product> products,
+            Sort.Direction sortDirection
+    ) {
+        List<Product> sortedProducts = new ArrayList<>();
+        switch (productSort) {
+            case STOCK_QUANTITY -> // Sorted Products by lowest STOCK_QUANTITY (filter out null STOCK_QUANTITY)
+                    sortedProducts = products.stream()
+                            .filter(product -> product.getPrice() != null)
+                            .sorted(Comparator.comparing(Product::getStockQuantity))
+                            .collect(Collectors.toCollection(ArrayList::new));
+            case PRICE -> // Sorted Products by lowest PRICE (filter out null PRICE)
+                    sortedProducts = products.stream()
+                            .filter(product -> product.getPrice() != null)
+                            .sorted(Comparator.comparing(Product::getPrice))
+                            .collect(Collectors.toCollection(ArrayList::new));
+            case CREATED_DATE -> // Sorted Products by earliest CREATED_DATE (filter out null created dates)
+                    sortedProducts = products.stream()
+                            .filter(product -> product.getCreatedDate() != null)
+                            .sorted(Comparator.comparing(Product::getCreatedDate))
+                            .collect(Collectors.toCollection(ArrayList::new));
+            case LAST_MODIFIED_DATE -> // Sorted Products by earliest LAST_MODIFIED_DATE (filter out null modified dates)
+                    sortedProducts = products.stream()
+                            .filter(product -> product.getLastModifiedDate() != null)
+                            .sorted(Comparator.comparing(Product::getLastModifiedDate))
+                            .collect(Collectors.toCollection(ArrayList::new));
+        }
+
+        if (sortDirection.isDescending()) {
+            // Reverse the sorted Transaction if direction is DESC
+            Collections.reverse(sortedProducts);
+        }
+        return sortedProducts;
     }
 }

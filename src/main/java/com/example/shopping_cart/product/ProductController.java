@@ -31,26 +31,45 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(productResponseDTO);
     }
 
-    @GetMapping("/search/{product-name}")
-    public ResponseEntity<?> searchBy(
-            @PathVariable(value = "product-name", required = false)
-            String productName
-    ) {
-        List<ProductResponseDTO> productResponseDTO = productService.findBy(productName);
-        return ResponseEntity.status(HttpStatus.OK).body(productResponseDTO);
-    }
+//    @GetMapping("/search/{product-name}")
+//    public ResponseEntity<?> searchBy(
+//            @PathVariable(value = "product-name", required = false)
+//            String productName,
+//            @RequestParam(value = "page-size", defaultValue = "20")
+//            @Min(value = 1) @Max(value = 20)
+//            Integer pageSize,
+//            @RequestParam(value = "page-number", defaultValue = "1")
+//            @Min(value = 1)
+//            Integer pageNumber,
+//            @RequestParam(value = "sort", required = false, defaultValue = "created-date")
+//            String sortAttribute,
+//            @RequestParam(value = "direction", defaultValue = "desc") String direction
+//    ) {
+//        Page<ProductResponseDTO> productResponseDTO =
+//                productService.findAllByNameAndPageAndDirectionAndSortAttribute(
+//                        productName, pageNumber, pageSize, direction, sortAttribute
+//                );
+//        return ResponseEntity.status(HttpStatus.OK).body(productResponseDTO);
+//    }
 
     @GetMapping("/search")
-    public ResponseEntity<?> searchByProductNameAndPage(
-            @RequestParam(value = "product-name", required = false) String productName,
+    public ResponseEntity<?> searchByProductNameAndPageAndDirectionAndSortAttribute(
+            @RequestParam(value = "product-name", required = false)
+            String productName,
             @RequestParam(value = "page-size") @NotNull(message = "Page size must not be null")
             @Min(value = 1) @Max(value = 20)
             Integer pageSize,
             @RequestParam(value = "page-number") @NotNull(message = "Page number must not be null")
             @Min(value = 1)
-            Integer pageNumber
+            Integer pageNumber,
+            @RequestParam(value = "sort", required = false, defaultValue = "created-date")
+            String sortAttribute,
+            @RequestParam(value = "direction", defaultValue = "desc") String direction
     ) {
-        Page<ProductResponseDTO> productResponseDTOPage = productService.findByProductNameAndPage(productName, pageNumber, pageSize);
+        Page<ProductResponseDTO> productResponseDTOPage =
+                productService.findAllByNameAndPageAndDirectionAndSortAttribute(
+                        productName, pageNumber, pageSize, direction, sortAttribute
+                );
         return ResponseEntity.status(HttpStatus.OK).body(productResponseDTOPage);
     }
 
