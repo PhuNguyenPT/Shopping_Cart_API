@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 import org.jetbrains.annotations.NotNull;
@@ -64,21 +65,18 @@ public class OrderService {
 
         order.setTotalAmount(myUser.getShoppingCart().getTotalAmount());
 
-
-
         //Remove Everything in Cart
         List<ProductQuantity> shoppingCartQuantities = shoppingCart.getQuantities();
         for (ProductQuantity quantity : shoppingCartQuantities) {
             quantity.setShoppingCart(null);
-            quantityService.deleteById(quantity.getId());
+//            quantityService.deleteById(quantity.getId());
         }
         shoppingCartQuantities.clear();
         shoppingCart.setQuantities(shoppingCartQuantities);
+        shoppingCart.setTotalAmount(BigDecimal.ZERO);
         ShoppingCart savedShoppingCart = shoppingCartService.save(shoppingCart);
 
         myUser.setShoppingCart(savedShoppingCart);
-
-
 
         Order savedOrder = orderRepository.save(order);
 
@@ -92,9 +90,9 @@ public class OrderService {
 
     public Page<OrderResponseDTO> findAllThroughAuthentication (
             @NotNull Authentication authentication,
-            @NotNull OrderRequestFindDTO orderRequestFindDTO
+            Integer pageNumber,
+            Integer pageSize
     ) {
-        Pageable pageable = PageRequest.of(orderRequestFindDTO.getPageNumber(), orderRequestFindDTO.getPageSize());
         MyUser myUser = myUserService.findByUserAuthentication(authentication);
         List<Order> ordersOfMyUser = myUser.getOrders();
         if (ordersOfMyUser.isEmpty()) {
@@ -103,6 +101,13 @@ public class OrderService {
         List<OrderResponseDTO> orderResponseDTOList = ordersOfMyUser.stream()
                 .map(OrderMapper::toOrderResponseDTO)
                 .toList();
+
+        orderResponseDTOList.stream().forEach(orderResponseDTO -> orderResponseDTO.setMessage("Find order successfully"));
+
+        Pageable pageable = PageRequest.of(
+                pageNumber, pageSize
+        );
+
         return new PageImpl<>(
                 orderResponseDTOList,
                 pageable,
