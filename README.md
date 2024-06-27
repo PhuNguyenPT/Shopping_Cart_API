@@ -347,177 +347,149 @@ To set up the backend of the Book Social Network project, follow these steps:
        * `stockQuantity`
        * `description`
        * `categoryIds`
-       * `newCategoryNames` <br/><br/>
+       * `newCategoryNames` 
+       * `files` <br/><br/>
      + Attributes constraints for Product:
        * `name` : *NotNull*, *NotBlank*
        * `price` : *NotNull*, *DecimalMin(0.01)*
        * `stockQuantity` : *NotNull*, *Min(0)*
        * `description` : *Optional*
        * `categoryIds` : *Optional*
-       * `newCategoryNames` : *Optional* <br/><br/>
+       * `newCategoryNames` : *Optional*
+       * `files` : *NotNull* <br/><br/>
      + Attributes explaination for Product:
        * `name` : *product name*
        * `price` : *product price*
        * `stockQuantity` : *product stock quantity*
        * `description` : *product description*
        * `categoryIds` : *saved category ids from database*
-       * `newCategoryNames` : *new category names to save to database* <br/><br/>
+       * `newCategoryNames` : *new category names to save to database* 
+       * `files` : "multipart files" <br/><br/>
      + Response Body
 ```json
-{
+  {
     "message": "Save product successfully,with categories,with files",
-    "id": 4,
-    "name": "Product 8",
-    "price": 9876.0,
-    "stockQuantity": 30,
-    "description": "Product 8",
-    "createdDate": "2024-06-26T12:13:57.4699588+07:00",
+    "id": 7,
+    "name": "Example Product 6",
+    "price": 10.0,
+    "stockQuantity": 100,
+    "description": "This is an example description for product 5",
+    "createdDate": "2024-06-27T15:36:22.0399524+07:00",
     "lastModifiedDate": null,
-    "fileResponseDTOList": [
-        {
-          "message": null,
-          "id": 4,
-          "name": "hello.png",
-          "fileType": "image/png",
-          "size": 674315,
-          "fileByte": null
-        }
-    ],
     "categoryResponseDTOList": [
-        {
-          "id": 4,
-          "name": "hello",
-          "productResponseDTOList": null
-        }
+      {
+        "id": 1,
+        "name": "Electronics",
+        "productResponseDTOList": null
+      },
+      {
+        "id": 2,
+        "name": "Gadgets",
+        "productResponseDTOList": null
+      }
+    ],
+    "fileResponseDTOList": [
+      {
+        "message": null,
+        "id": 12,
+        "name": "environment.png",
+        "fileType": "image/png",
+        "size": 6710,
+        "fileByte": "byte"
+      }
     ]
-}
+  }
 ```
 
-2. GET: https://localhost/api/v1/products/search/{product-name} `(NON-USER)` #(DEPRECATED)# <br/> 
-   - Search Product by `product-name` <br/><br/>
-   - Response Body
-     + Content-Type = application/json <br/><br/>
-```json
-{
-    "message": "Search product successfully,with categories,with files",
-    "id": 4,
-    "name": "Product 8",
-    "price": 9876.0,
-    "stockQuantity": 30,
-    "description": "Product 8",
-    "createdDate": "2024-06-26T12:13:57.4699588+07:00",
-    "lastModifiedDate": null,
-    "fileResponseDTOList": [
-        {
-          "message": null,
-          "id": 4,
-          "name": "image.png",
-          "fileType": "image/png",
-          "size": 674315,
-          "fileByte": null
-        }
-    ],
-    "categoryResponseDTOList": [
-        {
-          "id": 4,
-          "name": "hello",
-          "productResponseDTOList": null
-        }
-    ]
-}
-```
-
-2. GET: https://localhost/api/v1/products/search?product-name={product-name}&page-size=20&page-number=1 `(NON-USER)` <br/> 
-   - Search Product by `product-name` with `page-size` and `page-number` <br/><br/>
+2. GET: https://localhost/api/v1/products/search?page-number=1&page-size=20&direction=asc&sort=stock-quantity&product-name=ex <br/>`(NON-USER)` <br/> 
+   - Search Product by `product-name` with `page-size`, `page-number`, `direction`, `sort` <br/><br/>
    - Request parameters:
      + Suported attributes for Product:
        * `product-name`
        * `page-size`
-       * `page-number` <br/><br/>
+       * `page-number` 
+       * `direction`
+       * `sort` <br/><br/>
        
      + Attributes constraints for Product:
-       * `product-name`
-       * `pageSize` : *NotNull*, *Min(1)*, *Max(20)
-       * `pageNumber` : *NotNull*, *Min(1)* <br/><br/>
+       * `product-name` : *Optional*
+       * `pageSize` : *DefaultValue(20)*, *Min(1)*, *Max(20)
+       * `pageNumber` : *DefaultValue(1)*, *Min(1)* 
+       * `direction` : *DefaultValue("desc")*
+       * `sort` : *DefaultValue("created-date")* <br/><br/>
 
      + Attributes explaination for Product:    
        * `product-name` : *product name*
        * `pageSize` : *page size*
-       * `pageNumber` : *page number* <br/><br/>     
+       * `pageNumber` : *page number* 
+       * `direction` : *direction* `("asc", "desc")`
+       * `sort` : *sort attribute* `("created-date", "last-modified-date", "amount")` <br/><br/>
        
    - Response body:    
      + Return ProductResponseDTO
 ```json
-  {
+{
   "content": [
     {
-      "message": "",
-      "id": 1,
-      "name": "Product1",
-      "price": 99,
-      "stockQuantity": 99,
-      "description": "Descript1",
-      "createdDate": "2024-06-01T12:13:57.4699588+07:00",
-      "lastModifiedDate": "",
+      "message": null,
+      "id": 2,
+      "name": "Example Product 2",
+      "price": 99.99,
+      "stockQuantity": 70,
+      "description": "This is an example description for product 2",
+      "createdDate": "2024-06-26T09:48:51.594422+07:00",
+      "lastModifiedDate": "2024-06-27T10:58:11.092636+07:00",
       "categoryResponseDTOList": [
         {
-          "id": "1",
-          "name": "NAME1",
-          "productResponseDTOList": ""
+          "id": 2,
+          "name": "Gadgets",
+          "productResponseDTOList": null
         },
         {
-          "id": "2",
-          "name": "Name2",
-          "productResponseDTOList": ""
+          "id": 1,
+          "name": "Electronics",
+          "productResponseDTOList": null
         }
       ],
       "fileResponseDTOList": [
         {
-          "message": "",
-          "id": 1,
-          "name": "image.png",
+          "message": null,
+          "id": 2,
+          "name": "environment.png",
           "fileType": "image/png",
-          "size": 2313,
+          "size": 6710,
           "fileByte": ""
         }
       ]
     },
     {
-      "message": "",
-      "id": 2,
-      "name": "Product2",
-      "price": 99,
-      "stockQuantity": 99,
-      "description": "",
-      "createdDate": "2024-06-26T12:13:57.4699588+07:00",
-      "lastModifiedDate": "2024-06-26T12:13:57.4699588+07:00",
+      "message": null,
+      "id": 1,
+      "name": "Example Product 1",
+      "price": 99.99,
+      "stockQuantity": 90,
+      "description": "This is an example description for product 1",
+      "createdDate": "2024-06-26T09:48:44.588635+07:00",
+      "lastModifiedDate": "2024-06-27T10:58:09.069474+07:00",
       "categoryResponseDTOList": [
         {
-          "id": 2,
-          "name": "name2",
+          "id": 1,
+          "name": "Electronics",
           "productResponseDTOList": null
         },
         {
-          "id": 3,
-          "name": "name3",
+          "id": 2,
+          "name": "Gadgets",
           "productResponseDTOList": null
         }
       ],
       "fileResponseDTOList": [
         {
-          "message": "",
-          "id": 2,
-          "name": "image.png",
+          "message": null,
+          "id": 1,
+          "name": "broadcasting.png",
           "fileType": "image/png",
-          "size": 2222,
-          "fileByte": ""
-        },
-        {
-          "message": "",
-          "id": 2,
-          "name": "image.png",
-          "fileType": "image/png",
-          "size": 2121,
+          "size": 54326,
           "fileByte": ""
         }
       ]
@@ -609,7 +581,7 @@ To set up the backend of the Book Social Network project, follow these steps:
 ```
 <br/><br/>
 
-2. POST: https://localhost/api/v1/categories/filter `(NON-USER)` <br/><br/>
+2. GET: https://localhost/api/v1/categories/filter `(NON-USER)` <br/><br/>
    - Filter Product(s) by CategoryRequestDTOList of `category-id` with `pageSize` and `pageNumber` <br/><br/>   
    - Request Body 
      + Content-Type = application/json <br/><br/>
@@ -618,21 +590,21 @@ To set up the backend of the Book Social Network project, follow these steps:
        * `pageSize` 
        * `pageNumber`
        * `categoryRequestDTOList` :
-         * `categoryId`  <br/><br/>
+       * `categoryId`  <br/><br/>
          
      + Attributes constraints for Category filter: 
        * `pageSize` : *NotNull*, *Min(1)*, *Max(20)
        * `pageNumber` : *NotNull*, *Min(1)*
        * `categoryRequestDTOList` :
-         * `categoryId` *NotNull*, *Min(1)*  <br/><br/>
+       * `categoryId` *NotNull*, *Min(1)*  <br/><br/>
          
      + Attributes explaination for Category filter: 
        * `pageSize` : maximum number of Products in a page
        * `pageNumber` : page number of which page
        * `categoryRequestDTOList` :
-         * `categoryId` : category id  <br/><br/>
+       * `categoryId` : category id  <br/><br/>
          
-     + Example Response Body Raw: <br/>
+  - Example Request Body Raw: <br/>
 ```json
    {
      "pageSize": 20,
@@ -647,6 +619,68 @@ To set up the backend of the Book Social Network project, follow these steps:
      ]
    }
 ```
+  - Example Response Body Raw:
+```json
+{
+    "namesMap": {
+        "1": "Electronics",
+        "2": "Gadgets"
+    },
+    "productsPage": {
+        "content": [
+            {
+                "message": null,
+                "id": 7,
+                "name": "Example Product 6",
+                "price": 10.0,
+                "stockQuantity": 100,
+                "description": "This is an example description for product 5",
+                "createdDate": null,
+                "lastModifiedDate": null,
+                "categoryResponseDTOList": null,
+                "fileResponseDTOList": [
+                    {
+                        "message": null,
+                        "id": 12,
+                        "name": null,
+                        "fileType": null,
+                        "size": null,
+                        "fileByte": ""
+                    }
+                ]
+            },
+          {
+            "message": null,
+            "id": 6,
+            "name": "Example Product 5",
+            "price": 10.0,
+            "stockQuantity": 100,
+            "description": "This is an example description for product 5",
+            "createdDate": null,
+            "lastModifiedDate": null,
+            "categoryResponseDTOList": null,
+            "fileResponseDTOList": [
+              {
+                "message": null,
+                "id": 11,
+                "name": null,
+                "fileType": null,
+                "size": null,
+                "fileByte": ""
+              }
+            ]
+          }
+        ],
+      "page": {
+        "size": 20,
+        "number": 1,
+        "totalElements": 22,
+        "totalPages": 2
+      }
+    }
+}
+```
+<br/>
 <br/><br/>
 
 ### Shopping Cart
@@ -690,104 +724,340 @@ To set up the backend of the Book Social Network project, follow these steps:
   + Suported attributes for Cart:
 ```json
 {
-    "message": "Upload cart successfully",
-    "cartId": 1,
-    "userId": "4b740504-11b6-4652-97dc-7f22c819990c",
-    "totalAmount": 167892.0,
-    "productQuantityResponseDTOList": [
-        {
-            "productQuantityId": 40,
-            "productId": 1,
-            "shoppingCartId": 1,
-            "orderId": null,
-            "quantity": 7,
-            "totalAmount": 69132.0,
-            "productResponseDTO": {
-                "message": null,
-                "id": null,
-                "name": "Product 1",
-                "price": 9876.0,
-                "stockQuantity": 30,
-                "description": "Product 1",
-                "createdDate": null,
-                "lastModifiedDate": null,
-                "fileResponseDTOList": [
-                    {
-                        "message": null,
-                        "id": 1,
-                        "name": null,
-                        "fileType": null,
-                        "size": null,
-                        "fileByte": null
-                    }
-                ],
-                "categoryResponseDTOList": [
-                  {
-                    "id": 3,
-                    "name": "3",
-                    "productResponseDTOList": null
-                  }
-                ]
-            }
-        }
+  "message": "Upload cart successfully",
+  "cartId": 2,
+  "userId": "beaaf22c-9049-4af4-b42b-489435ccb786",
+  "totalAmount": 4999.50,
+  "productQuantityResponseDTOList": [
+    {
+      "productQuantityId": 37,
+      "productId": 1,
+      "shoppingCartId": 2,
+      "orderId": null,
+      "quantity": 10,
+      "totalAmount": 999.90,
+      "productResponseDTO": {
+        "message": null,
+        "id": null,
+        "name": "Example Product 1",
+        "price": 99.99,
+        "stockQuantity": 90,
+        "description": "This is an example description for product 1",
+        "createdDate": null,
+        "lastModifiedDate": null,
+        "categoryResponseDTOList": [
+          {
+            "id": 1,
+            "name": "Electronics",
+            "productResponseDTOList": null
+          },
+          {
+            "id": 2,
+            "name": "Gadgets",
+            "productResponseDTOList": null
+          }
+        ],
+        "fileResponseDTOList": [
+          {
+            "message": null,
+            "id": 1,
+            "name": null,
+            "fileType": null,
+            "size": null,
+            "fileByte": ""
+          }
+        ]
+      }
+    },
+    {
+      "productQuantityId": 38,
+      "productId": 2,
+      "shoppingCartId": 2,
+      "orderId": null,
+      "quantity": 30,
+      "totalAmount": 2999.70,
+      "productResponseDTO": {
+        "message": null,
+        "id": null,
+        "name": "Example Product 2",
+        "price": 99.99,
+        "stockQuantity": 70,
+        "description": "This is an example description for product 2",
+        "createdDate": null,
+        "lastModifiedDate": null,
+        "categoryResponseDTOList": [
+          {
+            "id": 2,
+            "name": "Gadgets",
+            "productResponseDTOList": null
+          },
+          {
+            "id": 1,
+            "name": "Electronics",
+            "productResponseDTOList": null
+          }
+        ],
+        "fileResponseDTOList": [
+          {
+            "message": null,
+            "id": 2,
+            "name": null,
+            "fileType": null,
+            "size": null,
+            "fileByte": ""
+          }
+        ]
+      }
+    }
   ]
 }
 ```
 
 2. GET: https://localhost/api/v1/carts `(USER ONLY)` <br/><br/>
    - Retrieve `Shopping Cart` by User authenticated `Bearer Token` in `AUTHORIZATION` <br/><br/> 
+   - Request parameters
+     + Supported attributes for Product:
+       * `product-name`
+       * `page-size`
+       * `page-number` <br/><br/>
+
+     + Attributes constraints for Product:
+       * `product-name` : *Optional*
+       * `pageSize` : *DefaultValue(20)*, *Min(1)*, *Max(20)
+       * `pageNumber` : *DefaultValue(1)*, *Min(1)* <br/><br/>
+
+     + Attributes explanation for Product:
+       * `product-name` : *product name*
+       * `pageSize` : *page size*
+       * `pageNumber` : *page number* <br/><br/>
+
    - Response Body 
      + Content-Type = application/json  <br/><br/>
      + Suported attributes for Cart:
 ```json
 {
-    "message": "Search cart successfully",
-    "cartId": 1,
-    "userId": "4b740504-11b6-4652-97dc-7f22c819990c",
-    "totalAmount": 167892.0,
+  "message": "Find cart successfully",
+  "cartId": 2,
+  "userId": "beaaf22c-9049-4af4-b42b-489435ccb786",
+  "totalAmount": 4999.50,
+  "productQuantityResponseDTOPage": {
+    "content": [
+      {
+        "productQuantityId": 38,
+        "productId": 2,
+        "shoppingCartId": 2,
+        "orderId": null,
+        "quantity": 20,
+        "totalAmount": 1999.80,
+        "productResponseDTO": {
+          "message": null,
+          "id": null,
+          "name": "Example Product 2",
+          "price": 99.99,
+          "stockQuantity": 70,
+          "description": "This is an example description for product 2",
+          "createdDate": null,
+          "lastModifiedDate": null,
+          "categoryResponseDTOList": [
+            {
+              "id": 2,
+              "name": "Gadgets",
+              "productResponseDTOList": null
+            },
+            {
+              "id": 1,
+              "name": "Electronics",
+              "productResponseDTOList": null
+            }
+          ],
+          "fileResponseDTOList": [
+            {
+              "message": null,
+              "id": 2,
+              "name": null,
+              "fileType": null,
+              "size": null,
+              "fileByte": ""
+            }
+          ]
+        }
+      },
+      {
+        "productQuantityId": 39,
+        "productId": 3,
+        "shoppingCartId": 2,
+        "orderId": null,
+        "quantity": 30,
+        "totalAmount": 2999.70,
+        "productResponseDTO": {
+          "message": null,
+          "id": null,
+          "name": "Example Product 3",
+          "price": 99.99,
+          "stockQuantity": 90,
+          "description": "This is an example description for product 3",
+          "createdDate": null,
+          "lastModifiedDate": null,
+          "categoryResponseDTOList": [
+            {
+              "id": 1,
+              "name": "Electronics",
+              "productResponseDTOList": null
+            },
+            {
+              "id": 2,
+              "name": "Gadgets",
+              "productResponseDTOList": null
+            }
+          ],
+          "fileResponseDTOList": [
+            {
+              "message": null,
+              "id": 3,
+              "name": null,
+              "fileType": null,
+              "size": null,
+              "fileByte": ""
+            }
+          ]
+        }
+      }
+    ],
+    "page": {
+      "size": 20,
+      "number": 1,
+      "totalElements": 22,
+      "totalPages": 2
+    }
+  }
+}
+```
+3. PATCH: https://localhost/api/v1/carts/update `(USER-ONLY)` <br/><br/>
+  - Update the current shopping cart with `productId` exists in cart with `quantity` or add new `productId` if not exist 
+in cart
+- Request Body
+  + Content-Type = application/json <br/><br/>
+  + Suported attributes for Shopping Cart:
+    * `productId`
+    * `quantity` <br/><br/>
+
+  + Attributes constraints for Shopping Cart:
+    * `productId` : *NotNull*, *Min(1)*
+    * `quantity` : *NotNull*, *Min(1)* <br/><br/>
+
+  + Attributes explaination for Product:
+    * `productId` : *product id*
+    * `quantity` : *product quantity* <br/><br/>
+
+  + Example in Request Body Raw:
+```json
+[
+    {
+        "productId": 1,
+        "quantity": 20
+    },
+    {
+        "productId": 2,
+        "quantity": 20
+    }
+]
+```
+  - Example in Response Body Raw
+```json
+{
+    "message": "Upload cart successfully",
+    "cartId": 2,
+    "userId": "beaaf22c-9049-4af4-b42b-489435ccb786",
+    "totalAmount": 4999.50,
     "productQuantityResponseDTOList": [
         {
-            "productQuantityId": 40,
-            "productId": 1,
-            "shoppingCartId": 1,
+            "productQuantityId": 38,
+            "productId": 2,
+            "shoppingCartId": 2,
             "orderId": null,
-            "quantity": 7,
-            "totalAmount": 69132.0,
+            "quantity": 20,
+            "totalAmount": 1999.80,
             "productResponseDTO": {
                 "message": null,
                 "id": null,
-                "name": "Product 1",
-                "price": 9876.0,
-                "stockQuantity": 30,
-                "description": "Product 1",
+                "name": "Example Product 2",
+                "price": 99.99,
+                "stockQuantity": 70,
+                "description": "This is an example description for product 2",
                 "createdDate": null,
                 "lastModifiedDate": null,
+                "categoryResponseDTOList": [
+                    {
+                        "id": 2,
+                        "name": "Gadgets",
+                        "productResponseDTOList": null
+                    },
+                    {
+                        "id": 1,
+                        "name": "Electronics",
+                        "productResponseDTOList": null
+                    }
+                ],
                 "fileResponseDTOList": [
                     {
                         "message": null,
-                        "id": 1,
+                        "id": 2,
                         "name": null,
                         "fileType": null,
                         "size": null,
-                        "fileByte": null
+                        "fileByte": ""
                     }
-                ],
-                "categoryResponseDTOList": [
-                  {
-                    "id": 3,
-                    "name": "3",
-                    "productResponseDTOList": null
-                  }
                 ]
             }
+        },
+      {
+        "productQuantityId": 39,
+        "productId": 3,
+        "shoppingCartId": 2,
+        "orderId": null,
+        "quantity": 30,
+        "totalAmount": 2999.70,
+        "productResponseDTO": {
+          "message": null,
+          "id": null,
+          "name": "Example Product 3",
+          "price": 99.99,
+          "stockQuantity": 90,
+          "description": "This is an example description for product 3",
+          "createdDate": null,
+          "lastModifiedDate": null,
+          "categoryResponseDTOList": [
+            {
+              "id": 1,
+              "name": "Electronics",
+              "productResponseDTOList": null
+            },
+            {
+              "id": 2,
+              "name": "Gadgets",
+              "productResponseDTOList": null
+            }
+          ],
+          "fileResponseDTOList": [
+            {
+              "message": null,
+              "id": 3,
+              "name": null,
+              "fileType": null,
+              "size": null,
+              "fileByte": ""
+            }
+          ]
         }
-  ]
+      }
+    ]
 }
 ```
 
 ### Order
 1. POST: https://localhost/api/v1/orders/upload `(USER-ONLY)` <br/><br/>
-   - Make Order from the user data and their cart (identifying user through token, so using Bearer Token in Authorization before send)
+   - Make Order from the user data and their cart (identifying user through token, so using Bearer Token in Authorization 
+before send)
    - Request Body
      + Content-Type = application/json <br/><br/>
      + Example Request Body Raw:
@@ -1102,13 +1372,29 @@ To set up the backend of the Book Social Network project, follow these steps:
        * `transactionType` : *transaction type* (can be categorized as INTERNET_BANKING, CREDIT_CARD, CASH) 
        * `currency` : *currency* (can be categorized as VND, USD, EUR) <br/><br/>
        
-     + Example Response Body Raw:
+  - Example Request Body Raw:
 ```json
    {
       "orderId": 1,
       "transactionType": "CREDIT_CARD",
       "currency": "VND"
    }
+```
+
+  - Example in Response Body Raw
+```json
+{
+    "message": "Save transaction successfully",
+    "orderId": 1,
+    "transactionId": 9,
+    "amount": 4999.50,
+    "transactionType": "CREDIT_CARD",
+    "currency": "VND",
+    "createdDate": "2024-06-27T10:58:03.7601828+07:00",
+    "lastModifiedDate": "2024-06-27T10:58:12.6250555+07:00",
+    "createdBy": "test hello",
+    "lastModifiedBy": null
+}
 ```
 
 2. GET: https://localhost/api/v1/transactions?page-number=1&page-size=20&sort=amount&direction=asc (`USER-ONLY`)  <br/><br/> 
@@ -1131,7 +1417,43 @@ To set up the backend of the Book Social Network project, follow these steps:
        * `page-number` : *page number of which page*
        * `sort` : *sort by attributes* `("amount", "created-date", "last-modified-date")`
        * `direction` : *sort by direction* `("asc", "desc")` <br/><br/>
-
+  - Example Body Raw
+```json
+{
+    "content": [
+        {
+            "message": "Find successfully",
+            "orderId": 11,
+            "transactionId": 8,
+            "amount": 4999.50,
+            "transactionType": "CREDIT_CARD",
+            "currency": "VND",
+            "createdDate": "2024-06-27T10:56:32.567386+07:00",
+            "lastModifiedDate": null,
+            "createdBy": "test hello",
+            "lastModifiedBy": null
+        },
+        {
+            "message": "Find successfully",
+            "orderId": 12,
+            "transactionId": 9,
+            "amount": 4999.50,
+            "transactionType": "CREDIT_CARD",
+            "currency": "VND",
+            "createdDate": "2024-06-27T10:58:03.760183+07:00",
+            "lastModifiedDate": "2024-06-27T10:58:12.625056+07:00",
+            "createdBy": "test hello",
+            "lastModifiedBy": null
+        }
+    ],
+    "page": {
+      "size": 20,
+      "number": 1,
+      "totalElements": 22,
+      "totalPages": 2
+    }
+}
+```
 3. GET: https://localhost/api/v1/transactions/search/{user-id}?page-number=1&page-size=20&sort=amount&direction=desc (`ADMIN-ONLY`)  <br/><br/>
   - Find all Transaction(s) as `Page` of  a user with `user-id`, authenticated `Bearer Token` in `AUTHORIZATION`
   - Request Parameters
@@ -1155,6 +1477,44 @@ To set up the backend of the Book Social Network project, follow these steps:
       * `page-number` : *page number of which page*
       * `sort` : *sort by attributes* `("amount", "created-date", "last-modified-date")`
       * `direction` : *sort by direction* `("asc", "desc")` <br/><br/>
+      * 
+  - Example Response Body Raw
+```json
+{
+    "content": [
+        {
+            "message": "Find successfully",
+            "orderId": 11,
+            "transactionId": 8,
+            "amount": 4999.50,
+            "transactionType": "CREDIT_CARD",
+            "currency": "VND",
+            "createdDate": "2024-06-27T10:56:32.567386+07:00",
+            "lastModifiedDate": null,
+            "createdBy": "test hello",
+            "lastModifiedBy": null
+        },
+        {
+            "message": "Find successfully",
+            "orderId": 12,
+            "transactionId": 9,
+            "amount": 4999.50,
+            "transactionType": "CREDIT_CARD",
+            "currency": "VND",
+            "createdDate": "2024-06-27T10:58:03.760183+07:00",
+            "lastModifiedDate": "2024-06-27T10:58:12.625056+07:00",
+            "createdBy": "test hello",
+            "lastModifiedBy": null
+        }
+    ],
+    "page": {
+      "size": 20,
+      "number": 1,
+      "totalElements": 22,
+      "totalPages": 2
+    }
+}
+```
 
 4. GET: https://localhost/api/v1/transactions/search?page-number=1&page-size=20&sort=amount&direction=desc (`ADMIN-ONLY`)  <br/><br/>
 - Find all Transaction(s) as `Page` of  `All Users`, authenticated `Bearer Token` in `AUTHORIZATION`
@@ -1176,3 +1536,41 @@ To set up the backend of the Book Social Network project, follow these steps:
     * `page-number` : *page number of which page*
     * `sort` : *sort by attributes* `("amount", "created-date", "last-modified-date")`
     * `direction` : *sort by direction* `("asc", "desc")` <br/><br/>
+  - Example Body Raw
+```json
+```json
+{
+    "content": [
+        {
+            "message": "Find successfully",
+            "orderId": 11,
+            "transactionId": 8,
+            "amount": 4999.50,
+            "transactionType": "CREDIT_CARD",
+            "currency": "VND",
+            "createdDate": "2024-06-27T10:56:32.567386+07:00",
+            "lastModifiedDate": null,
+            "createdBy": "test hello",
+            "lastModifiedBy": null
+        },
+        {
+            "message": "Find successfully",
+            "orderId": 12,
+            "transactionId": 9,
+            "amount": 4999.50,
+            "transactionType": "CREDIT_CARD",
+            "currency": "VND",
+            "createdDate": "2024-06-27T10:58:03.760183+07:00",
+            "lastModifiedDate": "2024-06-27T10:58:12.625056+07:00",
+            "createdBy": "test hello",
+            "lastModifiedBy": null
+        }
+    ],
+    "page": {
+      "size": 20,
+      "number": 1,
+      "totalElements": 22,
+      "totalPages": 2
+    }
+}
+```
