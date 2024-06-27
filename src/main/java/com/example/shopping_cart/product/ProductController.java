@@ -56,10 +56,10 @@ public class ProductController {
     public ResponseEntity<?> searchByProductNameAndPageAndDirectionAndSortAttribute(
             @RequestParam(value = "product-name", required = false)
             String productName,
-            @RequestParam(value = "page-size") @NotNull(message = "Page size must not be null")
+            @RequestParam(value = "page-size", defaultValue = "20")
             @Min(value = 1) @Max(value = 20)
             Integer pageSize,
-            @RequestParam(value = "page-number") @NotNull(message = "Page number must not be null")
+            @RequestParam(value = "page-number", defaultValue = "1")
             @Min(value = 1)
             Integer pageNumber,
             @RequestParam(value = "sort", required = false, defaultValue = "created-date")

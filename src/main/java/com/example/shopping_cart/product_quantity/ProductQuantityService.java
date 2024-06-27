@@ -16,4 +16,8 @@ public class ProductQuantityService {
     public void deleteById(Long id) {
         productQuantityRepository.deleteById(id);
     }
+
+    public ProductQuantity save(ProductQuantity productQuantity) {
+        return productQuantityRepository.save(productQuantity);
+    }
 }

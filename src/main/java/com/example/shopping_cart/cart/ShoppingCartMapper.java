@@ -3,9 +3,11 @@ package com.example.shopping_cart.cart;
 import com.example.shopping_cart.product.Product;
 import com.example.shopping_cart.product_quantity.ProductQuantity;
 import com.example.shopping_cart.product_quantity.ProductQuantityMapper;
+import com.example.shopping_cart.product_quantity.ProductQuantityResponseDTO;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -72,18 +74,17 @@ public class ShoppingCartMapper {
                 .build();
     }
 
-    public static ShoppingCartResponseDTO toShoppingCartResponseDTOFind(
-            @NotNull ShoppingCart shoppingCart
+    public static ShoppingCartResponseDTOFind toShoppingCartResponseDTOFind(
+            @NotNull ShoppingCart shoppingCart,
+            Page<ProductQuantityResponseDTO> productQuantityResponseDTOPage
     ) {
-        return ShoppingCartResponseDTO.builder()
+        return ShoppingCartResponseDTOFind.builder()
                 .message("Find cart successfully")
                 .cartId(shoppingCart.getId())
                 .userId(shoppingCart.getUser().getId())
                 .totalAmount(shoppingCart.getTotalAmount())
-                .productQuantityResponseDTOList(
-                        shoppingCart.getQuantities().stream()
-                                .map(ProductQuantityMapper::toProductQuantityResponseDTOSave)
-                                .toList()
+                .productQuantityResponseDTOPage(
+                        productQuantityResponseDTOPage
                 )
                 .build();
     }
