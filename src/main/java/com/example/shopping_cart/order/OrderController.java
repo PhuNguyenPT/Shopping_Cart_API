@@ -3,6 +3,8 @@ package com.example.shopping_cart.order;
 
 import com.example.shopping_cart.user.MyUserResponseDTO;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,13 +23,19 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @PostMapping("")
+    @GetMapping("")
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<?> findAll(
             Authentication authentication,
-            @RequestBody OrderRequestFindDTO orderRequestFindDTO
+            @RequestParam(value = "page-size", defaultValue = "20")
+            @Min(value = 1) @Max(value = 20)
+            Integer pageSize,
+            @RequestParam(value = "page-number", defaultValue = "1")
+            @Min(value = 1)
+            Integer pageNumber
     ) {
-        Page<OrderResponseDTO> orderResponseDTOPage = orderService.findAllThroughAuthentication(authentication, orderRequestFindDTO);
+        Page<OrderResponseDTO> orderResponseDTOPage =
+                orderService.findAllThroughAuthentication(authentication, pageNumber, pageSize);
         return ResponseEntity.status(HttpStatus.OK).body(orderResponseDTOPage);
     }
 
