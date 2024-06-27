@@ -102,11 +102,11 @@ public class TransactionService {
         // Get user transactions
         List<Transaction> userTransactions = authenticatedUser.getTransactions();
 
-        TransactionSort sortEnumAttribute = TransactionSortMapper.toTransactionSortDefaultCreatedDate(sortAttribute);
+        TransactionSort transactionSort = TransactionSortMapper.toTransactionSortDefaultCreatedDate(sortAttribute);
         Sort.Direction sortDirection = SortDirectionMapper.toSortDirectionDefaultDesc(direction);
 
         List<Transaction> sortedTransaction = sort(
-                sortEnumAttribute,
+                transactionSort,
                 userTransactions,
                 sortDirection
         );
@@ -141,11 +141,11 @@ public class TransactionService {
         // Get Transactions from User
         List<Transaction> userTransactions = myUser.getTransactions();
 
-        TransactionSort sortEnumAttribute = TransactionSortMapper.toTransactionSortDefaultCreatedDate(sortAttribute);
+        TransactionSort transactionSort = TransactionSortMapper.toTransactionSortDefaultCreatedDate(sortAttribute);
         Sort.Direction sortDirection = SortDirectionMapper.toSortDirectionDefaultDesc(direction);
 
         List<Transaction> sortedTransaction = sort(
-                sortEnumAttribute,
+                transactionSort,
                 userTransactions,
                 sortDirection
         );
@@ -174,10 +174,10 @@ public class TransactionService {
             throw new EntityNotFoundException("Transaction(s) not found");
         }
 
-        TransactionSort sortEnumAttribute = TransactionSortMapper.toTransactionSortDefaultCreatedDate(sortAttribute);
+        TransactionSort transactionSort = TransactionSortMapper.toTransactionSortDefaultCreatedDate(sortAttribute);
         Sort.Direction sortDirection = SortDirectionMapper.toSortDirectionDefaultDesc(direction);
 
-        List<Transaction> sortedTransactions = findAllByDirectionAndSortAttribute(sortDirection, sortEnumAttribute);
+        List<Transaction> sortedTransactions = findAllByDirectionAndSortAttribute(sortDirection, transactionSort);
 
         List<TransactionResponseDTO> transactionResponseDTOList = sortedTransactions.stream()
                 .map(TransactionMapper::toTransactionResponseDTO)
@@ -204,53 +204,51 @@ public class TransactionService {
 
     public List<Transaction> findAllByDirectionAndSortAttribute(
             @NotNull Sort.Direction sortDirection,
-            TransactionSort sortEnumAttribute
+            TransactionSort transactionSort
     ) {
-        Sort sortByCreatedDateDesc;
+        Sort sort;
         if (sortDirection.isAscending()) {
             // If Sort Direction is ASC
-            sortByCreatedDateDesc = Sort.by(Sort.Order.asc(sortEnumAttribute.getValue()));
+            sort = Sort.by(Sort.Order.asc(transactionSort.getValue()));
         } else {
             // If Sort Direction is DESC
-            sortByCreatedDateDesc = Sort.by(Sort.Order.desc(sortEnumAttribute.getValue()));
+            sort = Sort.by(Sort.Order.desc(transactionSort.getValue()));
         }
-        return transactionRepository.findAll(sortByCreatedDateDesc);
+        return transactionRepository.findAll(sort);
+    }
+
+    public List<Transaction> findAll(Sort sort) {
+        return transactionRepository.findAll(sort);
     }
 
     private static List<Transaction> sort(
-            @NotNull TransactionSort sortAttribute,
+            @NotNull TransactionSort transactionSort,
             List<Transaction> transactions,
-            Sort.Direction direction
+            Sort.Direction sortDirection
     ) {
-        List<Transaction> sortedTransaction = new ArrayList<>();
-        switch (sortAttribute) {
-            case AMOUNT -> {
-                // Sorted Transactions by lowest AMOUNT (filter out null amounts)
-                sortedTransaction = transactions.stream()
-                        .filter(transaction -> transaction.getAmount() != null)
-                        .sorted(Comparator.comparing(Transaction::getAmount))
-                        .collect(Collectors.toCollection(ArrayList::new));
-            }
-            case CREATED_DATE -> {
-                // Sorted Transactions by earliest CREATED_DATE (filter out null created dates)
-                sortedTransaction = transactions.stream()
-                        .filter(transaction -> transaction.getCreatedDate() != null)
-                        .sorted(Comparator.comparing(Transaction::getCreatedDate))
-                        .collect(Collectors.toCollection(ArrayList::new));
-            }
-            case LAST_MODIFIED_DATE -> {
-                // Sorted Transactions by earliest LAST_MODIFIED_DATE (filter out null modified dates)
-                sortedTransaction = transactions.stream()
-                        .filter(transaction -> transaction.getLastModifiedDate() != null)
-                        .sorted(Comparator.comparing(Transaction::getLastModifiedDate))
-                        .collect(Collectors.toCollection(ArrayList::new));
-            }
+        List<Transaction> sortedTransactions = new ArrayList<>();
+        switch (transactionSort) {
+            case AMOUNT -> // Sorted Transactions by lowest AMOUNT (filter out null amounts)
+                    sortedTransactions = transactions.stream()
+                            .filter(transaction -> transaction.getAmount() != null)
+                            .sorted(Comparator.comparing(Transaction::getAmount))
+                            .collect(Collectors.toCollection(ArrayList::new));
+            case CREATED_DATE -> // Sorted Transactions by earliest CREATED_DATE (filter out null created dates)
+                    sortedTransactions = transactions.stream()
+                            .filter(transaction -> transaction.getCreatedDate() != null)
+                            .sorted(Comparator.comparing(Transaction::getCreatedDate))
+                            .collect(Collectors.toCollection(ArrayList::new));
+            case LAST_MODIFIED_DATE -> // Sorted Transactions by earliest LAST_MODIFIED_DATE (filter out null modified dates)
+                    sortedTransactions = transactions.stream()
+                            .filter(transaction -> transaction.getLastModifiedDate() != null)
+                            .sorted(Comparator.comparing(Transaction::getLastModifiedDate))
+                            .collect(Collectors.toCollection(ArrayList::new));
         }
         
-        if (direction.isDescending()) {
+        if (sortDirection.isDescending()) {
             // Reverse the sorted Transaction if direction is DESC
-            Collections.reverse(sortedTransaction);
+            Collections.reverse(sortedTransactions);
         }
-        return sortedTransaction;
+        return sortedTransactions;
     }
 }
