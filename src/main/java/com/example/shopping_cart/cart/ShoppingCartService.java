@@ -1,8 +1,6 @@
 package com.example.shopping_cart.cart;
 
 import com.example.shopping_cart.product.Product;
-import com.example.shopping_cart.product.ProductMapper;
-import com.example.shopping_cart.product.ProductResponseDTO;
 import com.example.shopping_cart.product.ProductService;
 import com.example.shopping_cart.product_quantity.*;
 import com.example.shopping_cart.user.MyUser;
