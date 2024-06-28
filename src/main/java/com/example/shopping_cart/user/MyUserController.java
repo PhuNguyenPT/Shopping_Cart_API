@@ -2,7 +2,6 @@ package com.example.shopping_cart.user;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -20,23 +19,18 @@ public class MyUserController {
 
     private final MyUserService myUserService;
 
-    @NotNull
     @GetMapping("")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> findAll(
-//            @RequestBody MyUserRequestDTO myUserRequestDTO
-            @RequestParam(value = "page-size")
-            @NotNull(message = "Page size must not be null")
+            @RequestParam(value = "page-size", defaultValue = "20")
             @Min(value = 1) @Max(value = 20)
             Integer pageSize,
-            @RequestParam(value = "page-number")
-            @NotNull(message = "Page index must not be null")
+            @RequestParam(value = "page-number", defaultValue = "1")
             @Min(value = 1)
             Integer pageNumber
     ) {
         Page<MyUserResponseDTO> myUsersMyUserResponseDTOPage =
                 myUserService.findAll(pageNumber, pageSize);
-//                myUserService.findAll(myUserRequestDTO);
         return ResponseEntity.status(HttpStatus.OK).body(myUsersMyUserResponseDTOPage);
     }
 
@@ -56,6 +50,19 @@ public class MyUserController {
     ) {
         MyUserResponseDTO myUserResponseDTO =
                 myUserService.findUserAttributesByUserAuthentication(authentication);
+        return ResponseEntity.status(HttpStatus.OK).body(myUserResponseDTO);
+    }
+
+    @PatchMapping("/update")
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity<?> updateUserAttributes(
+            Authentication authentication,
+            @RequestBody MyUserRequestDTO myUserRequestDTO
+    ) {
+        MyUserResponseDTO myUserResponseDTO =
+                myUserService.updateUserAttributesByAuthentication(
+                        authentication, myUserRequestDTO
+                );
         return ResponseEntity.status(HttpStatus.OK).body(myUserResponseDTO);
     }
 }
