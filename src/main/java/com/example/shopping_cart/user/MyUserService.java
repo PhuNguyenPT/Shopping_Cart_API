@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -79,10 +80,12 @@ public class MyUserService {
         return MyUserMapper.toMyUserResponseDTOFind(authenticatedUser);
     }
 
+    @Transactional
     public MyUser save(MyUser myUser) {
         return myUserRepository.save(myUser);
     }
 
+    @Transactional
     public MyUserResponseDTO updateUserAttributesByAuthentication(
             Authentication authentication,
             @NotNull MyUserRequestDTO myUserRequestDTO

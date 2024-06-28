@@ -45,6 +45,27 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body(orderResponseDTOPage);
     }
 
+    @GetMapping("/deliver")
+    @PreAuthorize("hasAuthority('DELIVERER')")
+    public ResponseEntity<?> findAllForDeliverer(
+            @RequestParam(value = "page-size", defaultValue = "20")
+            @Min(value = 1) @Max(value = 20)
+            Integer pageSize,
+            @RequestParam(value = "page-number", defaultValue = "1")
+            @Min(value = 1)
+            Integer pageNumber,
+            @RequestParam(value = "sort", required = false, defaultValue = "createdDate")
+            String sortAttribute,
+            @RequestParam(value = "direction", defaultValue = "desc")
+            String direction
+    ) {
+        Page<OrderResponseDTODeliverer> orderResponseDTODelivererPagePage =
+                orderService.findAllOrderForDeliverer(
+                        pageNumber, pageSize, sortAttribute, direction
+                );
+        return ResponseEntity.status(HttpStatus.OK).body(orderResponseDTODelivererPagePage);
+    }
+
     @PostMapping("/upload")
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<?> uploadOrder(
@@ -89,7 +110,28 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body(orderResponseDTO);
     }
 
-    @PatchMapping("/update-status/{order-id}")
+    @GetMapping("/deliver/filter")
+    @PreAuthorize("hasAuthority('DELIVERER')")
+    public ResponseEntity<?> filterByStatusForDeliverer(
+            @RequestParam(value = "page-size", defaultValue = "20")
+            @Min(value = 1) @Max(value = 20)
+            Integer pageSize,
+            @RequestParam(value = "page-number", defaultValue = "1")
+            @Min(value = 1)
+            Integer pageNumber,
+            @RequestParam(value = "status", required = false, defaultValue = "paid")
+            String statusAttribute,
+            @RequestParam(value = "direction", defaultValue = "desc")
+            String direction
+    ) {
+        Page<OrderResponseDTODeliverer> orderResponseDTODelivererPagePage =
+                orderService.filterOrderByStatusForDeliverer(
+                        pageNumber, pageSize, statusAttribute, direction
+                );
+        return ResponseEntity.status(HttpStatus.OK).body(orderResponseDTODelivererPagePage);
+    }
+
+    @PatchMapping("/deliver/update-status/{order-id}")
     @PreAuthorize("hasAuthority('DELIVERER')")
     public ResponseEntity<?> updateStatusOrder(
             @PathVariable("order-id") Long orderId,
@@ -98,7 +140,7 @@ public class OrderController {
             @NotNull(message = "Status must not null")
             String status
     ) {
-        OrderResponseDTO orderResponseDTO = orderService.updateStatusOrder(orderId, status);
-        return ResponseEntity.status(HttpStatus.OK).body(orderResponseDTO);
+        OrderResponseDTODeliverer orderResponseDTODeliverer = orderService.updateStatusOrder(orderId, status);
+        return ResponseEntity.status(HttpStatus.OK).body(orderResponseDTODeliverer);
     }
 }

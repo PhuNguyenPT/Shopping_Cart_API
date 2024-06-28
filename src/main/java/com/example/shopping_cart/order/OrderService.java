@@ -7,8 +7,6 @@ import com.example.shopping_cart.product_quantity.ProductQuantity;
 import com.example.shopping_cart.product_quantity.ProductQuantityService;
 import com.example.shopping_cart.address.AddressMapper;
 import com.example.shopping_cart.sort.SortDirectionMapper;
-import com.example.shopping_cart.transaction.Transaction;
-import com.example.shopping_cart.transaction.TransactionSort;
 import com.example.shopping_cart.user.MyUser;
 import com.example.shopping_cart.user.MyUserService;
 import jakarta.persistence.EntityNotFoundException;
@@ -110,6 +108,7 @@ public class OrderService {
                 ordersOfMyUser,
                 sortDirection
         );
+
         List<OrderResponseDTO> orderResponseDTOList = sortedOrder.stream()
                 .map(OrderMapper::toOrderResponseDTO)
                 .peek(orderResponseDTO -> orderResponseDTO.setMessage("Find order successfully"))
@@ -232,7 +231,8 @@ public class OrderService {
         return sortedOrder;
     }
 
-    public OrderResponseDTO updateStatusOrder(
+    @Transactional
+    public OrderResponseDTODeliverer updateStatusOrder(
             Long orderId,
             @NotNull String status
     ) {
@@ -245,8 +245,100 @@ public class OrderService {
             throw new IllegalArgumentException("Invalid status transition " + status);
         }
         Order updateOrder = orderRepository.save(order);
-        OrderResponseDTO orderResponseDTO = OrderMapper.toOrderResponseDTO(updateOrder);
-        orderResponseDTO.setMessage("Update status successfully");
-        return orderResponseDTO;
+        OrderResponseDTODeliverer orderResponseDTODeliverer = OrderMapper.toOrderResponseDTODeliverer(updateOrder);
+        orderResponseDTODeliverer.setMessage("Update status successfully");
+        return orderResponseDTODeliverer;
+    }
+
+    public Page<OrderResponseDTODeliverer> findAllOrderForDeliverer(
+            @NotNull
+            Integer pageNumber,
+            Integer pageSize,
+            String sortAttribute,
+            String direction
+    ) {
+        Sort sort = Sort.by(Sort.Order.desc(OrderSort.CREATED_DATE.getValue()));
+        List<Order> ordersForDeliverer = orderRepository.findAll(sort);
+        if (ordersForDeliverer.isEmpty()) {
+            throw new EntityNotFoundException("Order(s) not found");
+        }
+        ordersForDeliverer = ordersForDeliverer.stream()
+                .filter(order -> !order.getStatus().equals(Status.PROCESSING.name()))
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        Sort.Direction sortDirection = SortDirectionMapper.toSortDirectionDefaultDesc(direction);
+        if (sortDirection.isAscending()) {
+            Collections.reverse(ordersForDeliverer);
+        }
+
+        List<OrderResponseDTODeliverer> orderResponseDTODelivererListList = ordersForDeliverer.stream()
+                .map(OrderMapper::toOrderResponseDTODeliverer)
+                .peek(orderResponseDTO -> orderResponseDTO.setMessage("Find order successfully"))
+                .toList();
+
+        Pageable pageable = PageRequest.of(
+                pageNumber,
+                pageSize
+        );
+
+        return new PageImpl<>(
+                orderResponseDTODelivererListList,
+                pageable,
+                orderResponseDTODelivererListList.size()
+        );
+    }
+    public Page<OrderResponseDTODeliverer> filterOrderByStatusForDeliverer(
+            @NotNull
+            Integer pageNumber,
+            Integer pageSize,
+            String statusAttribute,
+            String direction
+    ) {
+        Sort sort = Sort.by(Sort.Order.desc(OrderSort.CREATED_DATE.getValue()));
+        List<Order> ordersForDeliverer = orderRepository.findAll(sort);
+        if (ordersForDeliverer.isEmpty()) {
+            throw new EntityNotFoundException("Order(s) not found");
+        }
+        ordersForDeliverer = ordersForDeliverer.stream()
+                .filter(order -> !order.getStatus().equals(Status.PROCESSING.name()))
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        Sort.Direction sortDirection = SortDirectionMapper.toSortDirectionDefaultDesc(direction);
+        if (sortDirection.isAscending()) {
+            Collections.reverse(ordersForDeliverer);
+        }
+        if (statusAttribute.equalsIgnoreCase(Status.PAID.getValue())) {
+            ordersForDeliverer = ordersForDeliverer.stream()
+                    .filter(order -> order.getStatus().equals(Status.PAID.name()))
+                    .collect(Collectors.toCollection(ArrayList::new));
+        } else if (statusAttribute.equalsIgnoreCase(Status.DELIVERING.getValue())) {
+            ordersForDeliverer = ordersForDeliverer.stream()
+                    .filter(order -> order.getStatus().equals(Status.DELIVERING.name()))
+                    .collect(Collectors.toCollection(ArrayList::new));
+        } else if (statusAttribute.equalsIgnoreCase(Status.COMPLETE.getValue())) {
+            ordersForDeliverer = ordersForDeliverer.stream()
+                    .filter(order -> order.getStatus().equals(Status.COMPLETE.name()))
+                    .collect(Collectors.toCollection(ArrayList::new));
+        } else {
+            ordersForDeliverer = ordersForDeliverer.stream()
+                    .filter(order -> order.getStatus().equals(Status.PAID.name()))
+                    .collect(Collectors.toCollection(ArrayList::new));
+        }
+
+        List<OrderResponseDTODeliverer> orderResponseDTODelivererListList = ordersForDeliverer.stream()
+                .map(OrderMapper::toOrderResponseDTODeliverer)
+                .peek(orderResponseDTO -> orderResponseDTO.setMessage("Find order successfully"))
+                .toList();
+
+        Pageable pageable = PageRequest.of(
+                pageNumber,
+                pageSize
+        );
+
+        return new PageImpl<>(
+                orderResponseDTODelivererListList,
+                pageable,
+                orderResponseDTODelivererListList.size()
+        );
     }
 }

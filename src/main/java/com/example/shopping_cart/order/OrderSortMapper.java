@@ -15,6 +15,8 @@ public class OrderSortMapper {
             return OrderSort.LAST_MODIFIED_DATE;
         } else if (sortAttribute.equalsIgnoreCase("amount")) {
             return OrderSort.AMOUNT;
+        } else if (sortAttribute.equalsIgnoreCase("status")) {
+            return OrderSort.STATUS;
         } else {
             return OrderSort.CREATED_DATE;
         }

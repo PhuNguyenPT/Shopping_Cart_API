@@ -64,4 +64,19 @@ public class OrderMapper {
                 .anotherField(orderRequestDTO.getAnotherField())
                 .build();
     }
+
+    public static OrderResponseDTODeliverer toOrderResponseDTODeliverer(
+            @NotNull Order order
+    ) {
+        return OrderResponseDTODeliverer.builder()
+                .id(order.getId())
+                .fullName(order.getUser().getFullName())
+                .status(order.getStatus())
+                .totalAmount(order.getTotalAmount())
+                .deliveryDate(order.getDeliveryDate())
+                .orderInfo(order.getOrderInfo())
+                .phoneNumber(order.getUser().getPhoneNumber())
+                .addressResponseDTO(AddressMapper.toAddressResponseDTO(order.getUser().getAddress()))
+                .build();
+    }
 }

@@ -6,7 +6,8 @@ import lombok.Getter;
 public enum OrderSort {
     AMOUNT("amount"),
     CREATED_DATE("createdDate"),
-    LAST_MODIFIED_DATE("lastModifiedDate");
+    LAST_MODIFIED_DATE("lastModifiedDate"),
+    STATUS("status");
 
     private final String value;
 
