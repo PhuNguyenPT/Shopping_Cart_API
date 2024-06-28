@@ -85,6 +85,7 @@ public class ShoppingCartService {
         return ShoppingCartMapper.toShoppingCartResponseDTO(savedUpdatedShoppingCart);
     }
 
+    @Transactional
     public ShoppingCart save(ShoppingCart shoppingCart) {
         return shoppingCartRepository.save(shoppingCart);
     }
@@ -120,8 +121,7 @@ public class ShoppingCartService {
         return ShoppingCartMapper.toShoppingCartResponseDTOFind(shoppingCart, productQuantityResponseDTOPage);
     }
 
-
-
+    @Transactional
     public ShoppingCartResponseDTO updateBy(
             Authentication authentication,
             List<ShoppingCartRequestDTO> shoppingCartRequestDTOList

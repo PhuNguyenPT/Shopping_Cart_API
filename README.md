@@ -1353,7 +1353,7 @@ before send)
 5. DELETE: https://localhost/api/v1/orders/delete/{order-id} `(ADMIN ONLY)` <br/><br/>
    - Delete Order by `order-id` <br/><br/>
 
-6. PATCH: https://localhost/api/v1/orders/update-status/{order-id} `(DELIVERER-ONLY)` <br/><br/>
+6. PATCH: https://localhost/api/v1/orders/deliver/update-status/{order-id} `(DELIVERER-ONLY)` <br/><br/>
   - Update Order Status according to `order-id` <br/><br/>
   - Request Body
     + Content-Type = multipart/form-data <br/><br/>
@@ -1371,55 +1371,44 @@ before send)
 
 ```json
 {
-  "message": "Update order 29 successfully.",
-  "id": 29,
-  "name": "admin@email.com",
-  "totalAmount": 167892.00,
+  "message": "Update status successfully",
+  "id": 6,
+  "fullName": "first last",
+  "totalAmount": 177768.00,
   "status": "DELIVERING",
-  "deliveryDate": "2024-06-26T10:46:19.753213",
+  "deliveryDate": "2024-06-28T15:26:39.001256",
   "orderInfo": "good",
-  "anotherField": "good",
-  "productQuantityResponseDTOList": [
-    {
-      "productQuantityId": 40,
-      "productId": 1,
-      "shoppingCartId": null,
-      "orderId": 29,
-      "quantity": 7,
-      "totalAmount": 69132.00,
-      "productResponseDTO": {
-        "message": null,
-        "id": null,
-        "name": "Product 1",
-        "price": 9876.0,
-        "stockQuantity": null,
-        "description": "Product 1",
-        "createdDate": null,
-        "lastModifiedDate": null,
-        "fileResponseDTOList": [
-              {
-                "message": null,
-                "id": 1,
-                "name": null,
-                "fileType": null,
-                "size": null,
-                "fileByte": null
-              }
-          ],
-          "categoryResponseDTOList": null
-        }
-      }
-    ],
-    "phoneNumber": 987654321,
-    "addressResponseDTO": {
-      "houseNumber": "34",
-      "streetName": "street",
-      "wardName": "ward",
-      "city": "city",
-      "zipCode": "zipcode"
+  "phoneNumber": 987654321,
+  "addressResponseDTO": {
+    "houseNumber": "34",
+    "streetName": "street",
+    "wardName": "ward",
+    "city": "city",
+    "zipCode": "zipcode"
   }
 }
 ```
+7. GET: https://localhost/api/v1/transactions?page-number=1&page-size=20&sort=amount&direction=asc (`USER-ONLY`)  <br/><br/>
+  - Find all Transaction(s) as Page, of User authenticated `Bearer Token` in `AUTHORIZATION`
+  - Request Parameters
+    + Supported attributes for Transaction finding:
+      * `page-size`
+      * `page-number`
+      * `sort`
+      * `direction` <br/><br/>
+
+    + Attributes constraints for Transaction finding:
+      * `page-size` : *DefaultValue(20)*, *Min(1)*, *Max(20)
+      * `page-number` : *DefaultValue(1)*, *Min(1)*
+      * `sort` : *Optional*
+      * `direction` : *DefaultValue("desc")* <br/><br/>
+
+    + Attributes explanation for Transaction finding:
+      * `page-size` : *maximum number of Products in a page*
+      * `page-number` : *page number of which page*
+      * `sort` : *sort by attributes* `("amount", "created-date", "last-modified-date")`
+      * `direction` : *sort by direction* `("asc", "desc")` <br/><br/>
+- Example Body Raw
 
 ### Transaction
 1. POST: https://localhost/api/v1/transactions/upload (`USER-ONLY`) <br/><br/>

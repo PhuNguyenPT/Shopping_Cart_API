@@ -36,6 +36,7 @@ public class ProductService {
                 .orElse(null);
     }
 
+    @Transactional
     public Product save(Product product) {
         return productRepository.save(product);
     }
@@ -211,6 +212,7 @@ public class ProductService {
         return ProductMapper.toProductResponseDTOCreateFiles(product, fileResponseDTOList);
     }
 
+    @Transactional
     public ProductResponseDTO updateProductAttributes(
             Long id,
             @NotNull ProductUpdateDTO productUpdateDTO

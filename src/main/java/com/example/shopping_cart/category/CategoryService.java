@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -62,6 +63,7 @@ public class CategoryService {
         return categories;
     }
 
+    @Transactional
     public List<Category> saveAll(List<Category> categories) {
         return categoryRepository.saveAll(categories);
     }

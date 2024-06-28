@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,6 +38,7 @@ public class FileService {
 //        }
 //    }
 
+    @Transactional
     public ResponseEntity<?> saveFiles(
             @NotNull List<MultipartFile> multipartFiles
     ) {
@@ -55,6 +57,7 @@ public class FileService {
         );
     }
 
+    @Transactional
     public List<FileResponseDTO> saveFilesByProduct(
             Product product,
             @NotNull List<MultipartFile> multipartFiles) {
@@ -97,6 +100,7 @@ public class FileService {
         }
     }
 
+    @Transactional
     public ResponseEntity<?> deleteFile(String fileName) {
         if (fileName == null || fileName.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("File name must not be empty.");
@@ -115,6 +119,7 @@ public class FileService {
     }
 
 
+    @Transactional
     public FileResponseDTO updateFile(
             MultipartFile multipartFile,
             Product product,
