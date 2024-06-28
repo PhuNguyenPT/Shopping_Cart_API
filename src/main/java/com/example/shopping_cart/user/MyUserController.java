@@ -2,7 +2,6 @@ package com.example.shopping_cart.user;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -23,7 +22,6 @@ public class MyUserController {
     @GetMapping("")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> findAll(
-//            @RequestBody MyUserRequestDTO myUserRequestDTO
             @RequestParam(value = "page-size", defaultValue = "20")
             @Min(value = 1) @Max(value = 20)
             Integer pageSize,
@@ -33,7 +31,6 @@ public class MyUserController {
     ) {
         Page<MyUserResponseDTO> myUsersMyUserResponseDTOPage =
                 myUserService.findAll(pageNumber, pageSize);
-//                myUserService.findAll(myUserRequestDTO);
         return ResponseEntity.status(HttpStatus.OK).body(myUsersMyUserResponseDTOPage);
     }
 
