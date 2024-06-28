@@ -58,7 +58,7 @@ public class AuthenticationService {
         sendValidationEmail(user);
     }
 
-    private void sendValidationEmail(MyUser user) {
+    public void sendValidationEmail(MyUser user) {
         var newToken = generateAndSaveActivationToken(user);
         // send email
         try {
