@@ -1,5 +1,7 @@
 package com.example.shopping_cart.user;
 
+import com.example.shopping_cart.address.AddressMapper;
+import com.example.shopping_cart.authentication.AuthenticationService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +20,7 @@ import java.util.UUID;
 public class MyUserService {
 
     private final MyUserRepository myUserRepository;
+    private final AuthenticationService authenticationService;
 
     public Page<MyUserResponseDTO> findAll(
             Integer pageNumber,
@@ -78,5 +81,46 @@ public class MyUserService {
 
     public MyUser save(MyUser myUser) {
         return myUserRepository.save(myUser);
+    }
+
+    public MyUserResponseDTO updateUserAttributesByAuthentication(
+            Authentication authentication,
+            @NotNull MyUserRequestDTO myUserRequestDTO
+    ) {
+        MyUser authenticatedUser = findByUserAuthentication(authentication);
+        if (myUserRequestDTO.getFirstName() != null) {
+            authenticatedUser.setFirstName(myUserRequestDTO.getFirstName());
+        }
+        if (myUserRequestDTO.getLastName() != null) {
+            authenticatedUser.setLastName(myUserRequestDTO.getLastName());
+        }
+        if (myUserRequestDTO.getFirstName() != null &&
+                myUserRequestDTO.getLastName() != null) {
+            authenticatedUser.setLastModifyBy(authenticatedUser.getFullName());
+        }
+        if (myUserRequestDTO.getPhoneNumber() != null) {
+            authenticatedUser.setPhoneNumber(myUserRequestDTO.getPhoneNumber());
+        }
+        if (myUserRequestDTO.getDateOfBirth() != null) {
+            authenticatedUser.setDateOfBirth(myUserRequestDTO.getDateOfBirth());
+        }
+        if (myUserRequestDTO.getAddressRequestDTO() != null) {
+            authenticatedUser.setAddress(AddressMapper.toAddress(myUserRequestDTO.getAddressRequestDTO()));
+        }
+        if (myUserRequestDTO.getEmail() != null &&
+                !myUserRequestDTO.getEmail().equalsIgnoreCase(authenticatedUser.getEmail())
+        ) {
+            authenticatedUser.setEnabled(false);
+            authenticationService.sendValidationEmail(authenticatedUser);
+            authenticatedUser.setEmail(myUserRequestDTO.getEmail());
+        }
+
+        MyUserResponseDTO myUserResponseDTO = MyUserMapper.toMyUserResponseDTO(authenticatedUser);
+        if (!authenticatedUser.isEnabled()) {
+            myUserResponseDTO.setMessage("Please activate your account");
+        } else {
+            myUserResponseDTO.setMessage("Update successfully");
+        }
+        return myUserResponseDTO;
     }
 }
