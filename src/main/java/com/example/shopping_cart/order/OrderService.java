@@ -231,4 +231,22 @@ public class OrderService {
         }
         return sortedOrder;
     }
+
+    public OrderResponseDTO updateStatusOrder(
+            Long orderId,
+            @NotNull String status
+    ) {
+        Order order = this.findById(orderId);
+        if (status.equals(Status.DELIVERING.getValue()) && order.getStatus().equals(Status.PAID.name())){
+            order.setStatus(OrderStatusMapper.toOrderStatus(status).name());
+        } else if (status.equals(Status.COMPLETE.getValue()) && order.getStatus().equals(Status.DELIVERING.name())){
+            order.setStatus(OrderStatusMapper.toOrderStatus(status).name());
+        } else {
+            throw new IllegalArgumentException("Invalid status transition " + status);
+        }
+        Order updateOrder = orderRepository.save(order);
+        OrderResponseDTO orderResponseDTO = OrderMapper.toOrderResponseDTO(updateOrder);
+        orderResponseDTO.setMessage("Update status successfully");
+        return orderResponseDTO;
+    }
 }

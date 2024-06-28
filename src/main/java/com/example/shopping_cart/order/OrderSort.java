@@ -11,5 +11,4 @@ public enum OrderSort {
     private final String value;
 
     OrderSort(String value) { this.value = value; }
-
 }
