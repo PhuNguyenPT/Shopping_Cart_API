@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 
+import javax.validation.constraints.NotBlank;
 
 
 @RestController
@@ -77,7 +78,7 @@ public class OrderController {
     }
 
 
-    @PatchMapping("update/{order-id}")
+    @PatchMapping("/update/{order-id}")
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<?> updateOrder(
             Authentication authentication,
@@ -85,6 +86,19 @@ public class OrderController {
             @RequestBody @Valid OrderUpdateDTO orderUpdateDTO
     ) {
         OrderResponseDTO orderResponseDTO = orderService.updateOrderAttributes(authentication, orderId, orderUpdateDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(orderResponseDTO);
+    }
+
+    @PatchMapping("/update-status/{order-id}")
+    @PreAuthorize("hasAuthority('DELIVERER')")
+    public ResponseEntity<?> updateStatusOrder(
+            @PathVariable("order-id") Long orderId,
+            @RequestParam(value = "status")
+            @NotBlank(message = "Status must not blank")
+            @NotNull(message = "Status must not null")
+            String status
+    ) {
+        OrderResponseDTO orderResponseDTO = orderService.updateStatusOrder(orderId, status);
         return ResponseEntity.status(HttpStatus.OK).body(orderResponseDTO);
     }
 }

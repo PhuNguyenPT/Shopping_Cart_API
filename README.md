@@ -126,6 +126,7 @@ To set up the backend of the Book Social Network project, follow these steps:
 ## Rest API
 - `(USER ONLY)` : require user login
 - `(ADMIN ONLY)` : require admin login
+- `(DELIVERER ONLY)` : require deliverer login
 - `(NON-USER)` : no require for login
 
 ### Authentication
@@ -168,7 +169,7 @@ To set up the backend of the Book Social Network project, follow these steps:
        * `email` : *Email*, *NotEmpty*, *NotBlank*
        * `password` : *NotEmpty*, *NotBlank*, *Size(min=8)* <br/><br/>
        
-     + Attributes explanation for Authentication:
+     + Attributes explaination for Authentication:
        * `email` : email
        * `password` : password <br/><br/>
 
@@ -176,22 +177,22 @@ To set up the backend of the Book Social Network project, follow these steps:
 1. GET: https://localhost/api/v1/users?page-number=20&page-size=1 `(ADMIN ONLY)` <br/>
    - Find all users attributes available in database
    - Request Body:
-     + Supported attributes for MyUser findAll: 
+     + Suported attributes for MyUser findAll: 
        * `pageSize` 
        * `pageNumber` <br/><br/>
        
      + Attributes constraints for MyUser findAll: 
-       * `pageSize` : *DefaultValue(20)*, *Min(1)*, *Max(20)
-       * `pageNumber` : *DefaultValue(1)*, *Min(1)* <br/><br/>
+       * `pageSize` : *NotNull*, *Min(1)*, *Max(20)
+       * `pageNumber` : *NotNull*, *Min(1)* <br/><br/>
        
-     + Attributes explanation for Category filter: 
+     + Attributes explaination for Category filter: 
        * `pageSize` : maximum number of Products in a page
        * `pageNumber` : page number of which page <br/><br/>
        
    - Response Body:
      + Return Page of MyUserResponseDTOList <br/><br/>
      + Content-Type = application/json <br/><br/>
-     + Supported attributes for MyUser:
+     + Suported attributes for MyUser:
 ```json
 {
     "content": [
@@ -242,7 +243,7 @@ To set up the backend of the Book Social Network project, follow these steps:
    - Search user attributes with `user-id`
    - Response Body:
      + Content-Type = application/json <br/><br/>
-     + Supported attributes for MyUser:
+     + Suported attributes for MyUser:
        * `message` 
        * `id`
        * `firstName`
@@ -291,7 +292,7 @@ To set up the backend of the Book Social Network project, follow these steps:
    - Find user attributes by User authenticated `Bearer Token` in `AUTHORIZATION`
    - Response Body:
      + Content-Type = application/json <br/><br/>
-     + Supported attributes for MyUser:
+     + Suported attributes for MyUser:
        * `message` 
        * `id`
        * `firstName`
@@ -321,7 +322,7 @@ To set up the backend of the Book Social Network project, follow these steps:
          * `city` : *Optional*
          * `zipCode` : *Optional* <br/><br/>
         
-     + Attributes explanation for MyUser:
+     + Attributes explaination for MyUser:
        * `message` : *response message*
        * `id` : *user UUID*
        * `firstName` : *first name*
@@ -335,78 +336,13 @@ To set up the backend of the Book Social Network project, follow these steps:
          * `wardName` : *ward name*
          * `city` : *city*
          * `zipCode` : *zip code* <br/><br/>
-
-4. PATCH: https://localhost/api/v1/users/update `(USER ONLY)` <br/>
-  - Update user attributes by User authenticated `Bearer Token` in `AUTHORIZATION`
-  - If user request to change email, need to activate account that email in mail-dev
-  - Request Body:
-    + Content-Type = application/json <br/><br/>
-    + Supported attributes for MyUser:
-      * `firstName`
-      * `lastName`
-      * `dateOfBirth`
-      * `phoneNumber`
-      * `email`
-      * `addressResponseDTO` :
-        * `houseNumber`
-        * `streetName`
-        * `wardName`
-        * `city`
-        * `zipCode` <br/><br/>
-
-    + Attributes constraints for MyUser:
-      * `firstName` : *Optional*
-      * `lastName` : *Optional*
-      * `dateOfBirth` : *Optional*
-      * `phoneNumber` : *Optional*
-      * `email` : *Optional*
-      * `addressRequestDTO` : *Optional*
-        * `houseNumber` : *NotNull*, *NotBlank*
-        * `streetName` : *NotNull*, *NotBlank*
-        * `wardName` : *NotNull*, *NotBlank*
-        * `city` : *NotNull*, *NotBlank*
-        * `zipCode` : *NotNull*, *NotBlank* <br/><br/>
-
-    + Attributes explanation for MyUser:
-
-      * `firstName` : *first name*
-      * `lastName` : *last name*
-      * `dateOfBirth` : *date of birth*
-      * `phoneNumber` : *phone number*
-      * `email` : *email*
-      * `addressResponseDTO` : *address request*
-        * `houseNumber` : *house number*
-        * `streetName` : *street name*
-        * `wardName` : *ward name*
-        * `city` : *city*
-        * `zipCode` : *zip code* <br/><br/>          
-
-  - Response Body Raw:
-    + Content-Type = application/json
-```json
-{
-    "message": "Update successfully",
-    "id": "beaaf22c-9049-4af4-b42b-489435ccb786",
-    "firstName": "John",
-    "lastName": "Doe",
-    "dateOfBirth": "1990-05-15",
-    "phoneNumber": 1234567890,
-    "email": "test@email.com",
-    "addressResponseDTO": {
-        "houseNumber": "123",
-        "streetName": "Main Street",
-        "wardName": "Central Ward",
-        "city": "Springfield",
-        "zipCode": "12345"
-    }
-}
-```
+              
 ### Product
 1. POST: https://localhost/api/v1/products/upload `(ADMIN ONLY)` <br/>
    - Upload Product <br/>
    - Request Body: 
      + Content-Type = multipart/form-data <br/><br/>
-     + Supported attributes for Product: 
+     + Suported attributes for Product: 
        * `name` 
        * `price`
        * `stockQuantity`
@@ -414,7 +350,6 @@ To set up the backend of the Book Social Network project, follow these steps:
        * `categoryIds`
        * `newCategoryNames` 
        * `files` <br/><br/>
-     
      + Attributes constraints for Product:
        * `name` : *NotNull*, *NotBlank*
        * `price` : *NotNull*, *DecimalMin(0.01)*
@@ -423,8 +358,7 @@ To set up the backend of the Book Social Network project, follow these steps:
        * `categoryIds` : *Optional*
        * `newCategoryNames` : *Optional*
        * `files` : *NotNull* <br/><br/>
-       
-     + Attributes explanation for Product:
+     + Attributes explaination for Product:
        * `name` : *product name*
        * `price` : *product price*
        * `stockQuantity` : *product stock quantity*
@@ -432,7 +366,6 @@ To set up the backend of the Book Social Network project, follow these steps:
        * `categoryIds` : *saved category ids from database*
        * `newCategoryNames` : *new category names to save to database* 
        * `files` : "multipart files" <br/><br/>
-       
      + Response Body
 ```json
   {
@@ -472,7 +405,7 @@ To set up the backend of the Book Social Network project, follow these steps:
 2. GET: https://localhost/api/v1/products/search?page-number=1&page-size=20&direction=asc&sort=stock-quantity&product-name=ex <br/>`(NON-USER)` <br/> 
    - Search Product by `product-name` with `page-size`, `page-number`, `direction`, `sort` <br/><br/>
    - Request parameters:
-     + Supported attributes for Product:
+     + Suported attributes for Product:
        * `product-name`
        * `page-size`
        * `page-number` 
@@ -486,7 +419,7 @@ To set up the backend of the Book Social Network project, follow these steps:
        * `direction` : *DefaultValue("desc")*
        * `sort` : *DefaultValue("created-date")* <br/><br/>
 
-     + Attributes explanation for Product:    
+     + Attributes explaination for Product:    
        * `product-name` : *product name*
        * `pageSize` : *page size*
        * `pageNumber` : *page number* 
@@ -579,33 +512,33 @@ To set up the backend of the Book Social Network project, follow these steps:
    - Update Files with `file-id` of Product with `product-id` by new File <br/><br/>
    - Request Body 
      + Content-Type = multipart/form-data <br/>
-     + Supported attributes for Product: 
+     + Suported attributes for Product: 
        * `files` <br/><br/>
        
      + Attributes constraints for Product:
        * `files` : *NotNull* <br/><br/>
        
-     + Attributes explanation for Product:
+     + Attributes explaination for Product:
        * `files` : *multipart file* <br/><br/>
        
 5. POST: https://localhost/api/v1/products/{productId}/files `(ADMIN ONLY)` <br/>
    - Create new File(s) for Product with `product-id` <br/><br/>
    - Request Body 
      + Content-Type = multipart/form-data <br/>
-     + Supported attributes for Product: 
+     + Suported attributes for Product: 
        * `files` <br/><br/>
        
      + Attributes constraints for Product:
        * `files` : *NotNull* <br/><br/>
        
-     + Attributes explanation for Product:
+     + Attributes explaination for Product:
        * `files` : *multipart file* <br/><br/>
        
 6. PATCH: https://localhost/api/v1/products/update/{product-id} `(ADMIN ONLY)` <br/>
    - Update Product attribute(s) with `product-id` <br/><br/>   
    - Request Body 
      + Content-Type = multipart/form-data <br/>
-     + Supported attributes for Product: 
+     + Suported attributes for Product: 
        * `name` 
        * `price`
        * `stockQuantity`
@@ -619,7 +552,7 @@ To set up the backend of the Book Social Network project, follow these steps:
        * `description` : *Optional*
        * `categoryIds` : *Optional* <br/><br/>
 
-     + Attributes explanation for Product:
+     + Attributes explaination for Product:
        * `name` : *product name*
        * `price` : *product price*
        * `stockQuantity` : *product stock quantity*
@@ -654,7 +587,7 @@ To set up the backend of the Book Social Network project, follow these steps:
    - Request Body 
      + Content-Type = application/json <br/><br/>
      
-     + Supported attributes for Product: 
+     + Suported attributes for Product: 
        * `pageSize` 
        * `pageNumber`
        * `categoryRequestDTOList` :
@@ -666,7 +599,7 @@ To set up the backend of the Book Social Network project, follow these steps:
        * `categoryRequestDTOList` :
        * `categoryId` *NotNull*, *Min(1)*  <br/><br/>
          
-     + Attributes explanation for Category filter: 
+     + Attributes explaination for Category filter: 
        * `pageSize` : maximum number of Products in a page
        * `pageNumber` : page number of which page
        * `categoryRequestDTOList` :
@@ -756,7 +689,7 @@ To set up the backend of the Book Social Network project, follow these steps:
    - Upload `List` of (`Product id`, `Quantity`) for Shopping Cart (User authenticated `Bearer Token` needed in `AUTHORIZATION`) <br/><br/>
    - Request Body 
      + Content-Type = application/json <br/><br/>
-     + Supported attributes for Shopping Cart: 
+     + Suported attributes for Shopping Cart: 
        * `productId` 
        * `quantity` <br/><br/>
        
@@ -764,7 +697,7 @@ To set up the backend of the Book Social Network project, follow these steps:
        * `productId` : *NotNull*, *Min(1)*
        * `quantity` : *NotNull*, *Min(1)* <br/><br/>
        
-     + Attributes explanation for Product:
+     + Attributes explaination for Product:
        * `productId` : *product id*
        * `quantity` : *product quantity* <br/><br/>
        
@@ -789,7 +722,7 @@ To set up the backend of the Book Social Network project, follow these steps:
 
 - Response Body:
   + Content-Type = application/json <br/><br/>
-  + Supported attributes for Cart:
+  + Suported attributes for Cart:
 ```json
 {
   "message": "Upload cart successfully",
@@ -901,7 +834,7 @@ To set up the backend of the Book Social Network project, follow these steps:
 
    - Response Body 
      + Content-Type = application/json  <br/><br/>
-     + Supported attributes for Cart:
+     + Suported attributes for Cart:
 ```json
 {
   "message": "Find cart successfully",
@@ -1005,7 +938,7 @@ To set up the backend of the Book Social Network project, follow these steps:
 in cart
 - Request Body
   + Content-Type = application/json <br/><br/>
-  + Supported attributes for Shopping Cart:
+  + Suported attributes for Shopping Cart:
     * `productId`
     * `quantity` <br/><br/>
 
@@ -1013,7 +946,7 @@ in cart
     * `productId` : *NotNull*, *Min(1)*
     * `quantity` : *NotNull*, *Min(1)* <br/><br/>
 
-  + Attributes explanation for Product:
+  + Attributes explaination for Product:
     * `productId` : *product id*
     * `quantity` : *product quantity* <br/><br/>
 
@@ -1146,7 +1079,7 @@ before send)
 
   - Response Body:
     + Content-Type = application/json <br/><br/>
-    + Supported attributes for Oder:
+    + Suported attributes for Oder:
 ```json
 {
   "message": "Save order 29 successfully.",
@@ -1200,7 +1133,7 @@ before send)
 ```
     
 2. POST: https://localhost/api/v1/orders `(USER-ONLY)` <br/><br/>
-   - Get All Order information according to user (use token)
+   - Get All Order infomation according to user (use token)
    - Request Body
      + Content-Type = application/json <br/><br/>
        * `pageNumber`
@@ -1214,7 +1147,7 @@ before send)
 ```
 - Response Body:
   + Content-Type = application/json <br/><br/>
-  + Supported attributes for Oder:
+  + Suported attributes for Oder:
 ```json
 {
     "content": [
@@ -1420,6 +1353,74 @@ before send)
 5. DELETE: https://localhost/api/v1/orders/delete/{order-id} `(ADMIN ONLY)` <br/><br/>
    - Delete Order by `order-id` <br/><br/>
 
+6. PATCH: https://localhost/api/v1/orders/update-status/{order-id} `(DELIVERER-ONLY)` <br/><br/>
+  - Update Order Status according to `order-id` <br/><br/>
+  - Request Body
+    + Content-Type = multipart/form-data <br/><br/>
+      * `status` <br/><br/>
+    + Supported attributes for Order:
+      * `status`
+
+    + Attributes constraints for Order:
+      * `status` : *NotNull*, *NotBlank*
+
+    + Attributes explanation for Order:
+      * `status` : *status* `("delivering", "complete")` <br/><br/>
+      
+  - Response Body
+
+```json
+{
+  "message": "Update order 29 successfully.",
+  "id": 29,
+  "name": "admin@email.com",
+  "totalAmount": 167892.00,
+  "status": "DELIVERING",
+  "deliveryDate": "2024-06-26T10:46:19.753213",
+  "orderInfo": "good",
+  "anotherField": "good",
+  "productQuantityResponseDTOList": [
+    {
+      "productQuantityId": 40,
+      "productId": 1,
+      "shoppingCartId": null,
+      "orderId": 29,
+      "quantity": 7,
+      "totalAmount": 69132.00,
+      "productResponseDTO": {
+        "message": null,
+        "id": null,
+        "name": "Product 1",
+        "price": 9876.0,
+        "stockQuantity": null,
+        "description": "Product 1",
+        "createdDate": null,
+        "lastModifiedDate": null,
+        "fileResponseDTOList": [
+              {
+                "message": null,
+                "id": 1,
+                "name": null,
+                "fileType": null,
+                "size": null,
+                "fileByte": null
+              }
+          ],
+          "categoryResponseDTOList": null
+        }
+      }
+    ],
+    "phoneNumber": 987654321,
+    "addressResponseDTO": {
+      "houseNumber": "34",
+      "streetName": "street",
+      "wardName": "ward",
+      "city": "city",
+      "zipCode": "zipcode"
+  }
+}
+```
+
 ### Transaction
 1. POST: https://localhost/api/v1/transactions/upload (`USER-ONLY`) <br/><br/>
    - Upload transaction of User authenticated `Bearer Token` in `AUTHORIZATION`
@@ -1430,12 +1431,12 @@ before send)
        * `transactionType`
        * `currency` <br/><br/>
 
-     + Attributes constraints for Product: 
+     + Attributes constraints for Transaction: 
        * `orderId` : *NotNull*, *Min(1)*
        * `transactionType` : *NotNull*, *NotBlank*
        * `currency` : *NotNull*, *NotBlank* <br/><br/>
 
-     + Attributes explanation for Product:
+     + Attributes explanation for Transaction:
        * `orderId` : *order id*
        * `transactionType` : *transaction type* (can be categorized as INTERNET_BANKING, CREDIT_CARD, CASH) 
        * `currency` : *currency* (can be categorized as VND, USD, EUR) <br/><br/>
