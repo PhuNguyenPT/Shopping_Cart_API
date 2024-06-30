@@ -7,7 +7,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/shopping_cart
     username: postgres
-    password: password
+    password: abc
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
