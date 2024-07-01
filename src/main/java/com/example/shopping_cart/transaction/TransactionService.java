@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -29,6 +30,7 @@ public class TransactionService {
     private final OrderService orderService;
     private final ProductService productService;
 
+    @Transactional
     public TransactionResponseDTO saveByAuthentication(
             @NotNull Authentication authentication,
             @NotNull TransactionRequestDTO transactionRequestDTO
