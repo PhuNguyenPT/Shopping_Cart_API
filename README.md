@@ -584,13 +584,11 @@ To set up the backend of the Book Social Network project, follow these steps:
 
 2. GET: https://localhost/api/v1/categories/filter?id=1,2&page-number=1&page-size=20 `(NON-USER)` <br/><br/>
    - Filter Product(s) by CategoryRequestDTOList of `category-id` with `page-size` and `page-number` <br/><br/>   
-   - Request Body 
-     + Content-Type = application/json <br/><br/>
-     
+   - Request params     
      + Supported attributes for Product: 
        * `page-size` 
        * `page-number`
-       * `id`  <br/><br/>
+       * `id` <br/><br/>
          
      + Attributes constraints for Category filter: 
        * `page-size` : *DefaultValue(20)*, *Min(1)*, *Max(20)
