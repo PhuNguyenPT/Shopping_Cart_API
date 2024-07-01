@@ -9,7 +9,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class AddressRequestDTO {
+public class
+AddressRequestDTO {
     @NotNull(message = "House Number must not be null")
     @NotBlank(message = "House Number is invalid")
     private String houseNumber;
@@ -25,12 +26,4 @@ public class AddressRequestDTO {
     @NotNull(message = "Zipcode must not be null")
     @NotBlank(message = "Zipcode Number is invalid")
     private String zipCode;
-
-    public AddressRequestDTO(String houseNumber, String streetName, String wardName, String city, String zipCode) {
-        this.houseNumber = houseNumber;
-        this.streetName = streetName;
-        this.wardName = wardName;
-        this.city = city;
-        this.zipCode = zipCode;
-    }
 }

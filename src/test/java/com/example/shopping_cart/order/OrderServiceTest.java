@@ -55,7 +55,13 @@ class OrderServiceTest {
     void testSaveOrder() {
         // Arrange
         Authentication authentication = mock(Authentication.class);
-        AddressRequestDTO addressRequestDTO = new AddressRequestDTO("street", "city", "state", "city", "zipCode");
+        AddressRequestDTO addressRequestDTO = AddressRequestDTO.builder()
+                .houseNumber("123")
+                .streetName("Main St")
+                .wardName("Ward 1")
+                .city("City")
+                .zipCode("12345")
+                .build();
         OrderRequestDTO orderRequestDTO = new OrderRequestDTO("orderInfo", "anotherField", BigInteger.valueOf(1234567890), addressRequestDTO);
 
         MyUser myUser = new MyUser();
@@ -115,7 +121,13 @@ class OrderServiceTest {
     void testSaveOrder_ShouldThrowEntityNotFoundException_WhenCartIsEmpty() {
         // Arrange
         Authentication authentication = mock(Authentication.class);
-        AddressRequestDTO addressRequestDTO = new AddressRequestDTO("street", "city", "state", "city", "zipCode");
+        AddressRequestDTO addressRequestDTO = AddressRequestDTO.builder()
+                .houseNumber("123")
+                .streetName("Main St")
+                .wardName("Ward 1")
+                .city("City")
+                .zipCode("12345")
+                .build();
         OrderRequestDTO orderRequestDTO = new OrderRequestDTO("orderInfo", "anotherField", BigInteger.valueOf(1234567890), addressRequestDTO);
 
         MyUser myUser = new MyUser();
@@ -283,7 +295,13 @@ class OrderServiceTest {
         // Arrange
         Authentication authentication = mock(Authentication.class);
         Long orderId = 1L;
-        AddressRequestDTO addressRequestDTO = new AddressRequestDTO("street", "city", "state", "city", "zipCode");
+        AddressRequestDTO addressRequestDTO = AddressRequestDTO.builder()
+                .houseNumber("123")
+                .streetName("Main St")
+                .wardName("Ward 1")
+                .city("City")
+                .zipCode("12345")
+                .build();
         OrderUpdateDTO orderUpdateDTO = new OrderUpdateDTO("updatedOrderInfo", "updatedAnotherField", "updatedPhoneNumber", BigInteger.valueOf(9876543210L), addressRequestDTO);
 
         MyUser myUser = new MyUser();
