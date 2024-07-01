@@ -87,15 +87,15 @@ public class CategoryService {
     }
 
     public CategoryResponseDTOFilter filterAllProductsByCategoryIdIn(
-            @NotNull CategoryRequestFilterDTO categoryRequestFilterDTO
+            @NotNull List<Long> idList, Integer pageNumber, Integer pageSize
     ) {
         // Handle page
         Pageable pageable = PageRequest.of(
-                categoryRequestFilterDTO.getPageNumber(),
-                categoryRequestFilterDTO.pageSize);
-        Set<Category> categories = categoryRequestFilterDTO
-                .getCategoryRequestDTOList().stream()
-                .map(CategoryRequestDTO::getCategoryId)
+                pageNumber,
+                pageSize
+        );
+
+        Set<Category> categories = idList.stream()
                 .map(this::findById)
                 .collect(Collectors.toSet());
 

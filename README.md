@@ -358,7 +358,7 @@ To set up the backend of the Book Social Network project, follow these steps:
        * `categoryIds` : *Optional*
        * `newCategoryNames` : *Optional*
        * `files` : *NotNull* <br/><br/>
-     + Attributes explaination for Product:
+     + Attributes explanation for Product:
        * `name` : *product name*
        * `price` : *product price*
        * `stockQuantity` : *product stock quantity*
