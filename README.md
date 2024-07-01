@@ -599,22 +599,7 @@ To set up the backend of the Book Social Network project, follow these steps:
        * `page-size` : *page size*
        * `page-number` : *page number*
        * `id` : *List of id, at least 1 id* <br/><br/>
-         
-  - Example Request Body Raw: <br/>
-```json
-   {
-     "pageSize": 20,
-     "pageNumber": 1,
-     "categoryRequestDTOList": [
-       {
-         "categoryId": 1
-       },
-       {
-         "categoryId": 2
-       }
-     ]
-   }
-```
+
   - Example Response Body Raw:
 ```json
 {
