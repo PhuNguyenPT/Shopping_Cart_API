@@ -9,8 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class
-AddressRequestDTO {
+public class AddressRequestDTO {
     @NotNull(message = "House Number must not be null")
     @NotBlank(message = "House Number is invalid")
     private String houseNumber;
