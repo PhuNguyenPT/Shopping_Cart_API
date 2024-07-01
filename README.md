@@ -591,19 +591,19 @@ To set up the backend of the Book Social Network project, follow these steps:
        * `pageSize` 
        * `pageNumber`
        * `categoryRequestDTOList` :
-       * `categoryId`  <br/><br/>
+          * `categoryId`  <br/><br/>
          
      + Attributes constraints for Category filter: 
        * `pageSize` : *NotNull*, *Min(1)*, *Max(20)
        * `pageNumber` : *NotNull*, *Min(1)*
        * `categoryRequestDTOList` :
-       * `categoryId` *NotNull*, *Min(1)*  <br/><br/>
+          * `categoryId` *NotNull*, *Min(1)*  <br/><br/>
          
      + Attributes explaination for Category filter: 
        * `pageSize` : maximum number of Products in a page
        * `pageNumber` : page number of which page
        * `categoryRequestDTOList` :
-       * `categoryId` : category id  <br/><br/>
+          * `categoryId` : category id  <br/><br/>
          
   - Example Request Body Raw: <br/>
 ```json
