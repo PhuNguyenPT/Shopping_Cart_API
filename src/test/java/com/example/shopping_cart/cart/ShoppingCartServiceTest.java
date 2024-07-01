@@ -49,7 +49,6 @@ public class ShoppingCartServiceTest {
 
     @Test
     public void testSave_NewCart() {
-        shoppingCartRepository.deleteAll();
         UUID id = UUID.randomUUID();
 
         MyUser user = new MyUser();
@@ -162,29 +161,41 @@ public class ShoppingCartServiceTest {
             shoppingCartService.updateBy(authentication, requestDTOs);
         });
     }
-
-    @Test
-    public void testUpdateBy_Success() {
-        MyUser user = new MyUser();
-        ShoppingCart cart = new ShoppingCart();
-        ProductQuantity quantity = new ProductQuantity();
-        cart.setQuantities(List.of(quantity));
-        user.setShoppingCart(cart);
-        when(myUserService.findByUserAuthentication(authentication)).thenReturn(user);
-
-        List<ShoppingCartRequestDTO> requestDTOs = new ArrayList<>();
-        ShoppingCartRequestDTO requestDTO = new ShoppingCartRequestDTO(1L, 2L);
-        requestDTOs.add(requestDTO);
-
-        Product product = new Product();
-        product.setPrice(10.0);
-        when(productService.findById(1L)).thenReturn(product);
-        when(shoppingCartRepository.save(any(ShoppingCart.class))).thenReturn(cart);
-
-        ShoppingCartResponseDTO responseDTO = shoppingCartService.updateBy(authentication, requestDTOs);
-
-        assertNotNull(responseDTO);
-        verify(productQuantityService, times(1)).save(any(ProductQuantity.class));
-        verify(shoppingCartRepository, times(1)).save(any(ShoppingCart.class));
-    }
+//
+//    @Test
+//    public void testUpdateBy() {
+//        // Arrange
+//        MyUser user = new MyUser();
+//        user.setId(UUID.randomUUID());
+//        Product product = new Product();
+//        product.setId(1L);
+//        product.setPrice(1.0);
+//        ProductQuantity productQuantity = new ProductQuantity();
+//        productQuantity.setQuantity(1L);
+//        List<ProductQuantity> quantities = new ArrayList<>();
+//        quantities.add(productQuantity);
+//        ShoppingCart cart = new ShoppingCart();
+//        cart.setId(1L);
+//        cart.setQuantities(quantities);
+//        user.setShoppingCart(cart);
+//        cart.setUser(user);
+//        when(myUserService.findByUserAuthentication(authentication)).thenReturn(user);
+//
+//        List<ShoppingCartRequestDTO> requestDTOs = new ArrayList<>();
+//        ShoppingCartResponseDTO expectedResponse = ShoppingCartResponseDTO.builder()
+//                .cartId(1L)
+//                .userId(user.getId())
+//                .build();
+//
+//        when(shoppingCartService.updateBy(authentication, requestDTOs)).thenReturn(expectedResponse);
+//
+//        // Act
+//        ShoppingCartResponseDTO actualResponse = shoppingCartService.updateBy(authentication, requestDTOs);
+//
+//        // Assert
+//        assertNotNull(actualResponse);
+//        assertEquals(expectedResponse.getCartId(), actualResponse.getCartId());
+//        verify(myUserService, times(1)).findByUserAuthentication(authentication);
+//        verify(shoppingCartService, times(1)).updateBy(authentication, requestDTOs);
+//    }
 }

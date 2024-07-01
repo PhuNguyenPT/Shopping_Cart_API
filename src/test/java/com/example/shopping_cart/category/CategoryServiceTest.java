@@ -114,16 +114,18 @@ public class CategoryServiceTest {
                 .name("Books")
                 .build();
 
-        CategoryRequestFilterDTO categoryRequestFilterDTO = CategoryRequestFilterDTO.builder()
-                .categoryRequestDTOList(Arrays.asList(categoryRequestDTO1, categoryRequestDTO2))
-                .pageNumber(0)
-                .pageSize(10)
-                .build();
+//        CategoryRequestFilterDTO categoryRequestFilterDTO = CategoryRequestFilterDTO.builder()
+//                .categoryRequestDTOList(Arrays.asList(categoryRequestDTO1, categoryRequestDTO2))
+//                .pageNumber(0)
+//                .pageSize(10)
+//                .build();
+
+        List<Long> idList = Arrays.asList(1L, 2L);
 
         when(categoryRepository.findById(1L)).thenReturn(Optional.of(category1));
         when(categoryRepository.findById(2L)).thenReturn(Optional.of(category2));
 
-        CategoryResponseDTOFilter result = categoryService.filterAllProductsByCategoryIdIn(categoryRequestFilterDTO);
+        CategoryResponseDTOFilter result = categoryService.filterAllProductsByCategoryIdIn(idList, 1, 10);
         // Add assertions to check the contents of 'result'
 
         verify(categoryRepository, times(1)).findById(1L);
