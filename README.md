@@ -178,16 +178,16 @@ To set up the backend of the Book Social Network project, follow these steps:
    - Find all users attributes available in database
    - Request Body:
      + Suported attributes for MyUser findAll: 
-       * `pageSize` 
-       * `pageNumber` <br/><br/>
+       * `page-size` 
+       * `page-number` <br/><br/>
        
      + Attributes constraints for MyUser findAll: 
-       * `pageSize` : *NotNull*, *Min(1)*, *Max(20)
-       * `pageNumber` : *NotNull*, *Min(1)* <br/><br/>
+       * `page-size` : *NotNull*, *Min(1)*, *Max(20)
+       * `page-number` : *NotNull*, *Min(1)* <br/><br/>
        
      + Attributes explaination for Category filter: 
-       * `pageSize` : maximum number of Products in a page
-       * `pageNumber` : page number of which page <br/><br/>
+       * `page-size` : maximum number of Products in a page
+       * `page-number` : page number of which page <br/><br/>
        
    - Response Body:
      + Return Page of MyUserResponseDTOList <br/><br/>
@@ -414,15 +414,15 @@ To set up the backend of the Book Social Network project, follow these steps:
        
      + Attributes constraints for Product:
        * `product-name` : *Optional*
-       * `pageSize` : *DefaultValue(20)*, *Min(1)*, *Max(20)
-       * `pageNumber` : *DefaultValue(1)*, *Min(1)* 
+       * `page-size` : *DefaultValue(20)*, *Min(1)*, *Max(20)
+       * `page-number` : *DefaultValue(1)*, *Min(1)* 
        * `direction` : *DefaultValue("desc")*
        * `sort` : *DefaultValue("created-date")* <br/><br/>
 
      + Attributes explaination for Product:    
        * `product-name` : *product name*
-       * `pageSize` : *page size*
-       * `pageNumber` : *page number* 
+       * `page-size` : *page size*
+       * `page-number` : *page number* 
        * `direction` : *direction* `("asc", "desc")`
        * `sort` : *sort attribute* `("created-date", "last-modified-date", "amount")` <br/><br/>
        
@@ -582,28 +582,25 @@ To set up the backend of the Book Social Network project, follow these steps:
 ```
 <br/><br/>
 
-2. GET: https://localhost/api/v1/categories/filter `(NON-USER)` <br/><br/>
-   - Filter Product(s) by CategoryRequestDTOList of `category-id` with `pageSize` and `pageNumber` <br/><br/>   
+2. GET: https://localhost/api/v1/categories/filter?id=1,2&page-number=1&page-size=20 `(NON-USER)` <br/><br/>
+   - Filter Product(s) by CategoryRequestDTOList of `category-id` with `page-size` and `page-number` <br/><br/>   
    - Request Body 
      + Content-Type = application/json <br/><br/>
      
-     + Suported attributes for Product: 
-       * `pageSize` 
-       * `pageNumber`
-       * `categoryRequestDTOList` :
-          * `categoryId`  <br/><br/>
+     + Supported attributes for Product: 
+       * `page-size` 
+       * `page-number`
+       * `id`  <br/><br/>
          
      + Attributes constraints for Category filter: 
-       * `pageSize` : *NotNull*, *Min(1)*, *Max(20)
-       * `pageNumber` : *NotNull*, *Min(1)*
-       * `categoryRequestDTOList` :
-          * `categoryId` *NotNull*, *Min(1)*  <br/><br/>
-         
-     + Attributes explaination for Category filter: 
-       * `pageSize` : maximum number of Products in a page
-       * `pageNumber` : page number of which page
-       * `categoryRequestDTOList` :
-          * `categoryId` : category id  <br/><br/>
+       * `page-size` : *DefaultValue(20)*, *Min(1)*, *Max(20)
+       * `page-number` : *DefaultValue(1)*, *Min(1)*
+       * `id` : *At least 1 id* <br/><br/>
+
+     + Attributes explanation for Category filter: 
+       * `page-size` : *page size*
+       * `page-number` : *page number*
+       * `id` : *List of id, at least 1 id* <br/><br/>
          
   - Example Request Body Raw: <br/>
 ```json
@@ -824,17 +821,17 @@ To set up the backend of the Book Social Network project, follow these steps:
 
      + Attributes constraints for Product:
        * `product-name` : *Optional*
-       * `pageSize` : *DefaultValue(20)*, *Min(1)*, *Max(20)
-       * `pageNumber` : *DefaultValue(1)*, *Min(1)* <br/><br/>
+       * `page-size` : *DefaultValue(20)*, *Min(1)*, *Max(20)
+       * `page-number` : *DefaultValue(1)*, *Min(1)*
 
      + Attributes explanation for Product:
        * `product-name` : *product name*
-       * `pageSize` : *page size*
-       * `pageNumber` : *page number* <br/><br/>
+       * `page-size` : *DefaultValue(20)*, *Min(1)*, *Max(20)
+       * `page-number` : *DefaultValue(1)*, *Min(1)*
 
    - Response Body 
      + Content-Type = application/json  <br/><br/>
-     + Suported attributes for Cart:
+     + Supported attributes for Cart:
 ```json
 {
   "message": "Find cart successfully",
@@ -938,7 +935,7 @@ To set up the backend of the Book Social Network project, follow these steps:
 in cart
 - Request Body
   + Content-Type = application/json <br/><br/>
-  + Suported attributes for Shopping Cart:
+  + Supported attributes for Shopping Cart:
     * `productId`
     * `quantity` <br/><br/>
 
@@ -946,7 +943,7 @@ in cart
     * `productId` : *NotNull*, *Min(1)*
     * `quantity` : *NotNull*, *Min(1)* <br/><br/>
 
-  + Attributes explaination for Product:
+  + Attributes explanation for Product:
     * `productId` : *product id*
     * `quantity` : *product quantity* <br/><br/>
 
@@ -1079,7 +1076,7 @@ before send)
 
   - Response Body:
     + Content-Type = application/json <br/><br/>
-    + Suported attributes for Oder:
+    + Supported attributes for Oder:
 ```json
 {
   "message": "Save order 29 successfully.",
@@ -1133,11 +1130,11 @@ before send)
 ```
     
 2. POST: https://localhost/api/v1/orders `(USER-ONLY)` <br/><br/>
-   - Get All Order infomation according to user (use token)
+   - Get All Order information according to user (use token)
    - Request Body
      + Content-Type = application/json <br/><br/>
-       * `pageNumber`
-       * `pageSize`
+       * `page-number`
+       * `page-size`
      + Example Request Body Raw:
 ```json
   {
@@ -1147,7 +1144,7 @@ before send)
 ```
 - Response Body:
   + Content-Type = application/json <br/><br/>
-  + Suported attributes for Oder:
+  + Supported attributes for Oder:
 ```json
 {
     "content": [
