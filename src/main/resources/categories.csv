@@ -1,0 +1,12 @@
+created_date,id,last_modified_date,created_by,created_time_zone,last_modify_by,modified_time_zone,name
+2024-07-01 21:15:10.470985,1,2024-07-01 21:15:10.572327,,Asia/Saigon,,Asia/Saigon,Laptop
+2024-07-01 21:15:10.478985,2,2024-07-01 21:15:10.572327,,Asia/Saigon,,Asia/Saigon,Gaming
+2024-07-01 22:36:46.368523,3,2024-07-01 22:36:46.432137,,Asia/Saigon,,Asia/Saigon,CPU
+2024-07-01 23:04:35.191927,4,2024-07-01 23:04:35.244926,,Asia/Saigon,,Asia/Saigon,Mainboard
+2024-07-01 23:11:36.630197,5,2024-07-01 23:11:36.650758,,Asia/Saigon,,Asia/Saigon,RAM
+2024-07-01 23:28:19.036918,6,2024-07-01 23:28:19.08192,,Asia/Saigon,,Asia/Saigon,GPU
+2024-07-01 23:38:59.93262,7,2024-07-01 23:38:59.957617,,Asia/Saigon,,Asia/Saigon,SSD
+2024-07-01 23:56:58.954868,8,2024-07-01 23:56:59.033868,,Asia/Saigon,,Asia/Saigon,Case
+2024-07-02 00:12:07.396508,9,2024-07-02 00:12:07.452506,,Asia/Saigon,,Asia/Saigon,PSU
+2024-07-02 00:24:36.376146,10,2024-07-02 00:24:36.399145,,Asia/Saigon,,Asia/Saigon,Fan
+2024-07-02 00:38:08.712916,11,2024-07-02 00:38:08.792949,,Asia/Saigon,,Asia/Saigon,Water Cooler
