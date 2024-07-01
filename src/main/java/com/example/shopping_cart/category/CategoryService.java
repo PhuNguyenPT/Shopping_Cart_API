@@ -108,6 +108,12 @@ public class CategoryService {
             uniqueProducts.addAll(products);
         });
 
+        for (Product product : uniqueProducts) {
+            if (!product.getCategories().containsAll(categories)) {
+                uniqueProducts.remove(product);
+            }
+        }
+
         // Map unique products to response dto list
         List<ProductResponseDTO> productResponseDTOList = uniqueProducts.stream()
                 .map(ProductMapper::toProductResponseDTOCategory)
