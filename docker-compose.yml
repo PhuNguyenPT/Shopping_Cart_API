@@ -1,3 +1,5 @@
+version: '3.1'
+
 services:
   postgres:
     container_name: postgres-sql-shopping-cart
@@ -8,21 +10,25 @@ services:
       PGDATA: /var/lib/postgresql/data
       POSTGRES_DB: shopping_cart
     volumes:
-      - postgres:/data/postgres
+      - postgres:/var/lib/postgresql/data
+      - ./src/main/resources/initdb:/docker-entrypoint-initdb.d
     ports:
       - 5432:5432
     networks:
       - spring-shopping-cart
     restart: unless-stopped
+
   mail-dev:
     container_name: mail-dev-shopping-cart
     image: maildev/maildev
     ports:
       - 1080:1080
       - 1025:1025
+
 networks:
   spring-shopping-cart:
     driver: bridge
+
 volumes:
   postgres:
     driver: local
