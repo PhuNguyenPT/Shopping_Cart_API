@@ -4,6 +4,7 @@ import com.example.shopping_cart.category.Category;
 import com.example.shopping_cart.category.CategoryRepository;
 import com.example.shopping_cart.category.CategoryService;
 import com.example.shopping_cart.file.*;
+import com.example.shopping_cart.product_quantity.ProductQuantity;
 import com.example.shopping_cart.sort.SortDirectionMapper;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
@@ -182,7 +183,17 @@ public class ProductService {
     @Transactional
     public ResponseEntity<?> deleteBy(Long productId) {
         Product product = findById(productId);
-        productRepository.deleteById(product.getId());
+        product.setStockQuantity(0L);
+
+
+//        product.getShoppingCarts().forEach(shoppingCart -> {
+//            shoppingCart.getProducts().stream()
+//                    .filter(p -> p.getId().equals(product.getId()))
+//                    .findFirst()
+//                    .ifPresent(p -> p.setStockQuantity(0L));
+//        });
+        productRepository.save(product);
+//        productRepository.deleteById(product.getId());
         return ResponseEntity.ok("Product with id " + productId + " is deleted successfully");
     }
 
