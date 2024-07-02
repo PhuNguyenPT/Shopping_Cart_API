@@ -71,7 +71,8 @@ public class ShoppingCartService {
             Product product = productQuantity.getProduct();
             if (productQuantity.getQuantity() > product.getStockQuantity()) {
                 throw new RuntimeException("Product " + product.getName() +
-                        " stock quantity is less than " + productQuantity.getQuantity() + ".");
+                        " stock quantity is " + product.getStockQuantity() +
+                        " which is less than " + productQuantity.getQuantity());
             }
         });
 

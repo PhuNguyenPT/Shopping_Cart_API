@@ -73,7 +73,11 @@ public class TransactionService {
         for (ProductQuantity productQuantity : orderQuantities) {
             Long stockQuantity = productQuantity.getProduct().getStockQuantity();
             Product product = productQuantity.getProduct();
-            stockQuantity = stockQuantity - productQuantity.getQuantity();
+            if (stockQuantity - productQuantity.getQuantity() >= 0) {
+                stockQuantity = stockQuantity - productQuantity.getQuantity();
+            } else {
+                stockQuantity = 0L;
+            }
             product.setStockQuantity(stockQuantity);
             productService.save(product);
         }
